@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/ecc-kb/evolution_record.schema.json",
+  "title": "ECC-KB Evolution Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "schema_version",
+    "timestamp",
+    "task",
+    "backend_fingerprint",
+    "agent_label",
+    "kb_version",
+    "phase_events",
+    "final_decision",
+    "cost",
+    "artifacts",
+    "promotion_candidates"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "op_family",
+        "op_spec_hash",
+        "goal"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "op_family": {
+          "type": "string"
+        },
+        "op_name": {
+          "type": "string"
+        },
+        "op_spec_hash": {
+          "type": "string"
+        },
+        "shapes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dtypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "goal": {
+          "type": "string"
+        }
+      }
+    },
+    "backend_fingerprint": {
+      "type": "object",
+      "required": [
+        "vendor",
+        "backend",
+        "device_name",
+        "toolchain"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "vendor": {
+          "type": "string"
+        },
+        "backend": {
+          "type": "string"
+        },
+        "device_name": {
+          "type": "string"
+        },
+        "device_class": {
+          "type": "string"
+        },
+        "toolchain": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "agent_label": {
+      "type": "string",
+      "description": "External label only; no dependency on agent internals."
+    },
+    "kb_version": {
+      "type": "string"
+    },
+    "context_packet_hashes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "used_capsules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "phase_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "iteration",
+          "phase",
+          "action_summary",
+          "result"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "iteration": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "phase": {
+            "type": "string"
+          },
+          "action_summary": {
+            "type": "string"
+          },
+          "candidate_hash": {
+            "type": "string"
+          },
+          "compile": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "correctness": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "benchmark": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "profile_summary": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "compile_fail",
+              "correctness_fail",
+              "performance_regression",
+              "keep_candidate",
+              "discard_candidate",
+              "timeout",
+              "needs_more_evidence"
+            ]
+          },
+          "diagnosis": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "final_decision": {
+      "type": "string",
+      "enum": [
+        "KEEP",
+        "DISCARD",
+        "FAIL",
+        "NEED_MORE_EVIDENCE"
+      ]
+    },
+    "decision_rationale": {
+      "type": "string"
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wall_time_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "agent_tokens_in": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "agent_tokens_out": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gpu_benchmark_runs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "iterations": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "workspace_uri": {
+          "type": "string"
+        },
+        "candidate_uris": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "benchmark_json": {
+          "type": "string"
+        },
+        "profile_json": {
+          "type": "string"
+        }
+      }
+    },
+    "promotion_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_unit_id",
+          "reason",
+          "required_gates"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "candidate_unit_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "required_gates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "suggested_status": {
+            "type": "string",
+            "enum": [
+              "quarantine",
+              "candidate",
+              "stable",
+              "stale",
+              "rejected"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
