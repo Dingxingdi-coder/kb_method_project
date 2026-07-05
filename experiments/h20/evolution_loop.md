@@ -1,32 +1,60 @@
 # H20 自我进化闭环实验
 
-## 1. Round-0: 初始知识库
+## 1. Round-0: 初始资料库与初始知识库
+
+Round-0 先构建并冻结初始资料库，再从同一资料库转换出初始知识库。
 
 输入来源：
 
 - 本项目调研报告抽取的通用方法知识；
-- Triton/PyTorch 官方文档中人工结构化的少量合法性知识；
+- Triton/PyTorch/CUDA 官方文档；
+- 自动算子生成、kernel 优化、correctness harness、profiling 和 autotune 相关论文；
 - 5–10 个已知正确的基础 skeleton；
+- 示例 kernel、benchmark 说明和公开工具链资料；
 - 0 个 H20 性能经验，或只保留 manual baseline 的非 promoted 证据。
 
-输出：`KB v0`。
+输出：
 
-## 2. Round-1: 初始任务执行
+```text
+raw_corpus_v0
+KB v0
+raw_corpus_rag_index_v0
+kb_plain_rag_index_v0
+ecc_kb_index_v0
+```
 
-对 `operators.md` 中公开 shape 跑四组 baseline。A3 使用 `KB v0`。
+`KB v0` 必须只从 `raw_corpus_v0` 抽取。A1、A2、A3 的资料来源因此保持一致。
 
-每次 run 后生成 evolution record：
+## 2. Round-1: 四组主实验
+
+对 `operators.md` 中公开 shape 跑四组 baseline：
+
+```text
+A0_prompt
+A1_raw_corpus_rag
+A2_kb_plain_rag
+A3_ecc_kb
+```
+
+A1 使用 `raw_corpus_rag_index_v0`。A2 使用 `kb_plain_rag_index_v0`。A3 使用 `ecc_kb_index_v0` 和 `KB v0` 的 ContextPacket 服务。
+
+每次 run 后生成 trace record：
 
 ```text
 op_spec_hash
 backend_fingerprint
-context_packet_hash
+source_corpus_version
+kb_version
+context_packet_hash_or_rag_context_hash
 candidate_hash
 compile/correctness/performance/profile result
 decision KEEP/DISCARD/FAIL
-used_capsule_ids
+retrieved_item_ids
+used_capsule_ids if applicable
 token/time/iteration cost
 ```
+
+A0、A1、A2 的 trace 只用于评估和审计。A3 的 trace 额外进入 ECC-KB 自我进化管道。
 
 ## 3. Ingest and Promotion
 
@@ -50,15 +78,16 @@ performance capsule:
 
 输出：`KB v1`。
 
-## 4. Round-2: Held-out 验证
+## 4. 后续 Round-2: Held-out 验证
 
-用 held-out shape/dtype/算子变体测试 `KB v1`。禁止使用 Round-2 的结果更新知识后再评估同一 Round-2 任务。
+Round-2 不属于首轮四组实验的必做范围，但后续必须执行。Round-2 用 held-out shape/dtype/算子变体测试 `KB v1`。禁止使用 Round-2 的结果更新知识后再评估同一 Round-2 任务。
 
-比较：
+后续比较：
 
 ```text
-A3(v0) vs A3(v1)
+A3(v0 frozen) vs A3(v1 promoted)
 A3(v1) vs A0/A1/A2
+A2(v1) if budget allows
 ```
 
 ## 5. 判断进化有效的条件
