@@ -42,46 +42,71 @@ runtime:
   random seeds
 repo:
   git commit
+  source corpus version
   knowledge base version
   harness version
 ```
 
 不要在方法中硬编码 H20 的具体硬件参数。用 runtime fingerprint 记录即可。
 
-## 4. 算子任务集
+## 4. 资料库与知识库冻结
+
+H20 MVP 的首轮实验先冻结一个初始资料库，再从同一资料库派生知识库。这样可以把“原始资料是否有用”“知识化是否有用”和“ECC-KB 方法是否有用”拆开比较。
+
+```text
+web / papers / official docs / source code / examples / benchmark reports
+  -> source registry
+  -> raw_corpus_v0
+  -> claim extraction
+  -> capsule drafting
+  -> schema validation
+  -> KB v0
+```
+
+`raw_corpus_v0` 保存原始资料 chunk、来源、时间戳、许可证、主题标签和后端标签。`KB v0` 只从 `raw_corpus_v0` 抽取，不允许额外加入 A1 不可见的资料。实验运行期间禁止实时联网搜索；所有组都只能使用冻结版本。
+
+三类索引需要同时冻结：
+
+```text
+raw_corpus_rag_index_v0   # A1 使用，对原始资料 chunk 做普通 RAG
+kb_plain_rag_index_v0     # A2 使用，对知识单元文本做普通 RAG
+ecc_kb_index_v0           # A3 使用，支持阶段、条件、证据、门控和目标感知召回
+```
+
+## 5. 算子任务集
 
 MVP 选择四类中等复杂度算子：row reduction、softmax、layernorm、matmul variants。它们共同覆盖 reduction、数值稳定、mask/boundary、tile tuning、memory bandwidth、compute intensity 和 profile 归因。
 
 任务规模见 `experiments/h20/operators.md`。
 
-## 5. 实验组
+## 6. 实验组
 
-固定同一 Coding Agent、同一任务顺序、同一最大迭代数、同一 token 上限和同一 harness，比较四组：
+固定同一 Coding Agent、同一任务顺序、同一最大迭代数、同一 token 上限、同一 wall-clock 上限、同一 GPU benchmark 预算和同一 harness，比较四组：
 
-1. `A0_no_kb`：无知识库，只给 OpSpec 和 harness 指令。
-2. `A1_plain_rag`：普通文档 chunk/向量召回，返回段落文本。
-3. `A2_rulebook`：简单规则库/经验库，返回静态规则和 prompt tips。
-4. `A3_ecc_kb`：ECC-KB 返回 ContextPacket，使用 quarantine/promotion 写回。
+1. `A0_prompt`：普通 prompt。只给 OpSpec、reference、harness 命令和预算限制，不提供资料库、知识库、历史经验或优化规则。
+2. `A1_raw_corpus_rag`：对 `raw_corpus_v0` 做普通 RAG。召回对象是原始资料 chunk，例如官方文档、论文段落、示例代码说明、调研报告段落。检索只使用普通文本相似度，不做 phase-aware、evidence-aware、gate-aware 或 backend legality 过滤。
+3. `A2_kb_plain_rag`：对 `KB v0` 做普通 RAG。召回对象是知识单元的文本化表示。它可以看到 capsule 的自然语言内容，但不能调用 ECC-KB 的阶段化召回、硬过滤、证据重排、ContextPacket、stop capsule 或写回机制。
+4. `A3_ecc_kb`：使用 ECC-KB 方法。A3 输入 ECC-KB ContextPacket，使用阶段化召回、条件过滤、合法性过滤、证据重排、anti-action、validation plan、stop condition 和 quarantine/promotion 写回。
 
 每个任务至少跑 3 个随机种子或 3 次独立 agent session。若预算有限，先对 12 个任务跑 2 次，筛出最能区分方法的任务后扩展到 24–32 个任务。
 
-## 6. Agent 接入方式
+## 7. Agent 接入方式
 
 Agent 通过文件协议接入，不依赖内部工具：
 
 ```text
 workspace/
   task.json              # OpSpec + goal + budget
-  context_packet.json    # 由 KB 或 baseline 生成
+  context_packet.json    # A0 为空；A1/A2 为普通 RAG 上下文；A3 为 ECC-KB ContextPacket
   candidate.py           # Agent 写入 Triton kernel
   run.sh                 # harness 固定命令
   results.json           # harness 输出
   trace.jsonl            # 每次迭代事件
 ```
 
-Agent 每轮只允许修改候选代码和说明，不允许修改 reference、hidden tests、benchmark harness、metrics 脚本。
+Agent 每轮只允许修改候选代码和说明，不允许修改 reference、hidden tests、benchmark harness、metrics 脚本或资料库索引。
 
-## 7. 正确性门控
+## 8. 正确性门控
 
 正确性分四层：
 
@@ -92,7 +117,7 @@ Agent 每轮只允许修改候选代码和说明，不允许修改 reference、h
 
 性能测试必须在 hidden correctness 通过后执行。
 
-## 8. 性能测量
+## 9. 性能测量
 
 默认使用 torch CUDA event 计时：
 
@@ -112,7 +137,7 @@ profile_summary:
   candidate_actions: linked capsule ids
 ```
 
-## 9. 成功标准
+## 10. 成功标准
 
 MVP 不要求每个任务都达到专家 kernel 性能。建议采用以下最小成功标准：
 
@@ -123,27 +148,31 @@ A3 vs A0:
 A3 vs A1/A2:
   higher or equal hidden correctness with lower token/time, and
   higher median speedup among correct kernels
-Self-evolution:
-  Round-2 held-out tasks show statistically visible improvement over Round-1 frozen KB
+A2 vs A1:
+  higher or equal hidden correctness with lower token/time, or
+  higher median speedup among correct kernels
 ```
 
 更强目标：A3 在 24 个任务上相对 A0/A1/A2 同时降低 token 20%、wall time 20%、iterations 25%，且 correct-and-faster rate 最高。
 
-## 10. 实验流程
+## 11. 实验流程
 
 ```text
-prepare initial KB
-  -> freeze KB version v0
+collect source materials
+  -> build source registry
+  -> freeze raw_corpus_v0
+  -> derive KB v0 from raw_corpus_v0
+  -> freeze raw_corpus_rag_index_v0, kb_plain_rag_index_v0, ecc_kb_index_v0
   -> run A0/A1/A2/A3 on Round-1 tasks
   -> collect traces and benchmark/profile evidence
-  -> ECC-KB quarantine ingest
+  -> ECC-KB quarantine ingest for A3 traces
   -> promotion gate
-  -> freeze KB version v1
-  -> run A3(v1) and baselines on Round-2 held-out variants
-  -> compare metrics and knowledge utility
+  -> freeze KB v1 for later Round-2 experiments
 ```
 
-## 11. 判断知识进化有效
+首轮只评估四个主实验组。`A3(v0)` 和 `A3(v1)` 的演化 ablation、`A2(v1)`、random-context、legacy rulebook 等组保留到后续实验。
+
+## 12. 判断知识进化有效
 
 知识库进化有效必须同时满足：
 
