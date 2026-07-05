@@ -47,7 +47,37 @@ invalid_compile_attempts_per_task
 
 这些指标直接对应“少走弯路”。
 
-## 4. Knowledge Utility 指标
+## 4. Context and Knowledge Utility 指标
+
+四组都必须记录上下文规模。A1、A2、A3 还必须记录召回来源，方便区分“资料有用”“知识表示有用”和“ECC-KB 方法有用”。
+
+```text
+context_token_count
+retrieved_item_count
+retrieved_item_ids
+retrieved_source_type_distribution
+retrieved_context_used_by_agent_rate
+```
+
+A1 专属指标：
+
+```text
+raw_corpus_retrieved_chunk_count
+raw_corpus_context_tokens
+raw_corpus_chunk_adoption_rate
+raw_corpus_chunk_effective_rate
+```
+
+A2 专属指标：
+
+```text
+kb_plain_rag_retrieved_unit_count
+kb_plain_rag_context_tokens
+kb_plain_rag_unit_adoption_rate
+kb_plain_rag_unit_effective_rate
+```
+
+A3 专属指标：
 
 ```text
 retrieved_capsule_count
@@ -61,7 +91,7 @@ promoted_capsule_reuse_rate_round2
 stale_or_wrong_capsule_hit_rate
 ```
 
-`capsule_effective_rate` 定义为：被 Agent 明确采用或由 harness 触发后，对 compile/correctness/performance/iteration 至少一项带来可观改善的 capsule 比例。
+`*_effective_rate` 定义为：被 Agent 明确采用或由 harness 触发后，对 compile/correctness/performance/iteration 至少一项带来可观改善的资料片段、知识单元或 capsule 比例。
 
 ## 5. Evolution 指标
 
@@ -77,8 +107,10 @@ round2_delta_iterations
 heldout_generalization_gain
 ```
 
-知识库进化必须在 held-out tasks 上体现，而不能只在原任务复用。
+知识库进化必须在 held-out tasks 上体现，而不能只在原任务复用。Round-1 首轮四组实验可以先只收集 evolution 原始记录，不要求完成 Round-2。
 
 ## 6. 最小统计方式
 
 每个任务每组至少 3 次独立 run。汇总时报告 median 和 bootstrap confidence interval。如果预算不足，先报告 paired task-level comparison，而不是只报告整体平均。
+
+A0、A1、A2、A3 必须在同一任务集合、同一 agent、同一 token 上限、同一 wall-clock 上限和同一 GPU benchmark 预算下比较。A1、A2、A3 的上下文 token 上限必须相同。
