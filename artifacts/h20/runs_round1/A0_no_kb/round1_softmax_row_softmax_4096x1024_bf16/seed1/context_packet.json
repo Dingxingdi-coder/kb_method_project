@@ -1,0 +1,14 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "96ef6fa8ee8bf94f801fba43226deeb6c132a24d760c52d0d10bbeb952ef9729",
+  "context_packet_short_hash": "f7e995d9a2c5",
+  "evidence_refs": [],
+  "group": "A0_no_kb",
+  "must_obey": [],
+  "phase": "generate",
+  "recommended_actions": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_softmax_row_softmax_4096x1024_bf16",
+  "validation_plan": []
+}

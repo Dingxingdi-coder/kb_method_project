@@ -21,10 +21,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import append_jsonl, read_json, sha256_file, utc_now, write_json  # noqa: E402
 
 SKELETONS = {
-    "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y. Do not call torch.softmax.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
-    "reduction": """\"\"\"Candidate kernel for row reduction. Interface: candidate(x, reduce_op) -> y. Do not call torch.sum or torch.max.\"\"\"\n\ndef candidate(x, reduce_op):\n    raise NotImplementedError(\"agent must implement row reduction\")\n""",
+    "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
+    "reduction": """\"\"\"Candidate kernel for row reduction. Interface: candidate(x, reduce_op) -> y.\"\"\"\n\ndef candidate(x, reduce_op):\n    raise NotImplementedError(\"agent must implement row reduction\")\n""",
     "layernorm": """\"\"\"Candidate kernel for LayerNorm forward. Interface: candidate(x, gamma, beta, eps) -> y.\"\"\"\n\ndef candidate(x, gamma, beta, eps):\n    raise NotImplementedError(\"agent must implement layernorm forward\")\n""",
-    "matmul": """\"\"\"Candidate kernel for matmul. Interface: candidate(a, b) -> c. Do not call torch.matmul.\"\"\"\n\ndef candidate(a, b):\n    raise NotImplementedError(\"agent must implement matmul\")\n""",
+    "matmul": """\"\"\"Candidate kernel for matmul. Interface: candidate(a, b) -> c.\"\"\"\n\ndef candidate(a, b):\n    raise NotImplementedError(\"agent must implement matmul\")\n""",
 }
 
 

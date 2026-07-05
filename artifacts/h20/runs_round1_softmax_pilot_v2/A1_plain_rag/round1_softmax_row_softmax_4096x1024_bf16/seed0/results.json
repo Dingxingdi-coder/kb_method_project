@@ -1,0 +1,137 @@
+{
+  "anti_cheating": {
+    "issues": [],
+    "status": "pass"
+  },
+  "benchmark": {
+    "latency_mean_ms": 0.030541375987231733,
+    "latency_p50_ms": 0.03009600006043911,
+    "latency_p95_ms": 0.03331200033426285,
+    "latency_std_ms": 0.0030497264877576043,
+    "speedup_vs_eager_p50": 1.6661350923991687,
+    "speedup_vs_torch_compile_p50": 1.7299309361927064
+  },
+  "candidate_hash": "14c664008ca3e05d3479b46c4c0f0cade7fae43bbe41e1b74036766d72100dd6",
+  "compile": {
+    "status": "pass"
+  },
+  "correctness": {
+    "hidden": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.08,
+          "max_abs_error": 7.62939453125e-06,
+          "max_rel_error": 0.006896551698446274,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 100,
+            "shape": [
+              2049,
+              1025
+            ]
+          }
+        },
+        {
+          "atol": 0.08,
+          "max_abs_error": 3.0517578125e-05,
+          "max_rel_error": 0.007299270015209913,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 101,
+            "shape": [
+              4103,
+              1021
+            ]
+          }
+        },
+        {
+          "atol": 0.08,
+          "max_abs_error": 1.52587890625e-05,
+          "max_rel_error": 0.007751937955617905,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "non_contiguous",
+            "seed_offset": 200,
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        }
+      ]
+    },
+    "quick": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.08,
+          "max_abs_error": 3.0517578125e-05,
+          "max_rel_error": 0.007633587811142206,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 0,
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        }
+      ]
+    },
+    "smoke": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.08,
+          "max_abs_error": 3.0517578125e-05,
+          "max_rel_error": 0.007633587811142206,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 0,
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cost": {
+    "gpu_benchmark_runs": 500,
+    "iterations": 1,
+    "wall_time_s": 2.4837374687194824
+  },
+  "final_decision": "KEEP",
+  "op_family": "softmax",
+  "profile_summary": {
+    "candidate_actions": [
+      "verify_p95_stability",
+      "try_small_knob_search_only"
+    ],
+    "dominant_symptom": "memory_bound",
+    "evidence": {
+      "heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available",
+      "speedup_vs_eager_p50": 1.6661350923991687
+    }
+  },
+  "run_id": "harness_fa3d77839eaa",
+  "schema_version": "0.1",
+  "task_id": "round1_softmax_row_softmax_4096x1024_bf16",
+  "timestamp": "2026-07-05T06:34:55+00:00"
+}

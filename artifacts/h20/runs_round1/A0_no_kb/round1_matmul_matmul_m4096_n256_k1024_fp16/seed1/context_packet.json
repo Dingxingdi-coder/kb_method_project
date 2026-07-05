@@ -1,0 +1,14 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "fc6272ba169e83fafc2bcfc200ef2f77b834d8eae70c85d3b3482762f23a4693",
+  "context_packet_short_hash": "892eb7cf2316",
+  "evidence_refs": [],
+  "group": "A0_no_kb",
+  "must_obey": [],
+  "phase": "generate",
+  "recommended_actions": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_matmul_matmul_m4096_n256_k1024_fp16",
+  "validation_plan": []
+}

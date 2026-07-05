@@ -1,0 +1,47 @@
+{
+  "agent_allowed_files": [
+    "candidate.py",
+    "notes.md"
+  ],
+  "agent_forbidden_files": [
+    "reference.py",
+    "hidden_tests.json",
+    "experiments/h20/harness.py"
+  ],
+  "budget": {
+    "max_iterations": 8,
+    "max_wall_time_minutes": 60,
+    "repeats": 500,
+    "warmup": 100
+  },
+  "dtype": "bf16",
+  "goal": "compile_correct_and_benchmark",
+  "op_family": "softmax",
+  "op_name": "row_softmax",
+  "op_spec": {
+    "candidate_interface": "candidate(x) -> y",
+    "semantics": "Subtract row max before exp; mask padded tail elements.",
+    "signature": "y = torch.softmax(x, dim=-1)",
+    "tolerance": "dtype-dependent"
+  },
+  "op_spec_hash": "899a08780b80",
+  "public_tests": [
+    {
+      "dtype": "bf16",
+      "layout": "contiguous",
+      "seed_offset": 0,
+      "shape": [
+        16384,
+        1024
+      ]
+    }
+  ],
+  "round": "round2",
+  "schema_version": "0.1",
+  "shape": [
+    16384,
+    1024
+  ],
+  "task_id": "round2_softmax_row_softmax_16384x1024_bf16",
+  "variant": "row_softmax"
+}

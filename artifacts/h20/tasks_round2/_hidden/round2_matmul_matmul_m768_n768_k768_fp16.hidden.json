@@ -1,0 +1,27 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": {
+        "K": 768,
+        "M": 401,
+        "N": 768
+      }
+    },
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": {
+        "K": 407,
+        "M": 768,
+        "N": 403
+      }
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round2_matmul_matmul_m768_n768_k768_fp16"
+}

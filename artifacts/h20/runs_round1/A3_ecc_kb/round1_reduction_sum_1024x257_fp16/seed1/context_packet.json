@@ -1,0 +1,31 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "5c25e80f1ce5c904d269a9b73672991844208dda2909bb4ec19c18a26e99cf7a",
+  "context_packet_short_hash": "7128138c4030",
+  "evidence_refs": [],
+  "group": "A3_ecc_kb",
+  "kb_version": "v0",
+  "must_obey": [
+    {
+      "capsule_id": "fallback_no_reference",
+      "instruction": "Do not call PyTorch reference or fallback libraries from candidate.py."
+    },
+    {
+      "capsule_id": "fallback_hidden_first",
+      "instruction": "Treat hidden correctness as a hard gate before performance claims."
+    }
+  ],
+  "op_family": "reduction",
+  "phase": "generate",
+  "recommended_actions": [],
+  "retrieved_capsules": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_reduction_sum_1024x257_fp16",
+  "validation_plan": [
+    {
+      "capsule_id": "fallback_validation_plan",
+      "instruction": "Run smoke, quick, hidden correctness, then p50/p95 benchmark with fixed warmup/repeats."
+    }
+  ]
+}

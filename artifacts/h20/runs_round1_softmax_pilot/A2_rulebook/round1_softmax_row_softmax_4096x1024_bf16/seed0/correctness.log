@@ -1,0 +1,4 @@
+anti_cheating: fail forbidden_or_suspicious_reference_pattern:torch.softmax, forbidden_or_suspicious_reference_pattern:torch.sum, forbidden_or_suspicious_reference_pattern:.sum(, forbidden_or_suspicious_reference_pattern:.max(
+smoke: pass
+quick: pass
+hidden: pass

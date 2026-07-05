@@ -1,0 +1,164 @@
+{
+  "results": [
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A0_no_kb",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x768_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x768_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0/context_packet.json group=A0_no_kb phase=generate hash=2006a9f575a1\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A1_plain_rag",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x768_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x768_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x768_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x768_fp16/seed0/context_packet.json group=A1_plain_rag phase=generate hash=c3e8af3e4d4c\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x768_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x768_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A2_rulebook",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x768_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x768_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x768_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x768_fp16/seed0/context_packet.json group=A2_rulebook phase=generate hash=65cac4eafb58\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x768_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x768_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A3_ecc_kb",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x768_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x768_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0/context_packet.json group=A3_ecc_kb phase=generate hash=a3dcfb48190e\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x768_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A0_no_kb",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x8192_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x8192_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0/context_packet.json group=A0_no_kb phase=generate hash=148e20604b8d\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A0_no_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A1_plain_rag",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x8192_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x8192_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0/context_packet.json group=A1_plain_rag phase=generate hash=8ce833f0a0ba\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A1_plain_rag/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A2_rulebook",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x8192_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x8192_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0/context_packet.json group=A2_rulebook phase=generate hash=392836a72de5\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A2_rulebook/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0 && ./run.sh\n"
+    },
+    {
+      "job": {
+        "backend": "/data/dxd/kb_method_project/artifacts/h20/backend_h20_v0.json",
+        "gpu": "0",
+        "group": "A3_ecc_kb",
+        "hidden": "artifacts/h20/tasks_round1/_hidden/round1_layernorm_layernorm_forward_1024x8192_fp16.hidden.json",
+        "iteration": "0",
+        "kb_version": "v0",
+        "out_dir": "/data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0",
+        "phase": "generate",
+        "repeats": "None",
+        "run_harness": "False",
+        "seed": "0",
+        "task": "/data/dxd/kb_method_project/artifacts/h20/tasks_round1/round1_layernorm_layernorm_forward_1024x8192_fp16.json",
+        "warmup": "None"
+      },
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "wrote /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0/context_packet.json group=A3_ecc_kb phase=generate hash=c1ea28bb7929\nWorkspace prepared: /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0\nEdit candidate.py, then run:\n  cd /data/dxd/kb_method_project/artifacts/h20/runs_round1_pilot/A3_ecc_kb/round1_layernorm_layernorm_forward_1024x8192_fp16/seed0 && ./run.sh\n"
+    }
+  ]
+}

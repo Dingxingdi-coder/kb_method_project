@@ -1,0 +1,47 @@
+{
+  "agent_allowed_files": [
+    "candidate.py",
+    "notes.md"
+  ],
+  "agent_forbidden_files": [
+    "reference.py",
+    "hidden_tests.json",
+    "experiments/h20/harness.py"
+  ],
+  "budget": {
+    "max_iterations": 8,
+    "max_wall_time_minutes": 60,
+    "repeats": 500,
+    "warmup": 100
+  },
+  "dtype": "fp16",
+  "goal": "compile_correct_and_benchmark",
+  "op_family": "reduction",
+  "op_name": "sum",
+  "op_spec": {
+    "candidate_interface": "candidate(x, reduce_op) -> y",
+    "semantics": "Reduce the last dimension with fp32 accumulation for sum unless declared otherwise.",
+    "signature": "y = torch.sum(x, dim=-1)",
+    "tolerance": "dtype-dependent"
+  },
+  "op_spec_hash": "6dfc03fe3b78",
+  "public_tests": [
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 0,
+      "shape": [
+        1024,
+        257
+      ]
+    }
+  ],
+  "round": "round1",
+  "schema_version": "0.1",
+  "shape": [
+    1024,
+    257
+  ],
+  "task_id": "round1_reduction_sum_1024x257_fp16",
+  "variant": "sum"
+}

@@ -1,0 +1,47 @@
+{
+  "agent_allowed_files": [
+    "candidate.py",
+    "notes.md"
+  ],
+  "agent_forbidden_files": [
+    "reference.py",
+    "hidden_tests.json",
+    "experiments/h20/harness.py"
+  ],
+  "budget": {
+    "max_iterations": 8,
+    "max_wall_time_minutes": 60,
+    "repeats": 500,
+    "warmup": 100
+  },
+  "dtype": "bf16",
+  "goal": "compile_correct_and_benchmark",
+  "op_family": "layernorm",
+  "op_name": "layernorm_forward",
+  "op_spec": {
+    "candidate_interface": "candidate(x, gamma, beta, eps) -> y",
+    "semantics": "Mean and variance over last dimension; fp32 accumulation.",
+    "signature": "y = (x - mean) / sqrt(var + eps) * gamma + beta",
+    "tolerance": "dtype-dependent"
+  },
+  "op_spec_hash": "c66935c663de",
+  "public_tests": [
+    {
+      "dtype": "bf16",
+      "layout": "contiguous",
+      "seed_offset": 0,
+      "shape": [
+        2048,
+        1024
+      ]
+    }
+  ],
+  "round": "round1",
+  "schema_version": "0.1",
+  "shape": [
+    2048,
+    1024
+  ],
+  "task_id": "round1_layernorm_layernorm_forward_2048x1024_bf16",
+  "variant": "layernorm_forward"
+}

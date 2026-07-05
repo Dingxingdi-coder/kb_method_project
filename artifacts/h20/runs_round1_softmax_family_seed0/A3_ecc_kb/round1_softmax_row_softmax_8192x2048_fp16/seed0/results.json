@@ -1,0 +1,137 @@
+{
+  "anti_cheating": {
+    "issues": [],
+    "status": "pass"
+  },
+  "benchmark": {
+    "latency_mean_ms": 0.053140799805521964,
+    "latency_p50_ms": 0.04492799937725067,
+    "latency_p95_ms": 0.047807998955249786,
+    "latency_std_ms": 0.14001628498053742,
+    "speedup_vs_eager_p50": 3.618945781304362,
+    "speedup_vs_torch_compile_p50": 2.250712339062449
+  },
+  "candidate_hash": "9fdec610f65fb76db2546a508a60a4a9f3eb98c823f4acab514e662b9449ef5d",
+  "compile": {
+    "status": "pass"
+  },
+  "correctness": {
+    "hidden": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.03,
+          "max_abs_error": 1.9073486328125e-06,
+          "max_rel_error": 0.0036496350076049566,
+          "rtol": 0.03,
+          "status": "pass",
+          "test": {
+            "dtype": "fp16",
+            "layout": "contiguous",
+            "seed_offset": 100,
+            "shape": [
+              4097,
+              2049
+            ]
+          }
+        },
+        {
+          "atol": 0.03,
+          "max_abs_error": 7.62939453125e-06,
+          "max_rel_error": 0.0044843051582574844,
+          "rtol": 0.03,
+          "status": "pass",
+          "test": {
+            "dtype": "fp16",
+            "layout": "contiguous",
+            "seed_offset": 101,
+            "shape": [
+              8199,
+              2045
+            ]
+          }
+        },
+        {
+          "atol": 0.03,
+          "max_abs_error": 3.814697265625e-06,
+          "max_rel_error": 0.0047846888191998005,
+          "rtol": 0.03,
+          "status": "pass",
+          "test": {
+            "dtype": "fp16",
+            "layout": "non_contiguous",
+            "seed_offset": 200,
+            "shape": [
+              8192,
+              2048
+            ]
+          }
+        }
+      ]
+    },
+    "quick": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.03,
+          "max_abs_error": 7.62939453125e-06,
+          "max_rel_error": 0.0027027027681469917,
+          "rtol": 0.03,
+          "status": "pass",
+          "test": {
+            "dtype": "fp16",
+            "layout": "contiguous",
+            "seed_offset": 0,
+            "shape": [
+              8192,
+              2048
+            ]
+          }
+        }
+      ]
+    },
+    "smoke": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.03,
+          "max_abs_error": 7.62939453125e-06,
+          "max_rel_error": 0.0027027027681469917,
+          "rtol": 0.03,
+          "status": "pass",
+          "test": {
+            "dtype": "fp16",
+            "layout": "contiguous",
+            "seed_offset": 0,
+            "shape": [
+              8192,
+              2048
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cost": {
+    "gpu_benchmark_runs": 500,
+    "iterations": 1,
+    "wall_time_s": 2.4216911792755127
+  },
+  "final_decision": "KEEP",
+  "op_family": "softmax",
+  "profile_summary": {
+    "candidate_actions": [
+      "verify_p95_stability",
+      "try_small_knob_search_only"
+    ],
+    "dominant_symptom": "memory_bound",
+    "evidence": {
+      "heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available",
+      "speedup_vs_eager_p50": 3.618945781304362
+    }
+  },
+  "run_id": "harness_3462d48d1396",
+  "schema_version": "0.1",
+  "task_id": "round1_softmax_row_softmax_8192x2048_fp16",
+  "timestamp": "2026-07-05T06:52:49+00:00"
+}

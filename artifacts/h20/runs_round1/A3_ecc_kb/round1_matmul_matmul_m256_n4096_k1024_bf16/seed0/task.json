@@ -1,0 +1,49 @@
+{
+  "agent_allowed_files": [
+    "candidate.py",
+    "notes.md"
+  ],
+  "agent_forbidden_files": [
+    "reference.py",
+    "hidden_tests.json",
+    "experiments/h20/harness.py"
+  ],
+  "budget": {
+    "max_iterations": 8,
+    "max_wall_time_minutes": 60,
+    "repeats": 500,
+    "warmup": 100
+  },
+  "dtype": "bf16",
+  "goal": "compile_correct_and_benchmark",
+  "op_family": "matmul",
+  "op_name": "matmul",
+  "op_spec": {
+    "candidate_interface": "candidate(a, b) -> c",
+    "semantics": "Matrix multiplication with declared dtype and backend default/fp32 accumulation.",
+    "signature": "C = A @ B",
+    "tolerance": "dtype-dependent"
+  },
+  "op_spec_hash": "c9a45bb74052",
+  "public_tests": [
+    {
+      "dtype": "bf16",
+      "layout": "contiguous",
+      "seed_offset": 0,
+      "shape": {
+        "K": 1024,
+        "M": 256,
+        "N": 4096
+      }
+    }
+  ],
+  "round": "round1",
+  "schema_version": "0.1",
+  "shape": {
+    "K": 1024,
+    "M": 256,
+    "N": 4096
+  },
+  "task_id": "round1_matmul_matmul_m256_n4096_k1024_bf16",
+  "variant": "matmul"
+}

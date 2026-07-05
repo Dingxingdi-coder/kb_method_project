@@ -1,0 +1,85 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "d214321b1138180920d02bc2bb88d99ed6d25f50d8920d45ffeaa4ab572a5b4b",
+  "context_packet_short_hash": "6aa8b7cdf2a6",
+  "evidence_refs": [
+    {
+      "capsule_id": "sem_softmax_stability_v1",
+      "evidence": {
+        "ablation_refs": [],
+        "benchmark_refs": [],
+        "code_hashes": [],
+        "confidence": 0.75,
+        "evidence_level": "claim",
+        "profile_refs": [],
+        "run_ids": [],
+        "source_refs": [
+          "reports:auto_generated_kernel_survey:correctness_harness",
+          "reports:knowledge_kb:op_contract"
+        ]
+      },
+      "failure_boundary": {
+        "boundary_tests": [
+          "N=257",
+          "N=4096",
+          "values scaled by 100"
+        ],
+        "do_not_apply": [
+          "approximate or sparse softmax unless OpSpec declares it"
+        ],
+        "known_failures": [
+          "hardcoded visible N",
+          "unmasked tail values contribute to sum",
+          "exp without max subtraction overflows"
+        ]
+      },
+      "validation": {
+        "correctness_matrix": [
+          "large positive/negative values",
+          "non-power-of-two N",
+          "fp16/bf16/fp32",
+          "hidden shape sweep"
+        ],
+        "gates": [
+          "schema",
+          "smoke_correctness",
+          "quick_correctness",
+          "hidden_correctness",
+          "anti_cheating"
+        ],
+        "performance_requirements": [],
+        "promotion_policy": "Semantic capsule is stable as mathematical contract; backend-specific performance actions require separate evidence."
+      }
+    }
+  ],
+  "group": "A3_ecc_kb",
+  "kb_version": "v0",
+  "must_obey": [
+    {
+      "capsule_id": "sem_softmax_stability_v1",
+      "expected_effect": {
+        "correctness": "Prevents overflow and tail-mask numerical errors.",
+        "performance": "Allows fused row-wise implementation after correctness is preserved.",
+        "risk": "May not be optimal for extremely large N without multi-stage strategy.",
+        "search_efficiency": "Avoids debugging unstable softmax variants."
+      },
+      "instruction": "Compute row max before exp.; Subtract row max before exponentiation.; Mask offsets outside N for max, exp, sum, and store.; Do not hardcode public shapes.",
+      "source_path": "kb/stable/sem_softmax_stability_v1.json"
+    }
+  ],
+  "op_family": "softmax",
+  "phase": "generate",
+  "recommended_actions": [],
+  "retrieved_capsules": [
+    "sem_softmax_stability_v1"
+  ],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_softmax_row_softmax_512x4096_fp32",
+  "validation_plan": [
+    {
+      "capsule_id": "fallback_validation_plan",
+      "instruction": "Run smoke, quick, hidden correctness, then p50/p95 benchmark with fixed warmup/repeats."
+    }
+  ]
+}

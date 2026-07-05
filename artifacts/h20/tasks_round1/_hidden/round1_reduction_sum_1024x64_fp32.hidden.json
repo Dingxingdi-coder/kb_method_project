@@ -1,0 +1,34 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": [
+        513,
+        65
+      ]
+    },
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": [
+        1031,
+        61
+      ]
+    },
+    {
+      "dtype": "fp32",
+      "layout": "non_contiguous",
+      "seed_offset": 200,
+      "shape": [
+        1024,
+        64
+      ]
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round1_reduction_sum_1024x64_fp32"
+}

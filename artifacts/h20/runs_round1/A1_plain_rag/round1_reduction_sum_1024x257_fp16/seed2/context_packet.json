@@ -1,0 +1,106 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "b11d42ea3d06e034ec61b1a923fdced60fd644d1d932126768a9e79708ff54f4",
+  "context_packet_short_hash": "519fb844c9e0",
+  "document_chunks": [
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "```text\nwhen(task_state, op_contract, backend_abstract_features, evidence_scope)\n  -> suggest(action | transformation | guard | stop)\n  -> expect(effect_on_correctness | effect_on_latency | effect_on_search_space)\n  -> verify(gates)\n  -> invalidate(failure_boundary)\n```"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "- execution hierarchy：program / block / warp-or-wave / lane / vector / tensor-core-like unit；\n- memory hierarchy：global / cache / scratchpad / register / special on-chip buffer；\n- movement pattern：coalesced load、gather/scatter、tile copy、vectorized load、bank-conflict risk；\n- synchronization model：block-local sync、warp-local sync、pipeline barrier、async copy dependency；\n- numerical model：accumulation dtype、fast math、exp/log approximation、rounding and deterministic behavior；\n- compiler/toolchain model：DSL legality、intrinsic support、resource limits、launch overhead、autotune knobs；\n- profiler symptom taxonomy：memory-bound、compute-bound、occupancy-limited、register-pressure、bank-conflict、divergence、launch-bound。"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "H20 只是一个 backend instance。AMD、Ascend、TPU 或其他后端只替换实例层、工具链适配器、profile 解释器和后端约束证据，不替换方法本身。"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "- **Semantic/Correctness capsules**：保护算子语义、shape/dtype/layout、容差、边界条件、anti-cheating、fuzzing。\n- **Performance capsules**：在正确候选上缩小优化空间，给出结构性改写、参数性搜索和停止条件。"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "修复 loop 和性能 loop 不能混在一起。编译/正确性失败时只召回修复相关知识；正确性通过后才召回 profile motif 和 autotune 记录。"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "任何知识进入稳定库前，必须具备可复现证据。自然语言总结、LLM 自评、单次 allclose 或单次 benchmark 只能进入 quarantine，不得直接进入 stable。"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "| 类型 | 主要用途 | 典型触发阶段 |\n|---|---|---|\n| `op_contract` | 算子语义、shape/dtype/layout、容差、reference、隐藏测试规则 | 生成、正确性 |\n| `legality_constraint` | DSL/API/intrinsic/resource 合法性约束 | 生成、编译修复 |\n| `implementation_skeleton` | 可编辑代码骨架或 IR/schedule 模板 | 生成 |\n| `failure_signature` | 编译、数值、越界、race、cheating、性能退化模式 | 修复、复盘 |\n| `optimization_motif` | `trigger -> diff/action -> expected profile change -> gates` | 性能优化 |\n| `tuning_record` | workload fingerprint、knobs、latency、profile、版本 | autotune、warm start |\n| `stop_capsule` | 已接近上界、收益不足、风险过高、重复失败 | 搜索终止 |"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md",
+      "text": "- 算子语义和验证方法；\n- 算子族级别的计算/访存模式；\n- 抽象优化 motif，例如“行内 softmax 需要 max-subtract-exp-sum-divide 的两阶段或融合阶段语义”；\n- 抽象 profile bottleneck 分类；\n- 跨后端可复用的 failure boundary；\n- 从 op contract 到测试矩阵的生成规则。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    },
+    {
+      "source": "/data/dxd/kb_method_project/docs/method.md"
+    }
+  ],
+  "group": "A1_plain_rag",
+  "must_obey": [],
+  "phase": "generate",
+  "recommended_actions": [
+    {
+      "capsule_id": "rag_chunk_0",
+      "instruction": "```text\nwhen(task_state, op_contract, backend_abstract_features, evidence_scope)\n  -> suggest(action | transformation | guard | stop)\n  -> expect(effect_on_correctness | effect_on_latency | effect_on_search_space)\n  -> verify(gates)\n  -> invalidate(failure_boundary)\n```"
+    },
+    {
+      "capsule_id": "rag_chunk_1",
+      "instruction": "- execution hierarchy：program / block / warp-or-wave / lane / vector / tensor-core-like unit；\n- memory hierarchy：global / cache / scratchpad / register / special on-chip buffer；\n- movement pattern：coalesced load、gather/scatter、tile copy、vectorized load、bank-conflict risk；\n- synchronization model：block-local sync、warp-local sync、pipeline barrier、async copy dependency；\n- numerical model：accumulation dtype、fast math、exp/log approximation、rounding and deterministic behavior；\n- compiler/toolchain model：DSL legality、intrinsic support、resource limits、launch overhead、autotune knobs；\n- profiler symptom taxonomy：memory-bound、compute-bound、occupancy-limited、register-pressure、bank-conflict、divergence、launch-bound。"
+    },
+    {
+      "capsule_id": "rag_chunk_2",
+      "instruction": "H20 只是一个 backend instance。AMD、Ascend、TPU 或其他后端只替换实例层、工具链适配器、profile 解释器和后端约束证据，不替换方法本身。"
+    },
+    {
+      "capsule_id": "rag_chunk_3",
+      "instruction": "- **Semantic/Correctness capsules**：保护算子语义、shape/dtype/layout、容差、边界条件、anti-cheating、fuzzing。\n- **Performance capsules**：在正确候选上缩小优化空间，给出结构性改写、参数性搜索和停止条件。"
+    },
+    {
+      "capsule_id": "rag_chunk_4",
+      "instruction": "修复 loop 和性能 loop 不能混在一起。编译/正确性失败时只召回修复相关知识；正确性通过后才召回 profile motif 和 autotune 记录。"
+    },
+    {
+      "capsule_id": "rag_chunk_5",
+      "instruction": "任何知识进入稳定库前，必须具备可复现证据。自然语言总结、LLM 自评、单次 allclose 或单次 benchmark 只能进入 quarantine，不得直接进入 stable。"
+    },
+    {
+      "capsule_id": "rag_chunk_6",
+      "instruction": "| 类型 | 主要用途 | 典型触发阶段 |\n|---|---|---|\n| `op_contract` | 算子语义、shape/dtype/layout、容差、reference、隐藏测试规则 | 生成、正确性 |\n| `legality_constraint` | DSL/API/intrinsic/resource 合法性约束 | 生成、编译修复 |\n| `implementation_skeleton` | 可编辑代码骨架或 IR/schedule 模板 | 生成 |\n| `failure_signature` | 编译、数值、越界、race、cheating、性能退化模式 | 修复、复盘 |\n| `optimization_motif` | `trigger -> diff/action -> expected profile change -> gates` | 性能优化 |\n| `tuning_record` | workload fingerprint、knobs、latency、profile、版本 | autotune、warm start |\n| `stop_capsule` | 已接近上界、收益不足、风险过高、重复失败 | 搜索终止 |"
+    },
+    {
+      "capsule_id": "rag_chunk_7",
+      "instruction": "- 算子语义和验证方法；\n- 算子族级别的计算/访存模式；\n- 抽象优化 motif，例如“行内 softmax 需要 max-subtract-exp-sum-divide 的两阶段或融合阶段语义”；\n- 抽象 profile bottleneck 分类；\n- 跨后端可复用的 failure boundary；\n- 从 op contract 到测试矩阵的生成规则。"
+    }
+  ],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_reduction_sum_1024x257_fp16",
+  "validation_plan": []
+}

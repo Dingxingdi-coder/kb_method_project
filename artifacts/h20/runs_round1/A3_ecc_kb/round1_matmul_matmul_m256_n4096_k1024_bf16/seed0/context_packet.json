@@ -1,0 +1,31 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "f36290d746a5ba3c21cddd6393123166c6faf1f0858ed5e3306f72f61b8f90e7",
+  "context_packet_short_hash": "23c57a76172c",
+  "evidence_refs": [],
+  "group": "A3_ecc_kb",
+  "kb_version": "v0",
+  "must_obey": [
+    {
+      "capsule_id": "fallback_no_reference",
+      "instruction": "Do not call PyTorch reference or fallback libraries from candidate.py."
+    },
+    {
+      "capsule_id": "fallback_hidden_first",
+      "instruction": "Treat hidden correctness as a hard gate before performance claims."
+    }
+  ],
+  "op_family": "matmul",
+  "phase": "generate",
+  "recommended_actions": [],
+  "retrieved_capsules": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_matmul_matmul_m256_n4096_k1024_bf16",
+  "validation_plan": [
+    {
+      "capsule_id": "fallback_validation_plan",
+      "instruction": "Run smoke, quick, hidden correctness, then p50/p95 benchmark with fixed warmup/repeats."
+    }
+  ]
+}

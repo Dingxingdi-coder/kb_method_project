@@ -1,0 +1,45 @@
+{
+  "round": "round2",
+  "tasks": [
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_softmax_row_softmax_2048x513_fp16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_softmax_row_softmax_2048x513_fp16.json",
+      "task_id": "round2_softmax_row_softmax_2048x513_fp16"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_softmax_row_softmax_16384x1024_bf16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_softmax_row_softmax_16384x1024_bf16.json",
+      "task_id": "round2_softmax_row_softmax_16384x1024_bf16"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_layernorm_layernorm_forward_4096x3072_fp16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_layernorm_layernorm_forward_4096x3072_fp16.json",
+      "task_id": "round2_layernorm_layernorm_forward_4096x3072_fp16"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_layernorm_layernorm_forward_2048x6144_bf16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_layernorm_layernorm_forward_2048x6144_bf16.json",
+      "task_id": "round2_layernorm_layernorm_forward_2048x6144_bf16"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_reduction_sum_2048x1536_fp16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_reduction_sum_2048x1536_fp16.json",
+      "task_id": "round2_reduction_sum_2048x1536_fp16"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_reduction_max_16384x255_fp32.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_reduction_max_16384x255_fp32.json",
+      "task_id": "round2_reduction_max_16384x255_fp32"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_matmul_matmul_m768_n768_k768_fp16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_matmul_matmul_m768_n768_k768_fp16.json",
+      "task_id": "round2_matmul_matmul_m768_n768_k768_fp16"
+    },
+    {
+      "hidden": "artifacts/h20/tasks_round2/_hidden/round2_matmul_matmul_m2048_n512_k1536_bf16.hidden.json",
+      "task": "artifacts/h20/tasks_round2/round2_matmul_matmul_m2048_n512_k1536_bf16.json",
+      "task_id": "round2_matmul_matmul_m2048_n512_k1536_bf16"
+    }
+  ]
+}

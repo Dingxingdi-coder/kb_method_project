@@ -1,0 +1,34 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": [
+        513,
+        258
+      ]
+    },
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": [
+        1031,
+        254
+      ]
+    },
+    {
+      "dtype": "fp16",
+      "layout": "non_contiguous",
+      "seed_offset": 200,
+      "shape": [
+        1024,
+        257
+      ]
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round1_softmax_row_softmax_1024x257_fp16"
+}

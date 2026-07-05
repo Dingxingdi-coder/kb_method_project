@@ -1,0 +1,14 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "8d5a40261c0dcf7f561dfd72ff8e52990892d796572b9faeda24bbac7540eb3f",
+  "context_packet_short_hash": "246f36f0b705",
+  "evidence_refs": [],
+  "group": "A0_no_kb",
+  "must_obey": [],
+  "phase": "generate",
+  "recommended_actions": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_reduction_max_4096x1024_fp16",
+  "validation_plan": []
+}

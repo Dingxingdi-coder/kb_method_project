@@ -11,6 +11,7 @@ Candidate interface:
 from __future__ import annotations
 
 import argparse
+import ast
 import importlib.util
 import math
 import statistics
@@ -23,7 +24,62 @@ from typing import Any, Callable
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import read_json, sha256_file, short_hash, utc_now, write_json  # noqa: E402
 
-FORBIDDEN_PATTERNS = ["torch.softmax", "F.softmax", "torch.sum", ".sum(", "torch.max", ".max(", "torch.matmul", "torch.mm", "torch.bmm", "torch.nn.functional.layer_norm", "F.layer_norm"]
+FORBIDDEN_QUALIFIED_CALLS = {
+    "torch.softmax",
+    "torch.sum",
+    "torch.max",
+    "torch.matmul",
+    "torch.mm",
+    "torch.bmm",
+    "torch.nn.functional.softmax",
+    "torch.nn.functional.layer_norm",
+}
+FORBIDDEN_METHOD_CALLS = {"sum", "max"}
+TRITON_LANGUAGE_MODULES = {"triton.language"}
+
+
+class CandidateSourceScanner(ast.NodeVisitor):
+    def __init__(self) -> None:
+        self.aliases: dict[str, str] = {}
+        self.issues: list[str] = []
+
+    def visit_Import(self, node: ast.Import) -> Any:
+        for alias in node.names:
+            asname = alias.asname or alias.name.split(".")[0]
+            self.aliases[asname] = alias.name
+        self.generic_visit(node)
+
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> Any:
+        if not node.module:
+            return
+        for alias in node.names:
+            if alias.name == "*":
+                continue
+            asname = alias.asname or alias.name
+            self.aliases[asname] = f"{node.module}.{alias.name}"
+        self.generic_visit(node)
+
+    def visit_Call(self, node: ast.Call) -> Any:
+        name = self._resolve_expr(node.func)
+        if name in FORBIDDEN_QUALIFIED_CALLS:
+            self._add_issue(f"forbidden_call:{name}")
+        elif isinstance(node.func, ast.Attribute) and node.func.attr in FORBIDDEN_METHOD_CALLS:
+            owner = self._resolve_expr(node.func.value)
+            if owner not in TRITON_LANGUAGE_MODULES:
+                self._add_issue(f"forbidden_method_call:.{node.func.attr}")
+        self.generic_visit(node)
+
+    def _resolve_expr(self, node: ast.AST) -> str | None:
+        if isinstance(node, ast.Name):
+            return self.aliases.get(node.id, node.id)
+        if isinstance(node, ast.Attribute):
+            base = self._resolve_expr(node.value)
+            return f"{base}.{node.attr}" if base else None
+        return None
+
+    def _add_issue(self, issue: str) -> None:
+        if issue not in self.issues:
+            self.issues.append(issue)
 
 
 def torch_dtype(name: str):
@@ -59,7 +115,13 @@ def scan_candidate_source(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {"status": "fail", "issues": ["candidate.py does not exist"]}
     text = path.read_text(encoding="utf-8", errors="ignore")
-    issues = [f"forbidden_or_suspicious_reference_pattern:{p}" for p in FORBIDDEN_PATTERNS if p in text]
+    try:
+        tree = ast.parse(text, filename=str(path))
+    except SyntaxError as exc:
+        return {"status": "fail", "issues": [f"syntax_error:{exc.msg}"]}
+    scanner = CandidateSourceScanner()
+    scanner.visit(tree)
+    issues = scanner.issues
     return {"status": "fail" if issues else "pass", "issues": issues}
 
 

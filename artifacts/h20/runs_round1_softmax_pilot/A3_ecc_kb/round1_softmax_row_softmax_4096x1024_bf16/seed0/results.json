@@ -1,0 +1,124 @@
+{
+  "anti_cheating": {
+    "issues": [
+      "forbidden_or_suspicious_reference_pattern:torch.softmax",
+      "forbidden_or_suspicious_reference_pattern:.sum("
+    ],
+    "status": "fail"
+  },
+  "benchmark": {},
+  "candidate_hash": "8882e6ab8af3a3d09c5b6593090d82eba3b4c7d680108980b0c58d102c9c3871",
+  "compile": {
+    "status": "pass"
+  },
+  "correctness": {
+    "hidden": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.08,
+          "max_abs_error": 3.0517578125e-05,
+          "max_rel_error": 0.006896551698446274,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 100,
+            "shape": [
+              2049,
+              1025
+            ]
+          }
+        },
+        {
+          "atol": 0.08,
+          "max_abs_error": 1.52587890625e-05,
+          "max_rel_error": 0.007352941203862429,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 101,
+            "shape": [
+              4103,
+              1021
+            ]
+          }
+        },
+        {
+          "atol": 0.08,
+          "max_abs_error": 1.52587890625e-05,
+          "max_rel_error": 0.007692307699471712,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "non_contiguous",
+            "seed_offset": 200,
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        }
+      ]
+    },
+    "quick": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.08,
+          "max_abs_error": 7.62939453125e-06,
+          "max_rel_error": 0.007299270015209913,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 0,
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        }
+      ]
+    },
+    "smoke": {
+      "status": "pass",
+      "tests": [
+        {
+          "atol": 0.08,
+          "max_abs_error": 7.62939453125e-06,
+          "max_rel_error": 0.007299270015209913,
+          "rtol": 0.08,
+          "status": "pass",
+          "test": {
+            "dtype": "bf16",
+            "layout": "contiguous",
+            "seed_offset": 0,
+            "shape": [
+              4096,
+              1024
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cost": {
+    "gpu_benchmark_runs": 0,
+    "iterations": 1,
+    "wall_time_s": 0.4074418544769287
+  },
+  "diagnosis": "anti-cheating static scan failed",
+  "final_decision": "FAIL",
+  "op_family": "softmax",
+  "profile_summary": {},
+  "run_id": "harness_43ea0b1df7d7",
+  "schema_version": "0.1",
+  "task_id": "round1_softmax_row_softmax_4096x1024_bf16",
+  "timestamp": "2026-07-05T06:00:57+00:00"
+}

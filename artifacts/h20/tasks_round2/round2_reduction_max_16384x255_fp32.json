@@ -1,0 +1,47 @@
+{
+  "agent_allowed_files": [
+    "candidate.py",
+    "notes.md"
+  ],
+  "agent_forbidden_files": [
+    "reference.py",
+    "hidden_tests.json",
+    "experiments/h20/harness.py"
+  ],
+  "budget": {
+    "max_iterations": 8,
+    "max_wall_time_minutes": 60,
+    "repeats": 500,
+    "warmup": 100
+  },
+  "dtype": "fp32",
+  "goal": "compile_correct_and_benchmark",
+  "op_family": "reduction",
+  "op_name": "max",
+  "op_spec": {
+    "candidate_interface": "candidate(x, reduce_op) -> y",
+    "semantics": "Reduce the last dimension with fp32 accumulation for sum unless declared otherwise.",
+    "signature": "y = torch.max(x, dim=-1)",
+    "tolerance": "dtype-dependent"
+  },
+  "op_spec_hash": "6f00cbdefdf2",
+  "public_tests": [
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 0,
+      "shape": [
+        16384,
+        255
+      ]
+    }
+  ],
+  "round": "round2",
+  "schema_version": "0.1",
+  "shape": [
+    16384,
+    255
+  ],
+  "task_id": "round2_reduction_max_16384x255_fp32",
+  "variant": "max"
+}

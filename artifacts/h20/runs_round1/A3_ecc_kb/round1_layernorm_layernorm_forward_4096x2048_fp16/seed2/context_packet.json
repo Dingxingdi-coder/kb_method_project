@@ -1,0 +1,31 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "ee6af2ee73c2743fac59a6cfd7a9347172f1900d42e2215339c301413d029748",
+  "context_packet_short_hash": "240a8eb76409",
+  "evidence_refs": [],
+  "group": "A3_ecc_kb",
+  "kb_version": "v0",
+  "must_obey": [
+    {
+      "capsule_id": "fallback_no_reference",
+      "instruction": "Do not call PyTorch reference or fallback libraries from candidate.py."
+    },
+    {
+      "capsule_id": "fallback_hidden_first",
+      "instruction": "Treat hidden correctness as a hard gate before performance claims."
+    }
+  ],
+  "op_family": "layernorm",
+  "phase": "generate",
+  "recommended_actions": [],
+  "retrieved_capsules": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_layernorm_layernorm_forward_4096x2048_fp16",
+  "validation_plan": [
+    {
+      "capsule_id": "fallback_validation_plan",
+      "instruction": "Run smoke, quick, hidden correctness, then p50/p95 benchmark with fixed warmup/repeats."
+    }
+  ]
+}

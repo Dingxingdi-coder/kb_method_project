@@ -1,0 +1,12 @@
+{
+  "candidate_actions": [
+    "inspect_memory_access_pattern",
+    "reduce_register_pressure",
+    "retune_tile_or_block_size"
+  ],
+  "dominant_symptom": "memory_bound",
+  "evidence": {
+    "heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available",
+    "speedup_vs_eager_p50": 0.7827160470760567
+  }
+}

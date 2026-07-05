@@ -1,0 +1,43 @@
+{
+  "anti_actions": [
+    {
+      "capsule_id": "rule_no_hardcode_visible_shapes",
+      "instruction": "Do not hardcode public shapes or constants derived only from visible tests.",
+      "kind": "anti_action"
+    }
+  ],
+  "context_packet_hash": "2d3a83bff41a778c1865a9e69be4264a06fe051e3b06a3ab4c280dbed8534365",
+  "context_packet_short_hash": "5aba4beea4e5",
+  "evidence_refs": [],
+  "group": "A2_rulebook",
+  "must_obey": [
+    {
+      "capsule_id": "rule_tail_mask",
+      "instruction": "Use explicit masks for non-power-of-two tails and boundary elements.",
+      "kind": "must_obey"
+    },
+    {
+      "capsule_id": "rule_fp32_accumulation",
+      "instruction": "Use fp32 accumulation for fp16/bf16 reductions unless the OpSpec declares another policy.",
+      "kind": "must_obey"
+    }
+  ],
+  "phase": "generate",
+  "recommended_actions": [
+    {
+      "capsule_id": "rule_tune_tile_after_correctness",
+      "instruction": "Tune tile size, num_warps, and stages only after hidden correctness passes.",
+      "kind": "recommend"
+    }
+  ],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_reduction_sum_1024x64_fp32",
+  "validation_plan": [
+    {
+      "capsule_id": "rule_report_p50_p95",
+      "instruction": "Report p50 and p95 latency against eager and torch.compile baselines.",
+      "kind": "validate"
+    }
+  ]
+}

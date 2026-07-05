@@ -1,0 +1,34 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "bf16",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": [
+        4097,
+        4097
+      ]
+    },
+    {
+      "dtype": "bf16",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": [
+        8199,
+        4093
+      ]
+    },
+    {
+      "dtype": "bf16",
+      "layout": "non_contiguous",
+      "seed_offset": 200,
+      "shape": [
+        8192,
+        4096
+      ]
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round1_layernorm_layernorm_forward_8192x4096_bf16"
+}

@@ -1,0 +1,34 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": [
+        257,
+        4097
+      ]
+    },
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": [
+        519,
+        4093
+      ]
+    },
+    {
+      "dtype": "fp32",
+      "layout": "non_contiguous",
+      "seed_offset": 200,
+      "shape": [
+        512,
+        4096
+      ]
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round1_softmax_row_softmax_512x4096_fp32"
+}

@@ -1,0 +1,34 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": [
+        8193,
+        256
+      ]
+    },
+    {
+      "dtype": "fp32",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": [
+        16391,
+        252
+      ]
+    },
+    {
+      "dtype": "fp32",
+      "layout": "non_contiguous",
+      "seed_offset": 200,
+      "shape": [
+        16384,
+        255
+      ]
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round2_reduction_max_16384x255_fp32"
+}

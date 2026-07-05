@@ -1,0 +1,11 @@
+{
+  "candidate_actions": [
+    "verify_p95_stability",
+    "try_small_knob_search_only"
+  ],
+  "dominant_symptom": "memory_bound",
+  "evidence": {
+    "heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available",
+    "speedup_vs_eager_p50": 1.1767015455505423
+  }
+}

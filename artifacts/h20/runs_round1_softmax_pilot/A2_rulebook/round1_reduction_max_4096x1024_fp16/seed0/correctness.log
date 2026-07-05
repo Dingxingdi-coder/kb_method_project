@@ -1,0 +1,2 @@
+anti_cheating: fail forbidden_or_suspicious_reference_pattern:torch.sum, forbidden_or_suspicious_reference_pattern:torch.max
+smoke: fail

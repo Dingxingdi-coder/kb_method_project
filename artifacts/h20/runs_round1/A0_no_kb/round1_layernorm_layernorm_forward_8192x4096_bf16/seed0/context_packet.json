@@ -1,0 +1,14 @@
+{
+  "anti_actions": [],
+  "context_packet_hash": "8545bf943544146dec9e53f39932d8e5801c75b06601d24e656251d195a8ed06",
+  "context_packet_short_hash": "cbd933a2e04b",
+  "evidence_refs": [],
+  "group": "A0_no_kb",
+  "must_obey": [],
+  "phase": "generate",
+  "recommended_actions": [],
+  "schema_version": "0.1",
+  "stop_conditions": [],
+  "task_id": "round1_layernorm_layernorm_forward_8192x4096_bf16",
+  "validation_plan": []
+}

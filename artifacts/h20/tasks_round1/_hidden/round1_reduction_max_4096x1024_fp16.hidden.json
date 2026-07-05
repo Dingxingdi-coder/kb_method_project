@@ -1,0 +1,34 @@
+{
+  "hidden_tests": [
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 100,
+      "shape": [
+        2049,
+        1025
+      ]
+    },
+    {
+      "dtype": "fp16",
+      "layout": "contiguous",
+      "seed_offset": 101,
+      "shape": [
+        4103,
+        1021
+      ]
+    },
+    {
+      "dtype": "fp16",
+      "layout": "non_contiguous",
+      "seed_offset": 200,
+      "shape": [
+        4096,
+        1024
+      ]
+    }
+  ],
+  "notes": "Do not expose this file to the Coding Agent.",
+  "schema_version": "0.1",
+  "task_id": "round1_reduction_max_4096x1024_fp16"
+}
