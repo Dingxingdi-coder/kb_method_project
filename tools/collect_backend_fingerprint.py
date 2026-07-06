@@ -45,7 +45,7 @@ def detect_torch() -> dict[str, Any]:
             "compute_capability": f"{props.major}.{props.minor}",
             "total_memory_bytes": int(props.total_memory),
             "multi_processor_count": int(props.multi_processor_count),
-            "device_uuid": getattr(props, "uuid", "unknown"),
+            "device_uuid": str(getattr(props, "uuid", "unknown")),
         }
     )
     return info
