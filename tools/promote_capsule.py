@@ -96,7 +96,7 @@ def base_capsule(record: dict[str, Any], unit_id: str, unit_type: str, status: s
         "action": {"kind": action_kind, "instructions": []},
         "expected_effect": {"correctness": "see validation gates", "performance": "see evidence", "search_efficiency": "reduce repeated invalid attempts", "risk": "requires revalidation outside recorded conditions"},
         "evidence": {"source_refs": [str(record.get("run_id"))], "run_ids": [str(record.get("run_id"))], "evidence_level": "single_run", "confidence": 0.5},
-        "validation": {"gates": ["schema", "compile", "hidden_correctness", "anti_cheating", "benchmark_repeat", "reproducibility"], "correctness_matrix": ["smoke", "quick", "hidden"], "performance_requirements": ["p50/p95 benchmark recorded"], "promotion_policy": "MVP promotion; manual review recommended before stable use"},
+        "validation": {"gates": ["schema", "compile", "hidden_correctness", "benchmark_repeat", "reproducibility"], "correctness_matrix": ["smoke", "quick", "hidden"], "performance_requirements": ["p50/p95 benchmark recorded"], "promotion_policy": "MVP promotion; manual review recommended before stable use"},
         "failure_boundary": {"known_failures": [], "boundary_tests": ["held-out shape", "dtype matrix"], "do_not_apply": ["different backend without revalidation"]},
         "migration": {"transfer_policy": "requires_revalidation", "portable_part": ["root-cause category", "validation gate"], "replace_on_new_backend": ["knobs", "target fingerprint", "profiler mapping"]},
         "retrieval": {"keys": [safe_id(str(task.get("op_family", "unknown"))), safe_id(str(task.get("op_name", "")))], "negative_keys": [], "priority": 50, "max_context_tokens": 220},

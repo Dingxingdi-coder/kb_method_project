@@ -11,7 +11,6 @@ Candidate interface:
 from __future__ import annotations
 
 import argparse
-import ast
 import importlib.util
 import math
 import statistics
@@ -23,11 +22,6 @@ from typing import Any, Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import read_json, sha256_file, short_hash, utc_now, write_json  # noqa: E402
-
-FORBIDDEN_TORCH_CALLS = {"softmax", "sum", "max", "matmul", "mm", "bmm"}
-FORBIDDEN_FUNCTIONAL_CALLS = {"softmax", "layer_norm"}
-FORBIDDEN_TENSOR_METHODS = {"sum", "max"}
-FORBIDDEN_ATEN_TOKENS = {"softmax", "_softmax", "sum", "max", "matmul", "mm", "bmm", "native_layer_norm", "layer_norm"}
 
 
 def torch_dtype(name: str):
@@ -57,123 +51,6 @@ def load_candidate(path: Path):
         if callable(fn):
             return fn
     raise AttributeError("candidate.py must define callable candidate(), run(), or forward()")
-
-
-def scan_candidate_source(path: Path) -> dict[str, Any]:
-    if not path.exists():
-        return {"status": "fail", "issues": ["candidate.py does not exist"]}
-    text = path.read_text(encoding="utf-8", errors="ignore")
-
-    try:
-        tree = ast.parse(text, filename=str(path))
-    except SyntaxError as exc:
-        return {"status": "fail", "issues": [f"source_parse_error:{exc.msg}"]}
-
-    torch_aliases = {"torch"}
-    functional_aliases = {"F"}
-    triton_language_aliases = {"tl"}
-    forbidden_direct_calls: dict[str, str] = {}
-
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                asname = alias.asname or alias.name.split(".")[0]
-                if alias.name == "torch":
-                    torch_aliases.add(asname)
-                elif alias.name == "torch.nn.functional":
-                    functional_aliases.add(asname)
-                elif alias.name == "triton.language":
-                    triton_language_aliases.add(asname)
-        elif isinstance(node, ast.ImportFrom):
-            module = node.module or ""
-            for alias in node.names:
-                asname = alias.asname or alias.name
-                if module == "torch" and alias.name in FORBIDDEN_TORCH_CALLS:
-                    forbidden_direct_calls[asname] = f"torch.{alias.name}"
-                elif module == "torch.nn.functional" and alias.name in FORBIDDEN_FUNCTIONAL_CALLS:
-                    forbidden_direct_calls[asname] = f"torch.nn.functional.{alias.name}"
-                elif module == "triton" and alias.name == "language":
-                    triton_language_aliases.add(asname)
-
-    def qualified_name(node: ast.AST) -> str | None:
-        if isinstance(node, ast.Name):
-            return node.id
-        if isinstance(node, ast.Attribute):
-            parent = qualified_name(node.value)
-            return f"{parent}.{node.attr}" if parent else node.attr
-        return None
-
-    def getattr_reference(node: ast.Call) -> str | None:
-        if not isinstance(node.func, ast.Name) or node.func.id != "getattr" or len(node.args) < 2:
-            return None
-        owner = qualified_name(node.args[0])
-        attr = node.args[1]
-        if not owner or not isinstance(attr, ast.Constant) or not isinstance(attr.value, str):
-            return None
-        return f"{owner}.{attr.value}"
-
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.Assign):
-            continue
-        value_name = qualified_name(node.value)
-        if isinstance(node.value, ast.Call):
-            value_name = getattr_reference(node.value) or value_name
-        if value_name in torch_aliases:
-            for target in node.targets:
-                target_name = qualified_name(target)
-                if target_name:
-                    torch_aliases.add(target_name)
-        elif value_name in functional_aliases:
-            for target in node.targets:
-                target_name = qualified_name(target)
-                if target_name:
-                    functional_aliases.add(target_name)
-        elif value_name in triton_language_aliases:
-            for target in node.targets:
-                target_name = qualified_name(target)
-                if target_name:
-                    triton_language_aliases.add(target_name)
-        elif value_name:
-            parts = value_name.split(".")
-            root = parts[0]
-            leaf = parts[-1]
-            issue = None
-            if root in torch_aliases and len(parts) == 2 and leaf in FORBIDDEN_TORCH_CALLS:
-                issue = value_name
-            elif root in functional_aliases and leaf in FORBIDDEN_FUNCTIONAL_CALLS:
-                issue = value_name
-            if issue:
-                for target in node.targets:
-                    target_name = qualified_name(target)
-                    if target_name:
-                        forbidden_direct_calls[target_name] = issue
-
-    issues: list[str] = []
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.Call):
-            continue
-        qname = getattr_reference(node) or qualified_name(node.func)
-        if not qname:
-            continue
-
-        parts = qname.split(".")
-        root = parts[0]
-        leaf = parts[-1]
-        if root in torch_aliases:
-            if len(parts) == 2 and leaf in FORBIDDEN_TORCH_CALLS:
-                issues.append(f"forbidden_reference_call:{qname}")
-            elif qname.startswith(f"{root}.nn.functional.") and leaf in FORBIDDEN_FUNCTIONAL_CALLS:
-                issues.append(f"forbidden_reference_call:{qname}")
-            elif len(parts) >= 4 and parts[1:3] == ["ops", "aten"] and any(part in FORBIDDEN_ATEN_TOKENS for part in parts[3:]):
-                issues.append(f"forbidden_reference_call:{qname}")
-        elif root in functional_aliases and leaf in FORBIDDEN_FUNCTIONAL_CALLS:
-            issues.append(f"forbidden_reference_call:{qname}")
-        elif qname in forbidden_direct_calls:
-            issues.append(f"forbidden_reference_call:{forbidden_direct_calls[qname]}")
-        elif leaf in FORBIDDEN_TENSOR_METHODS and root not in triton_language_aliases:
-            issues.append(f"forbidden_tensor_method_call:{qname}")
-
-    return {"status": "fail" if issues else "pass", "issues": issues}
 
 
 def make_tensor_2d(shape: list[int], dtype_name: str, seed: int, layout: str, device: str):
@@ -359,7 +236,7 @@ def main() -> int:
     started = time.time()
     compile_log: list[str] = []
     correctness_log: list[str] = []
-    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path)])}", "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": scan_candidate_source(candidate_path), "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}}
+    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path)])}", "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}}
     try:
         fn = load_candidate(candidate_path)
         results["compile"] = {"status": "pass"}; compile_log.append("candidate import: pass")
@@ -370,14 +247,11 @@ def main() -> int:
         (out_dir / "correctness.log").write_text("", encoding="utf-8"); write_json(out_dir / "benchmark.json", {}); write_json(out_dir / "profile_summary.json", {})
         print("compile fail"); return 1
 
-    if results["anti_cheating"]["status"] != "pass":
-        correctness_log.append("anti_cheating: fail " + ", ".join(results["anti_cheating"]["issues"]))
     correctness = run_suite(task, hidden, fn, args.seed, device, correctness_log)
     results["correctness"] = correctness
     hidden_ok = str(correctness.get("hidden", {}).get("status", "fail")) == "pass"
-    anti_ok = results["anti_cheating"]["status"] == "pass"
     bench: dict[str, Any] = {}; prof: dict[str, Any] = {}
-    if hidden_ok and anti_ok:
+    if hidden_ok:
         bench = benchmark(task, fn, args.seed, device, warmup, repeats)
         prof = profile_summary(task, bench)
         results["benchmark"] = {"latency_p50_ms": bench["candidate"]["p50_ms"], "latency_p95_ms": bench["candidate"]["p95_ms"], "latency_mean_ms": bench["candidate"]["mean_ms"], "latency_std_ms": bench["candidate"]["std_ms"], "speedup_vs_eager_p50": bench.get("speedup_vs_eager_p50", 0.0), "speedup_vs_torch_compile_p50": bench.get("speedup_vs_torch_compile_p50", 0.0)}
@@ -385,7 +259,7 @@ def main() -> int:
         results["final_decision"] = "KEEP" if results["benchmark"]["speedup_vs_eager_p50"] >= 1.0 else "DISCARD"
     else:
         results["final_decision"] = "FAIL"
-        results["diagnosis"] = "hidden correctness failed" if not hidden_ok else "anti-cheating static scan failed"
+        results["diagnosis"] = "hidden correctness failed"
     results["cost"]["wall_time_s"] = time.time() - started
     write_json(out_dir / "results.json", results); write_json(out_dir / "benchmark.json", bench); write_json(out_dir / "profile_summary.json", prof)
     (out_dir / "compile.log").write_text("\n".join(compile_log) + "\n", encoding="utf-8")

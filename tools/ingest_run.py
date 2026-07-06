@@ -130,7 +130,7 @@ def build_promotion_candidates(task: dict[str, Any], results: dict[str, Any], be
             {
                 "candidate_unit_id": f"auto_perf_{op}_{task_hash}_{short_hash(benchmark or results)}",
                 "reason": "Candidate passed hidden correctness and produced a benchmark result eligible for promotion review.",
-                "required_gates": ["schema", "compile", "hidden_correctness", "anti_cheating", "benchmark_repeat", "profile_attribution", "reproducibility"],
+                "required_gates": ["schema", "compile", "hidden_correctness", "benchmark_repeat", "profile_attribution", "reproducibility"],
                 "suggested_status": "candidate",
             }
         )

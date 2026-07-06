@@ -33,6 +33,14 @@ def bool_pass(value: Any) -> int:
     return 1 if str(value).lower() in ("pass", "passed", "true", "1") else 0
 
 
+def optional_bool_pass(value: Any) -> int | None:
+    if isinstance(value, dict):
+        value = value.get("status")
+    if str(value).lower() in ("not_run", "skipped", "none", "null", ""):
+        return None
+    return bool_pass(value)
+
+
 def collect_run(run_dir: Path) -> dict[str, Any] | None:
     results_path = run_dir / "results.json"
     task_path = run_dir / "task.json"
@@ -50,7 +58,7 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
     hidden_pass = bool_pass(get_nested(results, "correctness.hidden.status"))
     quick_pass = bool_pass(get_nested(results, "correctness.quick.status"))
     smoke_pass = bool_pass(get_nested(results, "correctness.smoke.status"))
-    anti_pass = bool_pass(get_nested(results, "anti_cheating.status"))
+    anti_pass = optional_bool_pass(get_nested(results, "anti_cheating.status"))
     speedup_eager = float(get_nested(results, "benchmark.speedup_vs_eager_p50", 0.0) or 0.0)
     speedup_compile = float(get_nested(results, "benchmark.speedup_vs_torch_compile_p50", 0.0) or 0.0)
     retrieved_items = context.get("retrieved_items", [])
