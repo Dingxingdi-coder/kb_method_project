@@ -21,6 +21,67 @@
     "retrieval",
     "lineage"
   ],
+  "$defs": {
+    "operator_family": {
+      "type": "string",
+      "enum": [
+        "*",
+        "common",
+        "reduction",
+        "softmax",
+        "layernorm",
+        "matmul"
+      ]
+    },
+    "operator_name": {
+      "type": "string",
+      "enum": [
+        "*",
+        "sum",
+        "max",
+        "row_softmax",
+        "layernorm_forward",
+        "matmul"
+      ]
+    },
+    "dtype": {
+      "type": "string",
+      "enum": [
+        "*",
+        "fp16",
+        "bf16",
+        "fp32"
+      ]
+    },
+    "layout": {
+      "type": "string",
+      "enum": [
+        "*",
+        "contiguous",
+        "non_contiguous",
+        "as_declared_by_task"
+      ]
+    },
+    "backend_vendor": {
+      "type": "string",
+      "enum": [
+        "nvidia"
+      ]
+    },
+    "backend_name": {
+      "type": "string",
+      "enum": [
+        "nvidia-triton-cuda"
+      ]
+    },
+    "device_class": {
+      "type": "string",
+      "enum": [
+        "h20_runtime_detected",
+        "runtime_detected"
+      ]
+    }
+  },
   "properties": {
     "id": {
       "type": "string",
@@ -89,13 +150,13 @@
         "families": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/operator_family"
           }
         },
         "op_names": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/operator_name"
           }
         },
         "semantic_signature": {
@@ -110,13 +171,13 @@
         "dtype_scope": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/dtype"
           }
         },
         "layout_scope": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/layout"
           }
         }
       }
@@ -163,13 +224,13 @@
         ],
         "properties": {
           "vendor": {
-            "type": "string"
+            "$ref": "#/$defs/backend_vendor"
           },
           "backend": {
-            "type": "string"
+            "$ref": "#/$defs/backend_name"
           },
           "device_class": {
-            "type": "string"
+            "$ref": "#/$defs/device_class"
           },
           "target_fingerprint": {
             "type": "string"
