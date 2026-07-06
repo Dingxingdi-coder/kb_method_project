@@ -11,6 +11,7 @@ Candidate interface:
 from __future__ import annotations
 
 import argparse
+import ast
 import importlib.util
 import math
 import statistics
@@ -23,7 +24,10 @@ from typing import Any, Callable
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import read_json, sha256_file, short_hash, utc_now, write_json  # noqa: E402
 
-FORBIDDEN_PATTERNS = ["torch.softmax", "F.softmax", "torch.sum", ".sum(", "torch.max", ".max(", "torch.matmul", "torch.mm", "torch.bmm", "torch.nn.functional.layer_norm", "F.layer_norm"]
+FORBIDDEN_TORCH_CALLS = {"softmax", "sum", "max", "matmul", "mm", "bmm"}
+FORBIDDEN_FUNCTIONAL_CALLS = {"softmax", "layer_norm"}
+FORBIDDEN_TENSOR_METHODS = {"sum", "max"}
+FORBIDDEN_ATEN_TOKENS = {"softmax", "_softmax", "sum", "max", "matmul", "mm", "bmm", "native_layer_norm", "layer_norm"}
 
 
 def torch_dtype(name: str):
@@ -59,7 +63,116 @@ def scan_candidate_source(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {"status": "fail", "issues": ["candidate.py does not exist"]}
     text = path.read_text(encoding="utf-8", errors="ignore")
-    issues = [f"forbidden_or_suspicious_reference_pattern:{p}" for p in FORBIDDEN_PATTERNS if p in text]
+
+    try:
+        tree = ast.parse(text, filename=str(path))
+    except SyntaxError as exc:
+        return {"status": "fail", "issues": [f"source_parse_error:{exc.msg}"]}
+
+    torch_aliases = {"torch"}
+    functional_aliases = {"F"}
+    triton_language_aliases = {"tl"}
+    forbidden_direct_calls: dict[str, str] = {}
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                asname = alias.asname or alias.name.split(".")[0]
+                if alias.name == "torch":
+                    torch_aliases.add(asname)
+                elif alias.name == "torch.nn.functional":
+                    functional_aliases.add(asname)
+                elif alias.name == "triton.language":
+                    triton_language_aliases.add(asname)
+        elif isinstance(node, ast.ImportFrom):
+            module = node.module or ""
+            for alias in node.names:
+                asname = alias.asname or alias.name
+                if module == "torch" and alias.name in FORBIDDEN_TORCH_CALLS:
+                    forbidden_direct_calls[asname] = f"torch.{alias.name}"
+                elif module == "torch.nn.functional" and alias.name in FORBIDDEN_FUNCTIONAL_CALLS:
+                    forbidden_direct_calls[asname] = f"torch.nn.functional.{alias.name}"
+                elif module == "triton" and alias.name == "language":
+                    triton_language_aliases.add(asname)
+
+    def qualified_name(node: ast.AST) -> str | None:
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.Attribute):
+            parent = qualified_name(node.value)
+            return f"{parent}.{node.attr}" if parent else node.attr
+        return None
+
+    def getattr_reference(node: ast.Call) -> str | None:
+        if not isinstance(node.func, ast.Name) or node.func.id != "getattr" or len(node.args) < 2:
+            return None
+        owner = qualified_name(node.args[0])
+        attr = node.args[1]
+        if not owner or not isinstance(attr, ast.Constant) or not isinstance(attr.value, str):
+            return None
+        return f"{owner}.{attr.value}"
+
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        value_name = qualified_name(node.value)
+        if isinstance(node.value, ast.Call):
+            value_name = getattr_reference(node.value) or value_name
+        if value_name in torch_aliases:
+            for target in node.targets:
+                target_name = qualified_name(target)
+                if target_name:
+                    torch_aliases.add(target_name)
+        elif value_name in functional_aliases:
+            for target in node.targets:
+                target_name = qualified_name(target)
+                if target_name:
+                    functional_aliases.add(target_name)
+        elif value_name in triton_language_aliases:
+            for target in node.targets:
+                target_name = qualified_name(target)
+                if target_name:
+                    triton_language_aliases.add(target_name)
+        elif value_name:
+            parts = value_name.split(".")
+            root = parts[0]
+            leaf = parts[-1]
+            issue = None
+            if root in torch_aliases and len(parts) == 2 and leaf in FORBIDDEN_TORCH_CALLS:
+                issue = value_name
+            elif root in functional_aliases and leaf in FORBIDDEN_FUNCTIONAL_CALLS:
+                issue = value_name
+            if issue:
+                for target in node.targets:
+                    target_name = qualified_name(target)
+                    if target_name:
+                        forbidden_direct_calls[target_name] = issue
+
+    issues: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        qname = getattr_reference(node) or qualified_name(node.func)
+        if not qname:
+            continue
+
+        parts = qname.split(".")
+        root = parts[0]
+        leaf = parts[-1]
+        if root in torch_aliases:
+            if len(parts) == 2 and leaf in FORBIDDEN_TORCH_CALLS:
+                issues.append(f"forbidden_reference_call:{qname}")
+            elif qname.startswith(f"{root}.nn.functional.") and leaf in FORBIDDEN_FUNCTIONAL_CALLS:
+                issues.append(f"forbidden_reference_call:{qname}")
+            elif len(parts) >= 4 and parts[1:3] == ["ops", "aten"] and any(part in FORBIDDEN_ATEN_TOKENS for part in parts[3:]):
+                issues.append(f"forbidden_reference_call:{qname}")
+        elif root in functional_aliases and leaf in FORBIDDEN_FUNCTIONAL_CALLS:
+            issues.append(f"forbidden_reference_call:{qname}")
+        elif qname in forbidden_direct_calls:
+            issues.append(f"forbidden_reference_call:{forbidden_direct_calls[qname]}")
+        elif leaf in FORBIDDEN_TENSOR_METHODS and root not in triton_language_aliases:
+            issues.append(f"forbidden_tensor_method_call:{qname}")
+
     return {"status": "fail" if issues else "pass", "issues": issues}
 
 

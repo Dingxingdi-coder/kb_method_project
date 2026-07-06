@@ -20,6 +20,14 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import append_jsonl, read_json, sha256_file, utc_now, write_json  # noqa: E402
 
+GROUP_ALIASES = {
+    "A0_no_kb": "A0_prompt",
+    "A1_plain_rag": "A1_raw_corpus_rag",
+    "A2_rulebook": "A2_kb_plain_rag",
+}
+
+GROUPS = ["A0_prompt", "A1_raw_corpus_rag", "A2_kb_plain_rag", "A3_ecc_kb", *GROUP_ALIASES]
+
 SKELETONS = {
     "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y. Do not call torch.softmax.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
     "reduction": """\"\"\"Candidate kernel for row reduction. Interface: candidate(x, reduce_op) -> y. Do not call torch.sum or torch.max.\"\"\"\n\ndef candidate(x, reduce_op):\n    raise NotImplementedError(\"agent must implement row reduction\")\n""",
@@ -82,6 +90,7 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
     workspace.mkdir(parents=True, exist_ok=True)
 
     task = read_json(task_path)
+    group = GROUP_ALIASES.get(args.group, args.group)
     shutil.copy2(task_path, workspace / "task.json")
 
     candidate = workspace / "candidate.py"
@@ -96,13 +105,13 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
         str((repo_root / args.retrieve_script).resolve()),
         "--task", str(workspace / "task.json"),
         "--backend", str(backend_path),
-        "--group", args.group,
+        "--group", group,
         "--phase", phase,
         "--kb-version", args.kb_version,
         "--out", str(context_path),
     ]
     subprocess.run(retrieve_cmd, cwd=str(repo_root), check=True)
-    write_prompt(workspace, task, args.group, phase)
+    write_prompt(workspace, task, group, phase)
     write_run_sh(workspace, (repo_root / args.harness).resolve(), hidden_path, args.warmup, args.repeats)
     return workspace
 
@@ -150,7 +159,7 @@ def run_harness(args: argparse.Namespace, workspace: Path) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--group", choices=["A0_no_kb", "A1_plain_rag", "A2_rulebook", "A3_ecc_kb"], required=True)
+    parser.add_argument("--group", choices=GROUPS, required=True)
     parser.add_argument("--task", required=True)
     parser.add_argument("--backend", required=True)
     parser.add_argument("--kb-version", default="v0")

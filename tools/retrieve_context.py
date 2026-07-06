@@ -1,48 +1,39 @@
 #!/usr/bin/env python3
-"""Build a ContextPacket for one experimental group.
+"""Build retrieval context for one H20 experimental group.
 
 A0 returns no knowledge.
-A1 returns plain document snippets.
-A2 returns a static rulebook.
+A1 returns plain-text RAG chunks from the frozen raw corpus.
+A2 returns plain-text RAG chunks from KB knowledge units.
 A3 returns ECC-KB evidence capsules filtered by phase, task, backend, and evidence.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
+import re
 from pathlib import Path
 from typing import Any
 
 from ecc_utils import iter_json_files, normalize_shape, read_json, safe_id, shape_bucket, short_hash, stable_hash, write_json
 
 
-DEFAULT_RULEBOOK = [
-    {
-        "capsule_id": "rule_tail_mask",
-        "instruction": "Use explicit masks for non-power-of-two tails and boundary elements.",
-        "kind": "must_obey",
-    },
-    {
-        "capsule_id": "rule_fp32_accumulation",
-        "instruction": "Use fp32 accumulation for fp16/bf16 reductions unless the OpSpec declares another policy.",
-        "kind": "must_obey",
-    },
-    {
-        "capsule_id": "rule_no_hardcode_visible_shapes",
-        "instruction": "Do not hardcode public shapes or constants derived only from visible tests.",
-        "kind": "anti_action",
-    },
-    {
-        "capsule_id": "rule_tune_tile_after_correctness",
-        "instruction": "Tune tile size, num_warps, and stages only after hidden correctness passes.",
-        "kind": "recommend",
-    },
-    {
-        "capsule_id": "rule_report_p50_p95",
-        "instruction": "Report p50 and p95 latency against eager and torch.compile baselines.",
-        "kind": "validate",
-    },
-]
+GROUP_ALIASES = {
+    "A0_no_kb": "A0_prompt",
+    "A1_plain_rag": "A1_raw_corpus_rag",
+    "A2_rulebook": "A2_kb_plain_rag",
+}
+
+GROUPS = ["A0_prompt", "A1_raw_corpus_rag", "A2_kb_plain_rag", "A3_ecc_kb", *GROUP_ALIASES]
+
+RAW_CORPUS_VERSION = "raw_corpus_v0"
+RAW_CORPUS_INDEX_VERSION = "raw_corpus_rag_index_v0_simple_text"
+KB_PLAIN_RAG_INDEX_VERSION = "kb_plain_rag_index_v0_simple_text"
+ECC_KB_INDEX_VERSION = "ecc_kb_index_v0_structured"
+
+
+def canonical_group(group: str) -> str:
+    return GROUP_ALIASES.get(group, group)
 
 
 def task_terms(task: dict[str, Any], phase: str) -> set[str]:
@@ -58,30 +49,194 @@ def task_terms(task: dict[str, Any], phase: str) -> set[str]:
     return {safe_id(t) for t in terms if t}
 
 
-def doc_snippets(task: dict[str, Any], root: Path, max_chars: int = 1800) -> list[dict[str, str]]:
-    """A deliberately simple A1 baseline: text snippets without evidence gates."""
-    op_family = str(task.get("op_family", "")).lower()
-    candidate_files = [
-        root / "docs" / "method.md",
-        root / "docs" / "h20_mvp_protocol.md",
-        root / "experiments" / "h20" / "operators.md",
-        root / "experiments" / "h20" / "baselines.md",
+def tokenize(text: str) -> list[str]:
+    return [safe_id(t) for t in re.findall(r"[A-Za-z0-9_]+", text.lower()) if t]
+
+
+def query_terms(task: dict[str, Any], phase: str) -> set[str]:
+    parts = [
+        phase,
+        str(task.get("task_id", "")),
+        str(task.get("op_family", "")),
+        str(task.get("op_name", "")),
+        str(task.get("variant", "")),
+        str(task.get("dtype", "")),
+        str(task.get("goal", "")),
+        normalize_shape(task.get("shape") or task.get("shapes")),
+        shape_bucket(task.get("shape") or task.get("shapes")),
+        json.dumps(task.get("op_spec", {}), ensure_ascii=False, sort_keys=True),
     ]
-    snippets: list[dict[str, str]] = []
-    for path in candidate_files:
-        if not path.exists():
+    terms = set(tokenize(" ".join(parts)))
+    op_family = str(task.get("op_family", "")).lower()
+    if op_family == "softmax":
+        terms.update({"softmax", "exp", "max", "mask", "padded", "denominator", "stable"})
+    elif op_family == "reduction":
+        terms.update({"reduction", "reduce", str(task.get("op_name", "")).lower(), "mask", "sum", "max"})
+    elif op_family == "layernorm":
+        terms.update({"layernorm", "mean", "variance", "eps", "gamma", "beta"})
+    elif op_family == "matmul":
+        terms.update({"matmul", "gemm", "dot", "tile", "block"})
+    return {safe_id(t) for t in terms if t}
+
+
+def score_text(text: str, terms: set[str]) -> tuple[int, int]:
+    words = tokenize(text)
+    if not words:
+        return (0, 0)
+    counts = {word: words.count(word) for word in set(words)}
+    overlap = sum(1 for term in terms if term in counts)
+    frequency = sum(min(counts.get(term, 0), 4) for term in terms)
+    return (overlap, frequency)
+
+
+def relative_path(path: Path, root: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(root.resolve()))
+    except ValueError:
+        return str(path)
+
+
+def split_markdown_chunks(text: str, max_chars: int) -> list[str]:
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
+    chunks: list[str] = []
+    current = ""
+    for para in paragraphs:
+        if current and len(current) + len(para) + 2 > max_chars:
+            chunks.append(current)
+            current = para
+        else:
+            current = f"{current}\n\n{para}".strip() if current else para
+    if current:
+        chunks.append(current)
+    return chunks
+
+
+def raw_corpus_paths(source_root: Path) -> list[Path]:
+    paths: list[Path] = []
+    for subdir in ("raw_corpus", "raw_archive"):
+        base = source_root / subdir
+        if base.exists():
+            paths.extend(sorted(base.glob("*.md")))
+    return paths
+
+
+def build_plain_raw_rag_packet(task: dict[str, Any], phase: str, root: Path, source_root: Path, topk: int, max_chars: int) -> dict[str, Any]:
+    terms = query_terms(task, phase)
+    scored: list[tuple[tuple[int, int], int, dict[str, Any]]] = []
+    for path in raw_corpus_paths(source_root):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except Exception:
             continue
-        text = path.read_text(encoding="utf-8")
-        paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
-        for para in paragraphs:
-            lower = para.lower()
-            if op_family and op_family in lower:
-                snippets.append({"source": str(path), "text": para[:max_chars]})
-            elif any(k in lower for k in ("triton", "correctness", "profile", "benchmark")):
-                snippets.append({"source": str(path), "text": para[:max_chars]})
-            if len(snippets) >= 8:
-                return snippets
-    return snippets[:8]
+        source_type = "raw_archive" if path.parent.name == "raw_archive" else "raw_corpus"
+        for idx, chunk in enumerate(split_markdown_chunks(text, max_chars=max_chars)):
+            score = score_text(f"{path.name}\n{chunk}", terms)
+            if score == (0, 0):
+                continue
+            rel = relative_path(path, root)
+            item = {
+                "id": f"raw:{safe_id(path.stem)}:{idx}",
+                "source_type": source_type,
+                "source_path": rel,
+                "text": chunk[:max_chars],
+                "score": {"term_overlap": score[0], "term_frequency": score[1]},
+            }
+            scored.append((score, -idx, item))
+    scored.sort(key=lambda row: row[:2], reverse=True)
+    chunks = [item for _, _, item in scored[:topk]]
+    return {
+        "schema_version": "0.1",
+        "context_packet_hash": "",
+        "group": "A1_raw_corpus_rag",
+        "phase": phase,
+        "task_id": task.get("task_id"),
+        "retrieval_mode": "plain_text_rag",
+        "source_corpus_version": RAW_CORPUS_VERSION,
+        "raw_corpus_index_version": RAW_CORPUS_INDEX_VERSION,
+        "retrieved_items": chunks,
+        "retrieved_item_ids": [c["id"] for c in chunks],
+        "document_chunks": chunks,
+        "must_obey": [],
+        "recommended_actions": [{"capsule_id": c["id"], "instruction": c["text"], "source_path": c["source_path"]} for c in chunks],
+        "anti_actions": [],
+        "validation_plan": [],
+        "stop_conditions": [],
+        "evidence_refs": [{"id": c["id"], "source_path": c["source_path"], "source_type": c["source_type"]} for c in chunks],
+    }
+
+
+def kb_unit_to_plain_text(unit: dict[str, Any]) -> str:
+    action = unit.get("action", {}) if isinstance(unit.get("action"), dict) else {}
+    evidence = unit.get("evidence", {}) if isinstance(unit.get("evidence"), dict) else {}
+    validation = unit.get("validation", {}) if isinstance(unit.get("validation"), dict) else {}
+    boundary = unit.get("failure_boundary", {}) if isinstance(unit.get("failure_boundary"), dict) else {}
+    conditions = unit.get("conditions", {}) if isinstance(unit.get("conditions"), dict) else {}
+    scope = unit.get("operator_scope", {}) if isinstance(unit.get("operator_scope"), dict) else {}
+    lines = [
+        f"id: {unit.get('id')}",
+        f"unit_type: {unit.get('unit_type')}",
+        f"status: {unit.get('status')}",
+        f"abstraction_level: {unit.get('abstraction_level')}",
+        f"task_phases: {', '.join(str(x) for x in unit.get('task_phases', []))}",
+        f"operator_scope: {json.dumps(scope, ensure_ascii=False, sort_keys=True)}",
+        f"valid_when: {'; '.join(str(x) for x in conditions.get('valid_when', []))}",
+        f"invalid_when: {'; '.join(str(x) for x in conditions.get('invalid_when', []))}",
+        f"action_kind: {action.get('kind')}",
+        f"instructions: {'; '.join(str(x) for x in action.get('instructions', []))}",
+        f"expected_effect: {json.dumps(unit.get('expected_effect', {}), ensure_ascii=False, sort_keys=True)}",
+        f"evidence_level: {evidence.get('evidence_level')}",
+        f"source_refs: {', '.join(str(x) for x in evidence.get('source_refs', []))}",
+        f"validation_gates: {', '.join(str(x) for x in validation.get('gates', []))}",
+        f"failure_boundary: {json.dumps(boundary, ensure_ascii=False, sort_keys=True)}",
+    ]
+    if unit.get("mechanism"):
+        lines.append(f"mechanism: {unit.get('mechanism')}")
+    return "\n".join(lines)
+
+
+def build_plain_kb_rag_packet(task: dict[str, Any], phase: str, root: Path, kb_paths: list[Path], topk: int, max_chars: int) -> dict[str, Any]:
+    terms = query_terms(task, phase)
+    scored: list[tuple[tuple[int, int], int, dict[str, Any]]] = []
+    for idx, unit in enumerate(load_capsules(kb_paths)):
+        if unit.get("status") in ("rejected", "stale"):
+            continue
+        text = kb_unit_to_plain_text(unit)
+        score = score_text(text, terms)
+        if score == (0, 0):
+            continue
+        unit_id = str(unit.get("id") or f"kb_unit_{idx}")
+        source_path = relative_path(Path(str(unit.get("_source_path", ""))), root)
+        item = {
+            "id": unit_id,
+            "source_type": "kb_unit",
+            "source_path": source_path,
+            "text": text[:max_chars],
+            "score": {"term_overlap": score[0], "term_frequency": score[1]},
+        }
+        priority = int(unit.get("retrieval", {}).get("priority", 0) or 0)
+        scored.append((score, priority, item))
+    scored.sort(key=lambda row: row[:2], reverse=True)
+    units = [item for _, _, item in scored[:topk]]
+    return {
+        "schema_version": "0.1",
+        "context_packet_hash": "",
+        "group": "A2_kb_plain_rag",
+        "phase": phase,
+        "task_id": task.get("task_id"),
+        "retrieval_mode": "plain_text_rag",
+        "source_corpus_version": RAW_CORPUS_VERSION,
+        "kb_version": task.get("kb_version"),
+        "kb_plain_rag_index_version": KB_PLAIN_RAG_INDEX_VERSION,
+        "retrieved_items": units,
+        "retrieved_item_ids": [u["id"] for u in units],
+        "kb_units": units,
+        "must_obey": [],
+        "recommended_actions": [{"capsule_id": u["id"], "instruction": u["text"], "source_path": u["source_path"]} for u in units],
+        "anti_actions": [],
+        "validation_plan": [],
+        "stop_conditions": [],
+        "evidence_refs": [{"id": u["id"], "source_path": u["source_path"], "source_type": u["source_type"]} for u in units],
+    }
 
 
 def capsule_phase_match(unit: dict[str, Any], phase: str) -> bool:
@@ -188,7 +343,12 @@ def build_a3_packet(task: dict[str, Any], backend: dict[str, Any], phase: str, k
         "phase": phase,
         "task_id": task.get("task_id"),
         "op_family": task.get("op_family"),
+        "retrieval_mode": "phase_and_evidence_aware_context_packet",
+        "source_corpus_version": RAW_CORPUS_VERSION,
         "kb_version": task.get("kb_version"),
+        "ecc_kb_index_version": ECC_KB_INDEX_VERSION,
+        "retrieved_items": [],
+        "retrieved_item_ids": [],
         "must_obey": [],
         "recommended_actions": [],
         "anti_actions": [],
@@ -229,6 +389,17 @@ def build_a3_packet(task: dict[str, Any], backend: dict[str, Any], phase: str, k
             }
         )
         packet["retrieved_capsules"].append(unit.get("id"))
+        packet["retrieved_item_ids"].append(unit.get("id"))
+        packet["retrieved_items"].append(
+            {
+                "id": unit.get("id"),
+                "source_type": "ecc_capsule",
+                "source_path": unit.get("_source_path"),
+                "unit_type": unit.get("unit_type"),
+                "status": unit.get("status"),
+                "action_kind": action.get("kind"),
+            }
+        )
 
     if not packet["must_obey"]:
         packet["must_obey"].extend(
@@ -253,11 +424,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", required=True)
     parser.add_argument("--backend", required=True)
-    parser.add_argument("--group", choices=["A0_no_kb", "A1_plain_rag", "A2_rulebook", "A3_ecc_kb"], required=True)
+    parser.add_argument("--group", choices=GROUPS, required=True)
     parser.add_argument("--phase", default="generate")
     parser.add_argument("--kb-version", default="v0")
     parser.add_argument("--kb-root", default="kb")
+    parser.add_argument("--source-root", default="sources")
     parser.add_argument("--topk", type=int, default=12)
+    parser.add_argument("--max-chars-per-item", type=int, default=1800)
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
 
@@ -265,14 +438,23 @@ def main() -> int:
     task = read_json(args.task)
     backend = read_json(args.backend)
     task["kb_version"] = args.kb_version
+    group = canonical_group(args.group)
 
-    if args.group == "A0_no_kb":
+    if group == "A0_prompt":
         packet = {
             "schema_version": "0.1",
             "context_packet_hash": "",
-            "group": args.group,
+            "group": group,
             "phase": args.phase,
             "task_id": task.get("task_id"),
+            "retrieval_mode": "none",
+            "source_corpus_version": "none",
+            "raw_corpus_index_version": "none",
+            "kb_version": "none",
+            "kb_plain_rag_index_version": "none",
+            "ecc_kb_index_version": "none",
+            "retrieved_items": [],
+            "retrieved_item_ids": [],
             "must_obey": [],
             "recommended_actions": [],
             "anti_actions": [],
@@ -280,36 +462,17 @@ def main() -> int:
             "stop_conditions": [],
             "evidence_refs": [],
         }
-    elif args.group == "A1_plain_rag":
-        snippets = doc_snippets(task, root)
-        packet = {
-            "schema_version": "0.1",
-            "context_packet_hash": "",
-            "group": args.group,
-            "phase": args.phase,
-            "task_id": task.get("task_id"),
-            "document_chunks": snippets,
-            "must_obey": [],
-            "recommended_actions": [{"capsule_id": f"rag_chunk_{idx}", "instruction": s["text"]} for idx, s in enumerate(snippets)],
-            "anti_actions": [],
-            "validation_plan": [],
-            "stop_conditions": [],
-            "evidence_refs": [{"source": s["source"]} for s in snippets],
-        }
-    elif args.group == "A2_rulebook":
-        packet = {
-            "schema_version": "0.1",
-            "context_packet_hash": "",
-            "group": args.group,
-            "phase": args.phase,
-            "task_id": task.get("task_id"),
-            "must_obey": [r for r in DEFAULT_RULEBOOK if r["kind"] == "must_obey"],
-            "recommended_actions": [r for r in DEFAULT_RULEBOOK if r["kind"] == "recommend"],
-            "anti_actions": [r for r in DEFAULT_RULEBOOK if r["kind"] == "anti_action"],
-            "validation_plan": [r for r in DEFAULT_RULEBOOK if r["kind"] == "validate"],
-            "stop_conditions": [],
-            "evidence_refs": [],
-        }
+    elif group == "A1_raw_corpus_rag":
+        packet = build_plain_raw_rag_packet(task, args.phase, root, Path(args.source_root), args.topk, args.max_chars_per_item)
+    elif group == "A2_kb_plain_rag":
+        kb_root = Path(args.kb_root)
+        kb_paths = [
+            kb_root / "stable" / args.kb_version,
+            kb_root / "stable",
+            kb_root / "quarantine",
+            kb_root / "failures",
+        ]
+        packet = build_plain_kb_rag_packet(task, args.phase, root, kb_paths, args.topk, args.max_chars_per_item)
     else:
         kb_root = Path(args.kb_root)
         kb_paths = [
@@ -323,7 +486,7 @@ def main() -> int:
     packet["context_packet_hash"] = stable_hash(packet)
     packet["context_packet_short_hash"] = short_hash(packet)
     write_json(args.out, packet)
-    print(f"wrote {args.out} group={args.group} phase={args.phase} hash={packet['context_packet_short_hash']}")
+    print(f"wrote {args.out} group={group} phase={args.phase} hash={packet['context_packet_short_hash']}")
     return 0
 
 

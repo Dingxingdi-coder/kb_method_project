@@ -7,7 +7,7 @@ import argparse
 import csv
 import math
 import statistics
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 import sys
@@ -53,6 +53,22 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
     anti_pass = bool_pass(get_nested(results, "anti_cheating.status"))
     speedup_eager = float(get_nested(results, "benchmark.speedup_vs_eager_p50", 0.0) or 0.0)
     speedup_compile = float(get_nested(results, "benchmark.speedup_vs_torch_compile_p50", 0.0) or 0.0)
+    retrieved_items = context.get("retrieved_items", [])
+    if not isinstance(retrieved_items, list):
+        retrieved_items = []
+    retrieved_item_ids = context.get("retrieved_item_ids", [])
+    if not isinstance(retrieved_item_ids, list):
+        retrieved_item_ids = []
+    if not retrieved_item_ids and isinstance(context.get("retrieved_capsules"), list):
+        retrieved_item_ids = context.get("retrieved_capsules", [])
+    source_type_distribution = Counter(
+        str(item.get("source_type", "unknown")) for item in retrieved_items if isinstance(item, dict)
+    )
+    raw_corpus_count = sum(source_type_distribution.get(k, 0) for k in ("raw_corpus", "raw_archive"))
+    kb_plain_count = source_type_distribution.get("kb_unit", 0)
+    ecc_capsule_count = source_type_distribution.get("ecc_capsule", 0)
+    if not ecc_capsule_count and isinstance(context.get("retrieved_capsules"), list):
+        ecc_capsule_count = len(context.get("retrieved_capsules", []))
 
     first_compile = None
     first_correct = None
@@ -96,8 +112,20 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
         "wall_time_s": float(get_nested(results, "cost.wall_time_s", 0.0) or 0.0),
         "gpu_benchmark_runs": int(get_nested(results, "cost.gpu_benchmark_runs", 0) or 0),
         "invalid_compile_attempts": invalid_compiles,
-        "retrieved_capsule_count": len(context.get("retrieved_capsules", [])) if isinstance(context.get("retrieved_capsules"), list) else 0,
+        "context_token_count": len(str(context).split()),
         "context_packet_tokens_proxy": len(str(context).split()),
+        "retrieval_mode": context.get("retrieval_mode", "unknown"),
+        "source_corpus_version": context.get("source_corpus_version", ""),
+        "raw_corpus_index_version": context.get("raw_corpus_index_version", ""),
+        "kb_version": context.get("kb_version", ""),
+        "kb_plain_rag_index_version": context.get("kb_plain_rag_index_version", ""),
+        "ecc_kb_index_version": context.get("ecc_kb_index_version", ""),
+        "retrieved_item_count": len(retrieved_item_ids),
+        "retrieved_item_ids": ",".join(str(x) for x in retrieved_item_ids),
+        "retrieved_source_type_distribution": dict(source_type_distribution),
+        "raw_corpus_retrieved_chunk_count": raw_corpus_count,
+        "kb_plain_rag_retrieved_unit_count": kb_plain_count,
+        "retrieved_capsule_count": ecc_capsule_count,
     }
 
 
@@ -143,7 +171,11 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "median_iterations_to_first_correct": median([r["iterations_to_first_correct"] for r in items]),
             "median_wall_time_s": median([r["wall_time_s"] for r in items]),
             "median_invalid_compile_attempts": median([r["invalid_compile_attempts"] for r in items]),
-            "median_context_packet_tokens_proxy": median([r["context_packet_tokens_proxy"] for r in items]),
+            "median_context_token_count": median([r["context_token_count"] for r in items]),
+            "median_retrieved_item_count": median([r["retrieved_item_count"] for r in items]),
+            "median_raw_corpus_retrieved_chunk_count": median([r["raw_corpus_retrieved_chunk_count"] for r in items]),
+            "median_kb_plain_rag_retrieved_unit_count": median([r["kb_plain_rag_retrieved_unit_count"] for r in items]),
+            "median_retrieved_capsule_count": median([r["retrieved_capsule_count"] for r in items]),
         })
     return out
 
@@ -183,7 +215,7 @@ def main() -> int:
             writer.writeheader(); writer.writerows(rows)
     json_path = Path(args.json_out) if args.json_out else out_path.with_suffix(".json")
     write_json(json_path, {"runs": rows, "summary": summaries})
-    columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_wall_time_s", "median_invalid_compile_attempts"]
+    columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_wall_time_s", "median_invalid_compile_attempts", "median_context_token_count", "median_retrieved_item_count"]
     report = ["# H20 MVP Experiment Report", "", f"- run_records: {len(rows)}", f"- csv: `{csv_path}`", f"- json: `{json_path}`", "", "## Group summary", "", markdown_table(summaries, columns) if summaries else "No results found.", "", "## Interpretation checklist", "", "- Compare A3 against A0/A1/A2 under the same task, seed, and budget.", "- Treat hidden correctness as a hard gate before reading performance metrics.", "- Check whether A3 reduces iterations, wall time, invalid compile attempts, and context cost.", "- For self-evolution, compare A3(v1) against A3(v0) on Round-2 held-out tasks."]
     out_path.write_text("\n".join(report) + "\n", encoding="utf-8")
     print(f"wrote {out_path}")
