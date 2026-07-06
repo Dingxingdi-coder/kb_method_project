@@ -213,6 +213,45 @@ def profile_summary(task: dict[str, Any], bench: dict[str, Any]) -> dict[str, An
     return {"dominant_symptom": symptom, "evidence": {"heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available", "speedup_vs_eager_p50": speedup}, "candidate_actions": actions}
 
 
+def status_at(data: dict[str, Any], path: str, default: str = "not_run") -> str:
+    cur: Any = data
+    for key in path.split("."):
+        if not isinstance(cur, dict):
+            return default
+        cur = cur.get(key)
+        if cur is None:
+            return default
+    return str(cur)
+
+
+def print_summary(results: dict[str, Any], out_dir: Path) -> None:
+    print("H20 harness summary")
+    print(f"compile: {status_at(results, 'compile.status')}")
+    print(
+        "correctness: "
+        f"smoke={status_at(results, 'correctness.smoke.status')} "
+        f"quick={status_at(results, 'correctness.quick.status')} "
+        f"hidden={status_at(results, 'correctness.hidden.status')}"
+    )
+    benchmark = results.get("benchmark", {})
+    if benchmark:
+        print(
+            "performance: "
+            f"p50_ms={float(benchmark.get('latency_p50_ms', math.nan)):.6g} "
+            f"p95_ms={float(benchmark.get('latency_p95_ms', math.nan)):.6g} "
+            f"speedup_vs_eager={float(benchmark.get('speedup_vs_eager_p50', 0.0)):.4g} "
+            f"speedup_vs_torch_compile={float(benchmark.get('speedup_vs_torch_compile_p50', 0.0)):.4g}"
+        )
+    else:
+        print("performance: not_run")
+    diagnosis = results.get("diagnosis") or status_at(results, "compile.reason", "")
+    if diagnosis:
+        print(f"diagnosis: {diagnosis}")
+    print("outputs:")
+    for name in ("results.json", "compile.log", "correctness.log", "benchmark.json", "profile_summary.json"):
+        print(f"  {name}: {out_dir / name}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", required=True)
@@ -245,7 +284,7 @@ def main() -> int:
         results["final_decision"] = "FAIL"; results["cost"]["wall_time_s"] = time.time() - started
         write_json(out_dir / "results.json", results); (out_dir / "compile.log").write_text(traceback.format_exc(), encoding="utf-8")
         (out_dir / "correctness.log").write_text("", encoding="utf-8"); write_json(out_dir / "benchmark.json", {}); write_json(out_dir / "profile_summary.json", {})
-        print("compile fail"); return 1
+        print_summary(results, out_dir); return 1
 
     correctness = run_suite(task, hidden, fn, args.seed, device, correctness_log)
     results["correctness"] = correctness
@@ -264,7 +303,7 @@ def main() -> int:
     write_json(out_dir / "results.json", results); write_json(out_dir / "benchmark.json", bench); write_json(out_dir / "profile_summary.json", prof)
     (out_dir / "compile.log").write_text("\n".join(compile_log) + "\n", encoding="utf-8")
     (out_dir / "correctness.log").write_text("\n".join(correctness_log) + "\n", encoding="utf-8")
-    print(f"decision={results['final_decision']} hidden={correctness.get('hidden', {}).get('status')} out={out_dir}")
+    print_summary(results, out_dir)
     return 0 if results["final_decision"] in {"KEEP", "DISCARD"} else 1
 
 

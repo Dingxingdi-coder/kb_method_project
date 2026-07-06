@@ -2,7 +2,7 @@
 """Prepare or evaluate one agent-neutral H20 experiment session.
 
 This script does not invoke a specific Coding Agent. It creates a workspace with
-`task.json`, `context_packet.json`, `candidate.py`, `notes.md`, and `run.sh`.
+`task.json`, `agent_prompt.md`, `candidate.py`, `run.sh`, and `context_packets/`.
 After a human or external agent edits `candidate.py`, run the script again with
 `--run-harness` or execute `run.sh` inside the workspace.
 """
@@ -10,7 +10,6 @@ After a human or external agent edits `candidate.py`, run the script again with
 from __future__ import annotations
 
 import argparse
-import shutil
 import subprocess
 import sys
 import time
@@ -41,8 +40,73 @@ def infer_hidden_path(task_path: Path) -> Path | None:
     return hidden if hidden.exists() else None
 
 
-def write_prompt(workspace: Path, task: dict[str, Any], group: str, phase: str) -> Path:
+def retrieval_command(retrieve_script: Path, backend_path: Path, group: str, phase: str, kb_version: str, out_name: str) -> str:
+    return " ".join(
+        [
+            "python",
+            str(retrieve_script),
+            "--task",
+            "task.json",
+            "--backend",
+            str(backend_path),
+            "--group",
+            group,
+            "--phase",
+            phase,
+            "--kb-version",
+            kb_version,
+            "--out",
+            f"context_packets/{out_name}",
+        ]
+    )
+
+
+def phase_commands(retrieve_script: Path, backend_path: Path, group: str, kb_version: str) -> str:
+    return "\n".join(
+        f"- `{phase_name}`: `{retrieval_command(retrieve_script, backend_path, group, phase_name, kb_version, f'iter1_{phase_name}.json')}`"
+        for phase_name in ("generate", "correctness_repair", "performance_optimize", "autotune")
+    )
+
+
+def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: str, kb_version: str) -> str:
+    if group == "A0_prompt":
+        return """Retrieval protocol:
+- This is the no-retrieval baseline.
+- Do not call `tools/retrieve_context.py` or read `kb/`, `sources/raw_corpus/`, or `sources/raw_archive/`.
+- Use only `task.json`, `candidate.py`, `run.sh`, harness output files, and your own reasoning."""
+
+    if group == "A1_raw_corpus_rag":
+        return f"""Retrieval protocol:
+- This group may use only raw-corpus plain-text RAG.
+- If more context is needed, call retrieval only with `--group A1_raw_corpus_rag`.
+- Do not read `kb/` directly and do not call retrieval with A2 or A3 groups.
+- Save retrieved packets under `context_packets/`.
+- Phase-specific retrieval commands from this workspace:
+{phase_commands(retrieve_script, backend_path, group, kb_version)}"""
+
+    if group == "A2_kb_plain_rag":
+        return f"""Retrieval protocol:
+- This group may use only plain-text RAG over KB units.
+- If more context is needed, call retrieval only with `--group A2_kb_plain_rag`.
+- Do not read `sources/raw_corpus/` or `sources/raw_archive/` directly and do not call retrieval with A1 or A3 groups.
+- Treat retrieved KB units as ordinary text snippets, not as structured ECC capsules.
+- Save retrieved packets under `context_packets/`.
+- Phase-specific retrieval commands from this workspace:
+{phase_commands(retrieve_script, backend_path, group, kb_version)}"""
+
+    return f"""Retrieval protocol:
+- This group uses ECC-KB structured context packets.
+- If more context is needed, call retrieval only with `--group A3_ecc_kb`.
+- Use the structured packet fields such as `must_obey`, `recommended_actions`, `anti_actions`, `validation_plan`, `stop_conditions`, and `evidence_refs`.
+- Do not call retrieval with A1 or A2 groups, and do not browse raw corpus files directly.
+- Save retrieved packets under `context_packets/`.
+- Phase-specific commands from this workspace:
+{phase_commands(retrieve_script, backend_path, group, kb_version)}"""
+
+
+def write_prompt(workspace: Path, task: dict[str, Any], group: str, phase: str, backend_path: Path, retrieve_script: Path, kb_version: str) -> Path:
     prompt = workspace / "agent_prompt.md"
+    protocol = group_retrieval_protocol(retrieve_script, backend_path, group, kb_version)
     prompt.write_text(
         f"""# H20 Kernel Generation Task
 
@@ -57,11 +121,25 @@ DType: `{task.get('dtype')}`
 Interface: `{task.get('op_spec', {}).get('candidate_interface')}`
 
 Rules:
-- Modify only `candidate.py` and optionally `notes.md`.
-- Read `context_packet.json` before editing.
+- Read `task.json` first. It is the complete public task specification.
+- Modify only `candidate.py`. Keep retrieved context packets under `context_packets/`.
 - Preserve the declared interface.
-- Pass hidden correctness before performance tuning.
 - Do not hardcode public shapes.
+- Do not read hidden test files or modify the harness.
+
+Workflow:
+- You choose your own phase: `generate`, `correctness_repair`, `performance_optimize`, or `autotune`.
+- Use `./run.sh` whenever you need measurement evidence from the GPU.
+- After running `./run.sh`, use stdout and the output files to decide the next phase.
+- Fix compile, smoke, quick, or hidden correctness failures before performance tuning.
+- Optimize and autotune only after correctness passes.
+
+{protocol}
+
+Outputs:
+- Final implementation: `candidate.py`.
+- Optional retrieved context: `context_packets/*.json`.
+- Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`.
 """,
         encoding="utf-8",
     )
@@ -90,28 +168,18 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
     workspace.mkdir(parents=True, exist_ok=True)
 
     task = read_json(task_path)
+    task["agent_allowed_files"] = ["candidate.py", "context_packets/"]
+    task["agent_forbidden_files"] = ["reference.py", "hidden_tests.json", "experiments/h20/harness.py", "kb/", "sources/raw_corpus/", "sources/raw_archive/"]
     group = GROUP_ALIASES.get(args.group, args.group)
-    shutil.copy2(task_path, workspace / "task.json")
+    write_json(workspace / "task.json", task)
 
     candidate = workspace / "candidate.py"
     if not candidate.exists():
         candidate.write_text(SKELETONS.get(task.get("op_family"), "def candidate(*args):\n    raise NotImplementedError()\n"), encoding="utf-8")
-    if not (workspace / "notes.md").exists():
-        (workspace / "notes.md").write_text("# Agent notes\n", encoding="utf-8")
+    (workspace / "context_packets").mkdir(exist_ok=True)
 
-    context_path = workspace / "context_packet.json"
-    retrieve_cmd = [
-        sys.executable,
-        str((repo_root / args.retrieve_script).resolve()),
-        "--task", str(workspace / "task.json"),
-        "--backend", str(backend_path),
-        "--group", group,
-        "--phase", phase,
-        "--kb-version", args.kb_version,
-        "--out", str(context_path),
-    ]
-    subprocess.run(retrieve_cmd, cwd=str(repo_root), check=True)
-    write_prompt(workspace, task, group, phase)
+    retrieve_script = (repo_root / args.retrieve_script).resolve()
+    write_prompt(workspace, task, group, phase, backend_path, retrieve_script, args.kb_version)
     write_run_sh(workspace, (repo_root / args.harness).resolve(), hidden_path, args.warmup, args.repeats)
     return workspace
 
