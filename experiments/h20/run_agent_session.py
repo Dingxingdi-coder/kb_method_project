@@ -40,7 +40,16 @@ def infer_hidden_path(task_path: Path) -> Path | None:
     return hidden if hidden.exists() else None
 
 
-def retrieval_command(retrieve_script: Path, backend_path: Path, group: str, phase: str, kb_version: str, out_name: str) -> str:
+def retrieval_command(
+    retrieve_script: Path,
+    backend_path: Path,
+    kb_root: Path,
+    source_root: Path,
+    group: str,
+    phase: str,
+    kb_version: str,
+    out_name: str,
+) -> str:
     return " ".join(
         [
             "python",
@@ -55,15 +64,19 @@ def retrieval_command(retrieve_script: Path, backend_path: Path, group: str, pha
             phase,
             "--kb-version",
             kb_version,
+            "--kb-root",
+            str(kb_root),
+            "--source-root",
+            str(source_root),
             "--out",
             f"context_packets/{out_name}",
         ]
     )
 
 
-def phase_commands(retrieve_script: Path, backend_path: Path, group: str, kb_version: str) -> str:
+def phase_commands(retrieve_script: Path, backend_path: Path, kb_root: Path, source_root: Path, group: str, kb_version: str) -> str:
     return "\n".join(
-        f"- `{phase_name}`: `{retrieval_command(retrieve_script, backend_path, group, phase_name, kb_version, f'iter1_{phase_name}.json')}`"
+        f"- `{phase_name}`: `{retrieval_command(retrieve_script, backend_path, kb_root, source_root, group, phase_name, kb_version, f'iter1_{phase_name}.json')}`"
         for phase_name in ("generate", "correctness_repair", "performance_optimize", "autotune")
     )
 
@@ -97,7 +110,7 @@ def workflow_protocol() -> str:
 - Fix correctness failures before performance tuning. Optimize and autotune only after correctness passes."""
 
 
-def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: str, kb_version: str) -> str:
+def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, kb_root: Path, source_root: Path, group: str, kb_version: str) -> str:
     if group == "A0_prompt":
         return """Retrieval protocol:
 - This is the no-retrieval baseline.
@@ -112,7 +125,7 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
 - Do not read `kb/` directly and do not call retrieval with A2 or A3 groups.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific retrieval commands from this workspace:
-{phase_commands(retrieve_script, backend_path, group, kb_version)}"""
+{phase_commands(retrieve_script, backend_path, kb_root, source_root, group, kb_version)}"""
 
     if group == "A2_kb_plain_rag":
         return f"""Retrieval protocol:
@@ -123,7 +136,7 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
 - Treat retrieved KB units as ordinary text snippets, not as structured ECC capsules.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific retrieval commands from this workspace:
-{phase_commands(retrieve_script, backend_path, group, kb_version)}"""
+{phase_commands(retrieve_script, backend_path, kb_root, source_root, group, kb_version)}"""
 
     return f"""Retrieval protocol:
 - This group uses ECC-KB structured context packets.
@@ -133,7 +146,7 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
 - Do not call retrieval with A1 or A2 groups, and do not browse raw corpus files directly.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific commands from this workspace:
-{phase_commands(retrieve_script, backend_path, group, kb_version)}"""
+{phase_commands(retrieve_script, backend_path, kb_root, source_root, group, kb_version)}"""
 
 
 def output_protocol(group: str) -> str:
@@ -151,9 +164,12 @@ def output_protocol(group: str) -> str:
 
 def write_prompt(workspace: Path, task: dict[str, Any], group: str, phase: str, backend_path: Path, retrieve_script: Path, kb_version: str) -> Path:
     prompt = workspace / "agent_prompt.md"
+    repo_root = Path.cwd()
+    kb_root = (repo_root / "kb").resolve()
+    source_root = (repo_root / "sources").resolve()
     background = background_protocol()
     workflow = workflow_protocol()
-    protocol = group_retrieval_protocol(retrieve_script, backend_path, group, kb_version)
+    protocol = group_retrieval_protocol(retrieve_script, backend_path, kb_root, source_root, group, kb_version)
     outputs = output_protocol(group)
     prompt.write_text(
         f"""# H20 Kernel Generation Task
