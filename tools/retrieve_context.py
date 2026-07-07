@@ -2,8 +2,8 @@
 """Build retrieval context for one H20 experimental group.
 
 A0 returns no knowledge.
-A1 returns plain-text RAG chunks from the frozen raw corpus.
-A2 returns plain-text RAG chunks from KB knowledge units.
+A1 returns vector-RAG chunks from the frozen raw corpus.
+A2 returns vector-RAG chunks from KB knowledge units.
 A3 returns ECC-KB evidence capsules filtered by phase, task, backend, and evidence.
 """
 
@@ -20,15 +20,17 @@ from ecc_utils import iter_json_files, normalize_shape, read_json, safe_id, shap
 
 GROUP_ALIASES = {
     "A0_no_kb": "A0_prompt",
-    "A1_plain_rag": "A1_raw_corpus_rag",
-    "A2_rulebook": "A2_kb_plain_rag",
+    "A1_plain_rag": "A1_raw_corpus_vector_rag",
+    "A1_raw_corpus_rag": "A1_raw_corpus_vector_rag",
+    "A2_rulebook": "A2_kb_vector_rag",
+    "A2_kb_plain_rag": "A2_kb_vector_rag",
 }
 
-GROUPS = ["A0_prompt", "A1_raw_corpus_rag", "A2_kb_plain_rag", "A3_ecc_kb", *GROUP_ALIASES]
+GROUPS = ["A0_prompt", "A1_raw_corpus_vector_rag", "A2_kb_vector_rag", "A3_ecc_kb", *GROUP_ALIASES]
 
 RAW_CORPUS_VERSION = "raw_corpus_v0"
-RAW_CORPUS_INDEX_VERSION = "raw_corpus_rag_index_v0_simple_text"
-KB_PLAIN_RAG_INDEX_VERSION = "kb_plain_rag_index_v0_simple_text"
+RAW_CORPUS_VECTOR_INDEX_VERSION = "raw_corpus_vector_index_v0"
+KB_VECTOR_INDEX_VERSION = "kb_vector_index_v0"
 ECC_KB_INDEX_VERSION = "ecc_kb_index_v0_structured"
 
 
@@ -89,6 +91,29 @@ def score_text(text: str, terms: set[str]) -> tuple[int, int]:
     return (overlap, frequency)
 
 
+def query_text(task: dict[str, Any], phase: str) -> str:
+    parts = [
+        f"phase: {phase}",
+        f"task_id: {task.get('task_id', '')}",
+        f"operator: {task.get('op_family', '')} {task.get('op_name', '')} {task.get('variant', '')}",
+        f"dtype: {task.get('dtype', '')}",
+        f"shape: {normalize_shape(task.get('shape') or task.get('shapes'))}",
+        f"shape_bucket: {shape_bucket(task.get('shape') or task.get('shapes'))}",
+        f"goal: {task.get('goal', '')}",
+        f"op_spec: {json.dumps(task.get('op_spec', {}), ensure_ascii=False, sort_keys=True)}",
+    ]
+    op_family = str(task.get("op_family", "")).lower()
+    if op_family == "softmax":
+        parts.append("softmax stable exp row max mask padded denominator fp32 accumulation triton")
+    elif op_family == "reduction":
+        parts.append("row reduction sum max mask neutral value fp32 accumulation triton")
+    elif op_family == "layernorm":
+        parts.append("layernorm mean variance eps affine fp32 accumulation triton")
+    elif op_family == "matmul":
+        parts.append("matmul gemm dot tile boundary mask num warps num stages triton")
+    return "\n".join(str(p) for p in parts if p)
+
+
 def relative_path(path: Path, root: Path) -> str:
     try:
         return str(path.resolve().relative_to(root.resolve()))
@@ -118,6 +143,88 @@ def raw_corpus_paths(source_root: Path) -> list[Path]:
         if base.exists():
             paths.extend(sorted(base.glob("*.md")))
     return paths
+
+
+def load_vector_index(index_dir: Path) -> tuple[dict[str, Any], Any, list[dict[str, Any]]]:
+    manifest_path = index_dir / "manifest.json"
+    npz_path = index_dir / "index.npz"
+    if not manifest_path.exists() or not npz_path.exists():
+        raise FileNotFoundError(
+            f"missing vector index at {index_dir}; build it with tools/build_vector_index.py before running vector-RAG groups"
+        )
+    try:
+        import numpy as np
+    except Exception as exc:  # pragma: no cover - dependency checked in integration use
+        raise RuntimeError("vector retrieval requires numpy") from exc
+    manifest = read_json(manifest_path)
+    data = np.load(npz_path, allow_pickle=False)
+    embeddings = data["embeddings"].astype("float32", copy=False)
+    items = manifest.get("items", [])
+    if len(items) != int(embeddings.shape[0]):
+        raise ValueError(f"{index_dir}: manifest item count does not match embeddings")
+    return manifest, embeddings, items
+
+
+def embed_query(text: str, model_path: str) -> Any:
+    try:
+        from sentence_transformers import SentenceTransformer
+    except Exception as exc:  # pragma: no cover - dependency checked in integration use
+        raise RuntimeError("vector retrieval requires sentence-transformers") from exc
+    model = SentenceTransformer(model_path, device="cpu")
+    return model.encode([text], normalize_embeddings=True)[0].astype("float32", copy=False)
+
+
+def vector_rank(index_dir: Path, task: dict[str, Any], phase: str, topk: int, embedding_model_path: str | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    manifest, embeddings, items = load_vector_index(index_dir)
+    model_path = embedding_model_path or manifest.get("embedding_model_path")
+    if not model_path:
+        raise ValueError(f"{index_dir}: manifest is missing embedding_model_path; pass --embedding-model-path")
+    query = query_text(task, phase)
+    query_embedding = embed_query(query, str(model_path))
+    scores = embeddings @ query_embedding
+    ranked = sorted(range(len(items)), key=lambda idx: float(scores[idx]), reverse=True)[:topk]
+    retrieved: list[dict[str, Any]] = []
+    for rank, idx in enumerate(ranked, start=1):
+        item = dict(items[idx])
+        item["score"] = {"cosine": float(scores[idx]), "rank": rank}
+        retrieved.append(item)
+    return manifest, retrieved
+
+
+def vector_packet_common(packet: dict[str, Any], manifest: dict[str, Any], index_dir: Path) -> None:
+    packet["embedding_model_id"] = manifest.get("embedding_model_id", "")
+    packet["embedding_model_path"] = manifest.get("embedding_model_path", "")
+    packet["vector_index_version"] = manifest.get("index_version", "")
+    packet["vector_index_hash"] = manifest.get("index_hash", "")
+    packet["vector_index_path"] = str(index_dir)
+    packet["vector_index_kind"] = manifest.get("kind", "")
+    packet["retrieval_topk"] = packet.get("retrieval_topk")
+
+
+def build_vector_raw_rag_packet(task: dict[str, Any], phase: str, index_dir: Path, topk: int, embedding_model_path: str | None) -> dict[str, Any]:
+    manifest, chunks = vector_rank(index_dir, task, phase, topk, embedding_model_path)
+    packet = {
+        "schema_version": "0.1",
+        "context_packet_hash": "",
+        "group": "A1_raw_corpus_vector_rag",
+        "phase": phase,
+        "task_id": task.get("task_id"),
+        "retrieval_mode": "vector_rag",
+        "source_corpus_version": RAW_CORPUS_VERSION,
+        "raw_corpus_index_version": manifest.get("index_version", RAW_CORPUS_VECTOR_INDEX_VERSION),
+        "retrieval_topk": topk,
+        "retrieved_items": chunks,
+        "retrieved_item_ids": [c["id"] for c in chunks],
+        "document_chunks": chunks,
+        "must_obey": [],
+        "recommended_actions": [{"capsule_id": c["id"], "instruction": c["text"], "source_path": c["source_path"]} for c in chunks],
+        "anti_actions": [],
+        "validation_plan": [],
+        "stop_conditions": [],
+        "evidence_refs": [{"id": c["id"], "source_path": c["source_path"], "source_type": c["source_type"]} for c in chunks],
+    }
+    vector_packet_common(packet, manifest, index_dir)
+    return packet
 
 
 def build_plain_raw_rag_packet(task: dict[str, Any], phase: str, root: Path, source_root: Path, topk: int, max_chars: int) -> dict[str, Any]:
@@ -152,7 +259,7 @@ def build_plain_raw_rag_packet(task: dict[str, Any], phase: str, root: Path, sou
         "task_id": task.get("task_id"),
         "retrieval_mode": "plain_text_rag",
         "source_corpus_version": RAW_CORPUS_VERSION,
-        "raw_corpus_index_version": RAW_CORPUS_INDEX_VERSION,
+        "raw_corpus_index_version": "raw_corpus_rag_index_v0_simple_text",
         "retrieved_items": chunks,
         "retrieved_item_ids": [c["id"] for c in chunks],
         "document_chunks": chunks,
@@ -194,6 +301,33 @@ def kb_unit_to_plain_text(unit: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def build_vector_kb_rag_packet(task: dict[str, Any], phase: str, index_dir: Path, topk: int, embedding_model_path: str | None) -> dict[str, Any]:
+    manifest, units = vector_rank(index_dir, task, phase, topk, embedding_model_path)
+    packet = {
+        "schema_version": "0.1",
+        "context_packet_hash": "",
+        "group": "A2_kb_vector_rag",
+        "phase": phase,
+        "task_id": task.get("task_id"),
+        "retrieval_mode": "vector_rag",
+        "source_corpus_version": RAW_CORPUS_VERSION,
+        "kb_version": task.get("kb_version"),
+        "kb_vector_index_version": manifest.get("index_version", KB_VECTOR_INDEX_VERSION),
+        "retrieval_topk": topk,
+        "retrieved_items": units,
+        "retrieved_item_ids": [u["id"] for u in units],
+        "kb_units": units,
+        "must_obey": [],
+        "recommended_actions": [{"capsule_id": u["id"], "instruction": u["text"], "source_path": u["source_path"]} for u in units],
+        "anti_actions": [],
+        "validation_plan": [],
+        "stop_conditions": [],
+        "evidence_refs": [{"id": u["id"], "source_path": u["source_path"], "source_type": u["source_type"]} for u in units],
+    }
+    vector_packet_common(packet, manifest, index_dir)
+    return packet
+
+
 def build_plain_kb_rag_packet(task: dict[str, Any], phase: str, root: Path, kb_paths: list[Path], topk: int, max_chars: int) -> dict[str, Any]:
     terms = query_terms(task, phase)
     scored: list[tuple[tuple[int, int], int, dict[str, Any]]] = []
@@ -226,7 +360,7 @@ def build_plain_kb_rag_packet(task: dict[str, Any], phase: str, root: Path, kb_p
         "retrieval_mode": "plain_text_rag",
         "source_corpus_version": RAW_CORPUS_VERSION,
         "kb_version": task.get("kb_version"),
-        "kb_plain_rag_index_version": KB_PLAIN_RAG_INDEX_VERSION,
+        "kb_plain_rag_index_version": "kb_plain_rag_index_v0_simple_text",
         "retrieved_items": units,
         "retrieved_item_ids": [u["id"] for u in units],
         "kb_units": units,
@@ -429,6 +563,9 @@ def main() -> int:
     parser.add_argument("--kb-version", default="v0")
     parser.add_argument("--kb-root", default="kb")
     parser.add_argument("--source-root", default="sources")
+    parser.add_argument("--raw-vector-index", default="artifacts/indexes/raw_corpus_vector_v0")
+    parser.add_argument("--kb-vector-index", default="artifacts/indexes/kb_vector_v0")
+    parser.add_argument("--embedding-model-path", default=None)
     parser.add_argument("--topk", type=int, default=12)
     parser.add_argument("--max-chars-per-item", type=int, default=1800)
     parser.add_argument("--out", required=True)
@@ -452,7 +589,10 @@ def main() -> int:
             "raw_corpus_index_version": "none",
             "kb_version": "none",
             "kb_plain_rag_index_version": "none",
+            "kb_vector_index_version": "none",
             "ecc_kb_index_version": "none",
+            "vector_index_version": "none",
+            "vector_index_hash": "none",
             "retrieved_items": [],
             "retrieved_item_ids": [],
             "must_obey": [],
@@ -462,17 +602,10 @@ def main() -> int:
             "stop_conditions": [],
             "evidence_refs": [],
         }
-    elif group == "A1_raw_corpus_rag":
-        packet = build_plain_raw_rag_packet(task, args.phase, root, Path(args.source_root), args.topk, args.max_chars_per_item)
-    elif group == "A2_kb_plain_rag":
-        kb_root = Path(args.kb_root)
-        kb_paths = [
-            kb_root / "stable" / args.kb_version,
-            kb_root / "stable",
-            kb_root / "quarantine",
-            kb_root / "failures",
-        ]
-        packet = build_plain_kb_rag_packet(task, args.phase, root, kb_paths, args.topk, args.max_chars_per_item)
+    elif group == "A1_raw_corpus_vector_rag":
+        packet = build_vector_raw_rag_packet(task, args.phase, Path(args.raw_vector_index), args.topk, args.embedding_model_path)
+    elif group == "A2_kb_vector_rag":
+        packet = build_vector_kb_rag_packet(task, args.phase, Path(args.kb_vector_index), args.topk, args.embedding_model_path)
     else:
         kb_root = Path(args.kb_root)
         kb_paths = [

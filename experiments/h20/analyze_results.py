@@ -60,7 +60,11 @@ def load_context(run_dir: Path) -> dict[str, Any]:
         "raw_corpus_index_version": ",".join(sorted({str(p.get("raw_corpus_index_version", "")) for p in packets if p.get("raw_corpus_index_version")})),
         "kb_version": ",".join(sorted({str(p.get("kb_version", "")) for p in packets if p.get("kb_version")})),
         "kb_plain_rag_index_version": ",".join(sorted({str(p.get("kb_plain_rag_index_version", "")) for p in packets if p.get("kb_plain_rag_index_version")})),
+        "kb_vector_index_version": ",".join(sorted({str(p.get("kb_vector_index_version", "")) for p in packets if p.get("kb_vector_index_version")})),
         "ecc_kb_index_version": ",".join(sorted({str(p.get("ecc_kb_index_version", "")) for p in packets if p.get("ecc_kb_index_version")})),
+        "vector_index_version": ",".join(sorted({str(p.get("vector_index_version", "")) for p in packets if p.get("vector_index_version")})),
+        "vector_index_hash": ",".join(sorted({str(p.get("vector_index_hash", "")) for p in packets if p.get("vector_index_hash")})),
+        "embedding_model_id": ",".join(sorted({str(p.get("embedding_model_id", "")) for p in packets if p.get("embedding_model_id")})),
         "_packets": packets,
     }
     seen_ids: set[str] = set()
@@ -177,7 +181,11 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
         "raw_corpus_index_version": context.get("raw_corpus_index_version", ""),
         "kb_version": context.get("kb_version", ""),
         "kb_plain_rag_index_version": context.get("kb_plain_rag_index_version", ""),
+        "kb_vector_index_version": context.get("kb_vector_index_version", ""),
         "ecc_kb_index_version": context.get("ecc_kb_index_version", ""),
+        "vector_index_version": context.get("vector_index_version", ""),
+        "vector_index_hash": context.get("vector_index_hash", ""),
+        "embedding_model_id": context.get("embedding_model_id", ""),
         "retrieved_item_count": len(retrieved_item_ids),
         "retrieved_item_ids": ",".join(str(x) for x in retrieved_item_ids),
         "retrieved_source_type_distribution": dict(source_type_distribution),

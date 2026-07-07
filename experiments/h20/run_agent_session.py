@@ -21,11 +21,13 @@ from ecc_utils import append_jsonl, read_json, sha256_file, utc_now, write_json 
 
 GROUP_ALIASES = {
     "A0_no_kb": "A0_prompt",
-    "A1_plain_rag": "A1_raw_corpus_rag",
-    "A2_rulebook": "A2_kb_plain_rag",
+    "A1_plain_rag": "A1_raw_corpus_vector_rag",
+    "A1_raw_corpus_rag": "A1_raw_corpus_vector_rag",
+    "A2_rulebook": "A2_kb_vector_rag",
+    "A2_kb_plain_rag": "A2_kb_vector_rag",
 }
 
-GROUPS = ["A0_prompt", "A1_raw_corpus_rag", "A2_kb_plain_rag", "A3_ecc_kb", *GROUP_ALIASES]
+GROUPS = ["A0_prompt", "A1_raw_corpus_vector_rag", "A2_kb_vector_rag", "A3_ecc_kb", *GROUP_ALIASES]
 
 SKELETONS = {
     "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y. Do not call torch.softmax.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
@@ -45,38 +47,55 @@ def retrieval_command(
     backend_path: Path,
     kb_root: Path,
     source_root: Path,
+    raw_vector_index: Path,
+    kb_vector_index: Path,
+    embedding_model_path: str | None,
     group: str,
     phase: str,
     kb_version: str,
     out_name: str,
 ) -> str:
-    return " ".join(
-        [
-            "python",
-            str(retrieve_script),
-            "--task",
-            "task.json",
-            "--backend",
-            str(backend_path),
-            "--group",
-            group,
-            "--phase",
-            phase,
-            "--kb-version",
-            kb_version,
-            "--kb-root",
-            str(kb_root),
-            "--source-root",
-            str(source_root),
-            "--out",
-            f"context_packets/{out_name}",
-        ]
-    )
+    parts = [
+        "python",
+        str(retrieve_script),
+        "--task",
+        "task.json",
+        "--backend",
+        str(backend_path),
+        "--group",
+        group,
+        "--phase",
+        phase,
+        "--kb-version",
+        kb_version,
+        "--kb-root",
+        str(kb_root),
+        "--source-root",
+        str(source_root),
+        "--raw-vector-index",
+        str(raw_vector_index),
+        "--kb-vector-index",
+        str(kb_vector_index),
+    ]
+    if embedding_model_path:
+        parts.extend(["--embedding-model-path", embedding_model_path])
+    parts.extend(["--out", f"context_packets/{out_name}"])
+    return " ".join(parts)
 
 
-def phase_commands(retrieve_script: Path, backend_path: Path, kb_root: Path, source_root: Path, group: str, kb_version: str) -> str:
+def phase_commands(
+    retrieve_script: Path,
+    backend_path: Path,
+    kb_root: Path,
+    source_root: Path,
+    raw_vector_index: Path,
+    kb_vector_index: Path,
+    embedding_model_path: str | None,
+    group: str,
+    kb_version: str,
+) -> str:
     return "\n".join(
-        f"- `{phase_name}`: `{retrieval_command(retrieve_script, backend_path, kb_root, source_root, group, phase_name, kb_version, f'iter1_{phase_name}.json')}`"
+        f"- `{phase_name}`: `{retrieval_command(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, phase_name, kb_version, f'iter1_{phase_name}.json')}`"
         for phase_name in ("generate", "correctness_repair", "performance_optimize", "autotune")
     )
 
@@ -110,33 +129,51 @@ def workflow_protocol() -> str:
 - Fix correctness failures before performance tuning. Optimize and autotune only after correctness passes."""
 
 
-def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, kb_root: Path, source_root: Path, group: str, kb_version: str) -> str:
+def tuning_protocol() -> str:
+    return """Common tuning budget:
+- After correctness passes, test small launch/configuration variants when they apply to your implementation.
+- For a Triton row-wise kernel with `num_warps`, test `8`, `4`, `2`, and `1` when those values compile for the chosen block size.
+- Keep the fastest correct variant by the harness p50 result. If a value cannot compile or is clearly inapplicable, record that through `./run.sh` output or a brief code comment in `candidate.py` only if needed.
+- Do not continue random tuning after this fixed budget unless correctness is still failing."""
+
+
+def group_retrieval_protocol(
+    retrieve_script: Path,
+    backend_path: Path,
+    kb_root: Path,
+    source_root: Path,
+    raw_vector_index: Path,
+    kb_vector_index: Path,
+    embedding_model_path: str | None,
+    group: str,
+    kb_version: str,
+) -> str:
     if group == "A0_prompt":
         return """Retrieval protocol:
 - This is the no-retrieval baseline.
 - Do not call `tools/retrieve_context.py` or read `kb/`, `sources/raw_corpus/`, or `sources/raw_archive/`.
 - Use only `task.json`, `candidate.py`, `run.sh`, harness output files, and your own reasoning."""
 
-    if group == "A1_raw_corpus_rag":
+    if group == "A1_raw_corpus_vector_rag":
         return f"""Retrieval protocol:
-- This group may use only raw-corpus plain-text RAG.
-- Retrieval is mandatory at phase entry: call retrieval with `--group A1_raw_corpus_rag` before acting in each selected phase.
+- This group may use only raw-corpus vector RAG.
+- Retrieval is mandatory at phase entry: call retrieval with `--group A1_raw_corpus_vector_rag` before acting in each selected phase.
 - Do not skip retrieval just because you already have an implementation or tuning idea.
 - Do not read `kb/` directly and do not call retrieval with A2 or A3 groups.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific retrieval commands from this workspace:
-{phase_commands(retrieve_script, backend_path, kb_root, source_root, group, kb_version)}"""
+{phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)}"""
 
-    if group == "A2_kb_plain_rag":
+    if group == "A2_kb_vector_rag":
         return f"""Retrieval protocol:
-- This group may use only plain-text RAG over KB units.
-- Retrieval is mandatory at phase entry: call retrieval with `--group A2_kb_plain_rag` before acting in each selected phase.
+- This group may use only vector RAG over flattened KB units.
+- Retrieval is mandatory at phase entry: call retrieval with `--group A2_kb_vector_rag` before acting in each selected phase.
 - Do not skip retrieval just because you already have an implementation or tuning idea.
 - Do not read `sources/raw_corpus/` or `sources/raw_archive/` directly and do not call retrieval with A1 or A3 groups.
 - Treat retrieved KB units as ordinary text snippets, not as structured ECC capsules.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific retrieval commands from this workspace:
-{phase_commands(retrieve_script, backend_path, kb_root, source_root, group, kb_version)}"""
+{phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)}"""
 
     return f"""Retrieval protocol:
 - This group uses ECC-KB structured context packets.
@@ -146,7 +183,7 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, kb_root:
 - Do not call retrieval with A1 or A2 groups, and do not browse raw corpus files directly.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific commands from this workspace:
-{phase_commands(retrieve_script, backend_path, kb_root, source_root, group, kb_version)}"""
+{phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)}"""
 
 
 def output_protocol(group: str) -> str:
@@ -162,14 +199,36 @@ def output_protocol(group: str) -> str:
 - Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`."""
 
 
-def write_prompt(workspace: Path, task: dict[str, Any], group: str, phase: str, backend_path: Path, retrieve_script: Path, kb_version: str) -> Path:
+def write_prompt(
+    workspace: Path,
+    task: dict[str, Any],
+    group: str,
+    phase: str,
+    backend_path: Path,
+    retrieve_script: Path,
+    kb_version: str,
+    raw_vector_index: Path,
+    kb_vector_index: Path,
+    embedding_model_path: str | None,
+) -> Path:
     prompt = workspace / "agent_prompt.md"
     repo_root = Path.cwd()
     kb_root = (repo_root / "kb").resolve()
     source_root = (repo_root / "sources").resolve()
     background = background_protocol()
     workflow = workflow_protocol()
-    protocol = group_retrieval_protocol(retrieve_script, backend_path, kb_root, source_root, group, kb_version)
+    tuning = tuning_protocol()
+    protocol = group_retrieval_protocol(
+        retrieve_script,
+        backend_path,
+        kb_root,
+        source_root,
+        raw_vector_index,
+        kb_vector_index,
+        embedding_model_path,
+        group,
+        kb_version,
+    )
     outputs = output_protocol(group)
     prompt.write_text(
         f"""# H20 Kernel Generation Task
@@ -194,6 +253,8 @@ Rules:
 - Do not read hidden test files or modify the harness.
 
 {workflow}
+
+{tuning}
 
 {protocol}
 
@@ -237,7 +298,20 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
     (workspace / "context_packets").mkdir(exist_ok=True)
 
     retrieve_script = (repo_root / args.retrieve_script).resolve()
-    write_prompt(workspace, task, group, phase, backend_path, retrieve_script, args.kb_version)
+    raw_vector_index = (repo_root / args.raw_vector_index).resolve()
+    kb_vector_index = (repo_root / args.kb_vector_index).resolve()
+    write_prompt(
+        workspace,
+        task,
+        group,
+        phase,
+        backend_path,
+        retrieve_script,
+        args.kb_version,
+        raw_vector_index,
+        kb_vector_index,
+        args.embedding_model_path,
+    )
     write_run_sh(workspace, (repo_root / args.harness).resolve(), hidden_path, args.warmup, args.repeats)
     return workspace
 
@@ -299,6 +373,9 @@ def main() -> int:
     parser.add_argument("--hidden-tests", default=None)
     parser.add_argument("--retrieve-script", default="tools/retrieve_context.py")
     parser.add_argument("--harness", default="experiments/h20/harness.py")
+    parser.add_argument("--raw-vector-index", default="artifacts/indexes/raw_corpus_vector_v0")
+    parser.add_argument("--kb-vector-index", default="artifacts/indexes/kb_vector_v0")
+    parser.add_argument("--embedding-model-path", default=None)
     args = parser.parse_args()
 
     workspace = prepare_workspace(args, args.phase)
