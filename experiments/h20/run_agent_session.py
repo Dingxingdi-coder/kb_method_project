@@ -68,6 +68,35 @@ def phase_commands(retrieve_script: Path, backend_path: Path, group: str, kb_ver
     )
 
 
+def background_protocol() -> str:
+    return """Background:
+- This is an H20 operator-kernel generation experiment.
+- Your job is to implement the public operator specification in `candidate.py`, then use the local harness to make it compile, pass correctness checks, and improve latency.
+- The experiment compares how different context sources affect the same agent workflow. Keep the workflow below unchanged; only use the retrieval source allowed by your group.
+- The phase names describe your current intent:
+  - `generate`: create or substantially rewrite the initial implementation.
+  - `correctness_repair`: fix compile, smoke, quick, or hidden correctness failures.
+  - `performance_optimize`: improve latency after correctness passes.
+  - `autotune`: try small launch/configuration variations after a correct implementation exists.
+- `./run.sh` is the measurement interface. Treat its stdout and output files as the evidence for phase changes and final claims.
+- `task.json` is public task information. Hidden tests and harness internals are not part of your allowed context."""
+
+
+def workflow_protocol() -> str:
+    return """Workflow:
+- All experiment groups use this same phase-control loop. The only intended difference is the retrieval protocol below.
+- You choose your own phase: `generate`, `correctness_repair`, `performance_optimize`, or `autotune`.
+- Before the first substantial edit, enter `generate` and follow this group's retrieval protocol.
+- Use `./run.sh` whenever you need measurement evidence from the GPU.
+- After every `./run.sh`, classify the next phase from the harness output:
+  - compile, smoke, quick, or hidden failure -> `correctness_repair`
+  - correctness passes but latency or profile summary is weak -> `performance_optimize`
+  - correctness passes and only launch/configuration knobs remain -> `autotune`
+- Before editing for a selected phase, follow this group's retrieval protocol for that phase.
+- If retrieval is allowed for this group, do not treat retrieval as optional background reading; preserve the packet as evidence even when it contains no matches.
+- Fix correctness failures before performance tuning. Optimize and autotune only after correctness passes."""
+
+
 def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: str, kb_version: str) -> str:
     if group == "A0_prompt":
         return """Retrieval protocol:
@@ -78,7 +107,8 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
     if group == "A1_raw_corpus_rag":
         return f"""Retrieval protocol:
 - This group may use only raw-corpus plain-text RAG.
-- If more context is needed, call retrieval only with `--group A1_raw_corpus_rag`.
+- Retrieval is mandatory at phase entry: call retrieval with `--group A1_raw_corpus_rag` before acting in each selected phase.
+- Do not skip retrieval just because you already have an implementation or tuning idea.
 - Do not read `kb/` directly and do not call retrieval with A2 or A3 groups.
 - Save retrieved packets under `context_packets/`.
 - Phase-specific retrieval commands from this workspace:
@@ -87,7 +117,8 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
     if group == "A2_kb_plain_rag":
         return f"""Retrieval protocol:
 - This group may use only plain-text RAG over KB units.
-- If more context is needed, call retrieval only with `--group A2_kb_plain_rag`.
+- Retrieval is mandatory at phase entry: call retrieval with `--group A2_kb_plain_rag` before acting in each selected phase.
+- Do not skip retrieval just because you already have an implementation or tuning idea.
 - Do not read `sources/raw_corpus/` or `sources/raw_archive/` directly and do not call retrieval with A1 or A3 groups.
 - Treat retrieved KB units as ordinary text snippets, not as structured ECC capsules.
 - Save retrieved packets under `context_packets/`.
@@ -96,7 +127,8 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
 
     return f"""Retrieval protocol:
 - This group uses ECC-KB structured context packets.
-- If more context is needed, call retrieval only with `--group A3_ecc_kb`.
+- Retrieval is mandatory at ECC phase entry: call retrieval with `--group A3_ecc_kb` before acting in each selected phase.
+- Do not skip retrieval just because you already have an implementation or tuning idea.
 - Use the structured packet fields such as `must_obey`, `recommended_actions`, `anti_actions`, `validation_plan`, `stop_conditions`, and `evidence_refs`.
 - Do not call retrieval with A1 or A2 groups, and do not browse raw corpus files directly.
 - Save retrieved packets under `context_packets/`.
@@ -104,9 +136,25 @@ def group_retrieval_protocol(retrieve_script: Path, backend_path: Path, group: s
 {phase_commands(retrieve_script, backend_path, group, kb_version)}"""
 
 
+def output_protocol(group: str) -> str:
+    if group != "A0_prompt":
+        return """Outputs:
+- Final implementation: `candidate.py`.
+- Required retrieved context evidence: `context_packets/*.json` for every phase you enter.
+- Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`."""
+
+    return """Outputs:
+- Final implementation: `candidate.py`.
+- No retrieval output is expected for this no-retrieval baseline.
+- Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`."""
+
+
 def write_prompt(workspace: Path, task: dict[str, Any], group: str, phase: str, backend_path: Path, retrieve_script: Path, kb_version: str) -> Path:
     prompt = workspace / "agent_prompt.md"
+    background = background_protocol()
+    workflow = workflow_protocol()
     protocol = group_retrieval_protocol(retrieve_script, backend_path, group, kb_version)
+    outputs = output_protocol(group)
     prompt.write_text(
         f"""# H20 Kernel Generation Task
 
@@ -120,6 +168,8 @@ Shape: `{task.get('shape')}`
 DType: `{task.get('dtype')}`
 Interface: `{task.get('op_spec', {}).get('candidate_interface')}`
 
+{background}
+
 Rules:
 - Read `task.json` first. It is the complete public task specification.
 - Modify only `candidate.py`. Keep retrieved context packets under `context_packets/`.
@@ -127,19 +177,11 @@ Rules:
 - Do not hardcode public shapes.
 - Do not read hidden test files or modify the harness.
 
-Workflow:
-- You choose your own phase: `generate`, `correctness_repair`, `performance_optimize`, or `autotune`.
-- Use `./run.sh` whenever you need measurement evidence from the GPU.
-- After running `./run.sh`, use stdout and the output files to decide the next phase.
-- Fix compile, smoke, quick, or hidden correctness failures before performance tuning.
-- Optimize and autotune only after correctness passes.
+{workflow}
 
 {protocol}
 
-Outputs:
-- Final implementation: `candidate.py`.
-- Optional retrieved context: `context_packets/*.json`.
-- Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`.
+{outputs}
 """,
         encoding="utf-8",
     )
