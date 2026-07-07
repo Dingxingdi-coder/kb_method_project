@@ -174,13 +174,34 @@ def embed_query(text: str, model_path: str) -> Any:
     return model.encode([text], normalize_embeddings=True)[0].astype("float32", copy=False)
 
 
-def vector_rank(index_dir: Path, task: dict[str, Any], phase: str, topk: int, embedding_model_path: str | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def embed_texts(texts: list[str], model_path: str) -> Any:
+    try:
+        from sentence_transformers import SentenceTransformer
+    except Exception as exc:  # pragma: no cover - dependency checked in integration use
+        raise RuntimeError("semantic ECC-KB retrieval requires sentence-transformers") from exc
+    try:
+        import numpy as np
+    except Exception as exc:  # pragma: no cover - dependency checked in integration use
+        raise RuntimeError("semantic ECC-KB retrieval requires numpy") from exc
+    model = SentenceTransformer(model_path, device="cpu")
+    embeddings = model.encode(texts, normalize_embeddings=True)
+    return np.asarray(embeddings, dtype=np.float32)
+
+
+def vector_rank(
+    index_dir: Path,
+    task: dict[str, Any],
+    phase: str,
+    topk: int,
+    embedding_model_path: str | None = None,
+    query: str | None = None,
+) -> tuple[dict[str, Any], str, list[dict[str, Any]]]:
     manifest, embeddings, items = load_vector_index(index_dir)
     model_path = embedding_model_path or manifest.get("embedding_model_path")
     if not model_path:
         raise ValueError(f"{index_dir}: manifest is missing embedding_model_path; pass --embedding-model-path")
-    query = query_text(task, phase)
-    query_embedding = embed_query(query, str(model_path))
+    retrieval_query = query.strip() if query and query.strip() else query_text(task, phase)
+    query_embedding = embed_query(retrieval_query, str(model_path))
     scores = embeddings @ query_embedding
     ranked = sorted(range(len(items)), key=lambda idx: float(scores[idx]), reverse=True)[:topk]
     retrieved: list[dict[str, Any]] = []
@@ -188,7 +209,7 @@ def vector_rank(index_dir: Path, task: dict[str, Any], phase: str, topk: int, em
         item = dict(items[idx])
         item["score"] = {"cosine": float(scores[idx]), "rank": rank}
         retrieved.append(item)
-    return manifest, retrieved
+    return manifest, retrieval_query, retrieved
 
 
 def vector_packet_common(packet: dict[str, Any], manifest: dict[str, Any], index_dir: Path) -> None:
@@ -201,8 +222,8 @@ def vector_packet_common(packet: dict[str, Any], manifest: dict[str, Any], index
     packet["retrieval_topk"] = packet.get("retrieval_topk")
 
 
-def build_vector_raw_rag_packet(task: dict[str, Any], phase: str, index_dir: Path, topk: int, embedding_model_path: str | None) -> dict[str, Any]:
-    manifest, chunks = vector_rank(index_dir, task, phase, topk, embedding_model_path)
+def build_vector_raw_rag_packet(task: dict[str, Any], phase: str, index_dir: Path, topk: int, embedding_model_path: str | None, query: str | None = None) -> dict[str, Any]:
+    manifest, retrieval_query, chunks = vector_rank(index_dir, task, phase, topk, embedding_model_path, query)
     packet = {
         "schema_version": "0.1",
         "context_packet_hash": "",
@@ -210,6 +231,8 @@ def build_vector_raw_rag_packet(task: dict[str, Any], phase: str, index_dir: Pat
         "phase": phase,
         "task_id": task.get("task_id"),
         "retrieval_mode": "vector_rag",
+        "query_source": "agent_query" if query and query.strip() else "task_json_plus_phase_fallback",
+        "retrieval_query": retrieval_query,
         "source_corpus_version": RAW_CORPUS_VERSION,
         "raw_corpus_index_version": manifest.get("index_version", RAW_CORPUS_VECTOR_INDEX_VERSION),
         "retrieval_topk": topk,
@@ -301,8 +324,8 @@ def kb_unit_to_plain_text(unit: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def build_vector_kb_rag_packet(task: dict[str, Any], phase: str, index_dir: Path, topk: int, embedding_model_path: str | None) -> dict[str, Any]:
-    manifest, units = vector_rank(index_dir, task, phase, topk, embedding_model_path)
+def build_vector_kb_rag_packet(task: dict[str, Any], phase: str, index_dir: Path, topk: int, embedding_model_path: str | None, query: str | None = None) -> dict[str, Any]:
+    manifest, retrieval_query, units = vector_rank(index_dir, task, phase, topk, embedding_model_path, query)
     packet = {
         "schema_version": "0.1",
         "context_packet_hash": "",
@@ -310,6 +333,8 @@ def build_vector_kb_rag_packet(task: dict[str, Any], phase: str, index_dir: Path
         "phase": phase,
         "task_id": task.get("task_id"),
         "retrieval_mode": "vector_rag",
+        "query_source": "agent_query" if query and query.strip() else "task_json_plus_phase_fallback",
+        "retrieval_query": retrieval_query,
         "source_corpus_version": RAW_CORPUS_VERSION,
         "kb_version": task.get("kb_version"),
         "kb_vector_index_version": manifest.get("index_version", KB_VECTOR_INDEX_VERSION),
@@ -382,12 +407,28 @@ def capsule_op_match(unit: dict[str, Any], task: dict[str, Any]) -> bool:
     scope = unit.get("operator_scope", {})
     families = {str(x).lower() for x in scope.get("families", [])}
     op_family = str(task.get("op_family", "")).lower()
-    if families and "*" not in families and op_family not in families:
+    if families and "*" not in families and "common" not in families and op_family not in families:
+        return False
+
+    names = {str(x).lower() for x in scope.get("op_names", [])}
+    op_name = str(task.get("op_name", "")).lower()
+    if names and "*" not in names and op_name not in names:
         return False
 
     dtype_scope = {str(x).lower() for x in scope.get("dtype_scope", [])}
     dtype = str(task.get("dtype", "")).lower()
     if dtype_scope and "*" not in dtype_scope and dtype not in dtype_scope:
+        return False
+
+    layout_scope = {str(x).lower() for x in scope.get("layout_scope", [])}
+    layout = str(task.get("layout", task.get("memory_format", ""))).lower()
+    if layout_scope and "*" not in layout_scope and "as_declared_by_task" not in layout_scope and layout and layout not in layout_scope:
+        return False
+
+    patterns = {safe_id(x) for x in scope.get("shape_patterns", [])}
+    shape = task.get("shape") or task.get("shapes")
+    task_shape_terms = {safe_id(normalize_shape(shape)), safe_id(shape_bucket(shape))}
+    if patterns and "*" not in patterns and not (patterns & task_shape_terms):
         return False
 
     return True
@@ -404,6 +445,9 @@ def capsule_backend_match(unit: dict[str, Any], backend: dict[str, Any]) -> bool
 
     backend_name = str(backend.get("backend", "")).lower()
     vendor = str(backend.get("vendor", "")).lower()
+    device_class = str(backend.get("device_class", "")).lower()
+    toolchain = backend.get("toolchain", {}) if isinstance(backend.get("toolchain"), dict) else {}
+    software_toolchain = backend.get("software", {}).get("toolchain", {}) if isinstance(backend.get("software"), dict) else {}
     for instance in instances:
         if str(instance.get("validity", "unknown")) == "invalid":
             continue
@@ -411,16 +455,27 @@ def capsule_backend_match(unit: dict[str, Any], backend: dict[str, Any]) -> bool
             continue
         if instance.get("backend") and str(instance["backend"]).lower() not in backend_name:
             continue
+        if instance.get("device_class") and str(instance["device_class"]).lower() != device_class:
+            continue
+        instance_toolchain = instance.get("toolchain", {}) if isinstance(instance.get("toolchain"), dict) else {}
+        incompatible_toolchain = False
+        for key, expected in instance_toolchain.items():
+            actual = str(toolchain.get(key, software_toolchain.get(key, ""))).lower()
+            expected_text = str(expected).lower()
+            if not actual or expected_text in {"current docs", "current", "*"} or "docs" in expected_text:
+                continue
+            if expected_text not in actual and actual not in expected_text:
+                incompatible_toolchain = True
+                break
+        if incompatible_toolchain:
+            continue
         return True
     return False
 
 
-def rank_capsule(unit: dict[str, Any], terms: set[str]) -> tuple[int, int, int]:
-    retrieval = unit.get("retrieval", {})
-    keys = {safe_id(k) for k in retrieval.get("keys", [])}
-    overlap = len(keys & terms)
+def evidence_weight(unit: dict[str, Any]) -> int:
     evidence_level = str(unit.get("evidence", {}).get("evidence_level", "claim"))
-    evidence_weight = {
+    return {
         "cross_backend_supported": 6,
         "cross_shape_supported": 5,
         "ablation_supported": 4,
@@ -428,7 +483,10 @@ def rank_capsule(unit: dict[str, Any], terms: set[str]) -> tuple[int, int, int]:
         "single_run": 2,
         "claim": 1,
     }.get(evidence_level, 0)
-    status_weight = {
+
+
+def status_weight(unit: dict[str, Any]) -> int:
+    return {
         "stable": 5,
         "candidate": 3,
         "quarantine": 1,
@@ -436,8 +494,67 @@ def rank_capsule(unit: dict[str, Any], terms: set[str]) -> tuple[int, int, int]:
         "stale": -2,
         "rejected": -5,
     }.get(str(unit.get("status", "")), 0)
+
+
+def condition_match_score(unit: dict[str, Any], terms: set[str]) -> int:
+    conditions = unit.get("conditions", {}) if isinstance(unit.get("conditions"), dict) else {}
+    text = " ".join(str(x) for x in conditions.get("valid_when", []) + conditions.get("preconditions", []))
+    score = score_text(text, terms)
+    return score[0] + score[1]
+
+
+def recency_score(unit: dict[str, Any]) -> int:
+    lineage = unit.get("lineage", {}) if isinstance(unit.get("lineage"), dict) else {}
+    updated = str(lineage.get("updated_at") or lineage.get("created_at") or "")
+    digits = "".join(ch for ch in updated if ch.isdigit())
+    return int(digits[:8] or 0)
+
+
+def capsule_legality_pass(unit: dict[str, Any], terms: set[str]) -> bool:
+    retrieval = unit.get("retrieval", {}) if isinstance(unit.get("retrieval"), dict) else {}
+    negative = {safe_id(k) for k in retrieval.get("negative_keys", [])}
+    action = unit.get("action", {}) if isinstance(unit.get("action"), dict) else {}
+    action_text = " ".join(str(x) for x in action.get("instructions", []))
+    boundary = unit.get("failure_boundary", {}) if isinstance(unit.get("failure_boundary"), dict) else {}
+    blocked_text = " ".join(str(x) for x in boundary.get("do_not_apply", []) + boundary.get("known_failures", []))
+    negative_hits = negative & terms
+    if negative_hits and score_text(f"{action_text}\n{blocked_text}", negative_hits) == (0, 0):
+        return False
+    return True
+
+
+def rank_capsule(unit: dict[str, Any], terms: set[str], semantic_score: float | None = None) -> tuple[int, int, int, int, float, int, int]:
+    retrieval = unit.get("retrieval", {})
+    keys = {safe_id(k) for k in retrieval.get("keys", [])}
+    overlap = len(keys & terms)
     priority = int(retrieval.get("priority", 0))
-    return (status_weight + evidence_weight + overlap, priority, overlap)
+    text_score = score_text(kb_unit_to_plain_text(unit), terms)
+    return (
+        1 if capsule_legality_pass(unit, terms) else 0,
+        evidence_weight(unit),
+        condition_match_score(unit, terms),
+        recency_score(unit),
+        float(semantic_score or 0.0),
+        text_score[0] + text_score[1] + overlap,
+        priority + status_weight(unit),
+    )
+
+
+def capsule_score_details(unit: dict[str, Any], terms: set[str], semantic_score: float | None) -> dict[str, Any]:
+    retrieval = unit.get("retrieval", {}) if isinstance(unit.get("retrieval"), dict) else {}
+    keys = {safe_id(k) for k in retrieval.get("keys", [])}
+    text_score = score_text(kb_unit_to_plain_text(unit), terms)
+    return {
+        "legality_pass": capsule_legality_pass(unit, terms),
+        "evidence_weight": evidence_weight(unit),
+        "condition_match": condition_match_score(unit, terms),
+        "recency": recency_score(unit),
+        "semantic_cosine": semantic_score,
+        "text_relevance": text_score[0] + text_score[1] + len(keys & terms),
+        "priority": int(retrieval.get("priority", 0)),
+        "status_weight": status_weight(unit),
+        "retrieval_key_overlap": sorted(keys & terms),
+    }
 
 
 def load_capsules(paths: list[Path]) -> list[dict[str, Any]]:
@@ -453,21 +570,55 @@ def load_capsules(paths: list[Path]) -> list[dict[str, Any]]:
     return units
 
 
-def build_a3_packet(task: dict[str, Any], backend: dict[str, Any], phase: str, kb_paths: list[Path], topk: int) -> dict[str, Any]:
+def build_a3_packet(
+    task: dict[str, Any],
+    backend: dict[str, Any],
+    phase: str,
+    kb_paths: list[Path],
+    topk: int,
+    query: str | None = None,
+    embedding_model_path: str | None = None,
+) -> dict[str, Any]:
     terms = task_terms(task, phase)
+    retrieval_query = query.strip() if query and query.strip() else query_text(task, phase)
+    terms.update(tokenize(retrieval_query))
     units = []
+    filter_counts = {"loaded": 0, "status": 0, "phase": 0, "operator": 0, "backend": 0, "legality": 0}
     for unit in load_capsules(kb_paths):
+        filter_counts["loaded"] += 1
         if unit.get("status") in ("rejected", "stale"):
+            filter_counts["status"] += 1
             continue
         if not capsule_phase_match(unit, phase):
+            filter_counts["phase"] += 1
             continue
         if not capsule_op_match(unit, task):
+            filter_counts["operator"] += 1
             continue
         if not capsule_backend_match(unit, backend):
+            filter_counts["backend"] += 1
+            continue
+        if not capsule_legality_pass(unit, terms):
+            filter_counts["legality"] += 1
             continue
         units.append(unit)
 
-    units.sort(key=lambda u: rank_capsule(u, terms), reverse=True)
+    semantic_scores: dict[str, float] = {}
+    semantic_applied = False
+    semantic_error = ""
+    if not embedding_model_path:
+        raise ValueError("A3_ecc_kb requires --embedding-model-path for hard-filtered semantic retrieval")
+    if units:
+        try:
+            query_embedding = embed_query(retrieval_query, embedding_model_path)
+            unit_embeddings = embed_texts([kb_unit_to_plain_text(unit) for unit in units], embedding_model_path)
+            scores = unit_embeddings @ query_embedding
+            semantic_scores = {str(unit.get("id")): float(scores[idx]) for idx, unit in enumerate(units)}
+            semantic_applied = True
+        except Exception as exc:  # pragma: no cover - exercised in env-specific integration
+            raise RuntimeError(f"A3_ecc_kb semantic retrieval failed: {exc}") from exc
+
+    units.sort(key=lambda u: rank_capsule(u, terms, semantic_scores.get(str(u.get("id")))), reverse=True)
     units = units[:topk]
 
     packet: dict[str, Any] = {
@@ -478,6 +629,42 @@ def build_a3_packet(task: dict[str, Any], backend: dict[str, Any], phase: str, k
         "task_id": task.get("task_id"),
         "op_family": task.get("op_family"),
         "retrieval_mode": "phase_and_evidence_aware_context_packet",
+        "query_source": "agent_query_plus_task_phase_backend_filters" if query and query.strip() else "task_phase_backend_filters_fallback",
+        "retrieval_query": retrieval_query,
+        "retrieval_terms": sorted(terms),
+        "hard_filters": {
+            "phase": phase,
+            "operator_family": task.get("op_family", ""),
+            "operator_name": task.get("op_name", ""),
+            "dtype": task.get("dtype", ""),
+            "layout": task.get("layout", task.get("memory_format", "")),
+            "shape": normalize_shape(task.get("shape") or task.get("shapes")),
+            "shape_bucket": shape_bucket(task.get("shape") or task.get("shapes")),
+            "status_excluded": ["stale", "rejected"],
+        },
+        "hard_filter_counts": filter_counts,
+        "backend_filters": {
+            "backend": backend.get("backend", ""),
+            "vendor": backend.get("vendor", ""),
+            "device_class": backend.get("device_class", ""),
+            "device_name": backend.get("device_name", ""),
+            "toolchain": backend.get("toolchain", {}),
+        },
+        "semantic_retrieval": {
+            "stage": "after_hard_filter",
+            "applied": semantic_applied,
+            "embedding_model_path": str(Path(embedding_model_path).resolve()) if embedding_model_path else "",
+            "error": semantic_error,
+        },
+        "rerank_policy": [
+            "legality",
+            "evidence_strength",
+            "condition_match",
+            "recent_reproduction",
+            "semantic_similarity",
+            "text_relevance",
+            "retrieval_priority",
+        ],
         "source_corpus_version": RAW_CORPUS_VERSION,
         "kb_version": task.get("kb_version"),
         "ecc_kb_index_version": ECC_KB_INDEX_VERSION,
@@ -494,11 +681,13 @@ def build_a3_packet(task: dict[str, Any], backend: dict[str, Any], phase: str, k
 
     for unit in units:
         action = unit.get("action", {})
+        score = capsule_score_details(unit, terms, semantic_scores.get(str(unit.get("id"))))
         item = {
             "capsule_id": unit.get("id"),
             "instruction": "; ".join(action.get("instructions", [])),
             "expected_effect": unit.get("expected_effect", {}),
             "source_path": unit.get("_source_path"),
+            "score": score,
         }
         kind = action.get("kind")
         if kind == "must_obey":
@@ -532,6 +721,7 @@ def build_a3_packet(task: dict[str, Any], backend: dict[str, Any], phase: str, k
                 "unit_type": unit.get("unit_type"),
                 "status": unit.get("status"),
                 "action_kind": action.get("kind"),
+                "score": score,
             }
         )
 
@@ -566,6 +756,7 @@ def main() -> int:
     parser.add_argument("--raw-vector-index", default="artifacts/indexes/raw_corpus_vector_v0")
     parser.add_argument("--kb-vector-index", default="artifacts/indexes/kb_vector_v0")
     parser.add_argument("--embedding-model-path", default=None)
+    parser.add_argument("--query", default=None, help="Agent-written retrieval query for the current phase/problem. Falls back to task+phase when omitted.")
     parser.add_argument("--topk", type=int, default=12)
     parser.add_argument("--max-chars-per-item", type=int, default=1800)
     parser.add_argument("--out", required=True)
@@ -603,9 +794,9 @@ def main() -> int:
             "evidence_refs": [],
         }
     elif group == "A1_raw_corpus_vector_rag":
-        packet = build_vector_raw_rag_packet(task, args.phase, Path(args.raw_vector_index), args.topk, args.embedding_model_path)
+        packet = build_vector_raw_rag_packet(task, args.phase, Path(args.raw_vector_index), args.topk, args.embedding_model_path, args.query)
     elif group == "A2_kb_vector_rag":
-        packet = build_vector_kb_rag_packet(task, args.phase, Path(args.kb_vector_index), args.topk, args.embedding_model_path)
+        packet = build_vector_kb_rag_packet(task, args.phase, Path(args.kb_vector_index), args.topk, args.embedding_model_path, args.query)
     else:
         kb_root = Path(args.kb_root)
         kb_paths = [
@@ -614,7 +805,7 @@ def main() -> int:
             kb_root / "quarantine",
             kb_root / "failures",
         ]
-        packet = build_a3_packet(task, backend, args.phase, kb_paths, args.topk)
+        packet = build_a3_packet(task, backend, args.phase, kb_paths, args.topk, args.query, args.embedding_model_path)
 
     packet["context_packet_hash"] = stable_hash(packet)
     packet["context_packet_short_hash"] = short_hash(packet)

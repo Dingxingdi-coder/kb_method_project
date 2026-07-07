@@ -262,6 +262,7 @@ def main() -> int:
     parser.add_argument("--warmup", type=int, default=None)
     parser.add_argument("--repeats", type=int, default=None)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--require-cuda", action="store_true", help="Fail instead of silently falling back to CPU when CUDA is unavailable.")
     args = parser.parse_args()
 
     import torch
@@ -271,11 +272,43 @@ def main() -> int:
     candidate_path = Path(args.candidate)
     warmup = int(args.warmup if args.warmup is not None else task.get("budget", {}).get("warmup", 100))
     repeats = int(args.repeats if args.repeats is not None else task.get("budget", {}).get("repeats", 500))
-    device = args.device if args.device != "cuda" or torch.cuda.is_available() else "cpu"
+    requested_device = args.device
+    cuda_available = torch.cuda.is_available()
+    if requested_device == "cuda" and not cuda_available and args.require_cuda:
+        results = {
+            "schema_version": "0.1",
+            "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path), 'cuda_unavailable'])}",
+            "timestamp": utc_now(),
+            "task_id": task.get("task_id"),
+            "op_family": task.get("op_family"),
+            "candidate_hash": sha256_file(candidate_path),
+            "compile": {"status": "fail", "reason": "CUDA requested but torch.cuda.is_available() is false"},
+            "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []},
+            "correctness": {},
+            "benchmark": {},
+            "profile_summary": {},
+            "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0},
+            "runtime": {
+                "requested_device": requested_device,
+                "actual_device": "none",
+                "cuda_available": False,
+                "cuda_device_count": int(torch.cuda.device_count()),
+            },
+            "final_decision": "FAIL",
+            "diagnosis": "CUDA requested but unavailable; H20 benchmark was not run.",
+        }
+        write_json(out_dir / "results.json", results)
+        (out_dir / "compile.log").write_text(results["diagnosis"] + "\n", encoding="utf-8")
+        (out_dir / "correctness.log").write_text("", encoding="utf-8")
+        write_json(out_dir / "benchmark.json", {})
+        write_json(out_dir / "profile_summary.json", {})
+        print_summary(results, out_dir)
+        return 1
+    device = requested_device if requested_device != "cuda" or cuda_available else "cpu"
     started = time.time()
     compile_log: list[str] = []
     correctness_log: list[str] = []
-    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path)])}", "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}}
+    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path)])}", "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}, "runtime": {"requested_device": requested_device, "actual_device": device, "cuda_available": bool(cuda_available), "cuda_device_count": int(torch.cuda.device_count())}}
     try:
         fn = load_candidate(candidate_path)
         results["compile"] = {"status": "pass"}; compile_log.append("candidate import: pass")

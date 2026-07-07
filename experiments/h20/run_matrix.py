@@ -51,6 +51,8 @@ def run_one(repo_root: Path, runner: Path, job: dict[str, Any]) -> dict[str, Any
         cmd.extend(["--warmup", str(job["warmup"])])
     if job.get("repeats") is not None:
         cmd.extend(["--repeats", str(job["repeats"])])
+    if job.get("conda_env") is not None:
+        cmd.extend(["--conda-env", str(job["conda_env"])])
     proc = subprocess.run(cmd, cwd=str(repo_root), env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     return {"job": {k: str(v) for k, v in job.items()}, "returncode": proc.returncode, "stdout_tail": proc.stdout[-4000:], "stderr_tail": proc.stderr[-4000:]}
 
@@ -70,6 +72,7 @@ def main() -> int:
     parser.add_argument("--iteration", type=int, default=0)
     parser.add_argument("--warmup", type=int, default=None)
     parser.add_argument("--repeats", type=int, default=None)
+    parser.add_argument("--conda-env", default="op_kb_dxd", help="Conda environment activated by generated run.sh. Use an empty value to disable activation.")
     args = parser.parse_args()
 
     repo_root = Path.cwd()
@@ -88,7 +91,7 @@ def main() -> int:
         for group in groups:
             for seed in seeds:
                 gpu = gpus[idx % len(gpus)]; idx += 1
-                jobs.append({"task": task.resolve(), "hidden": hidden_for(task), "group": group, "seed": seed, "gpu": gpu, "backend": Path(args.backend).resolve(), "kb_version": args.kb_version, "phase": args.phase, "iteration": args.iteration, "run_harness": args.run_harness, "warmup": args.warmup, "repeats": args.repeats, "out_dir": (out_root / group / safe_id(str(task_id)) / f"seed{seed}").resolve()})
+                jobs.append({"task": task.resolve(), "hidden": hidden_for(task), "group": group, "seed": seed, "gpu": gpu, "backend": Path(args.backend).resolve(), "kb_version": args.kb_version, "phase": args.phase, "iteration": args.iteration, "run_harness": args.run_harness, "warmup": args.warmup, "repeats": args.repeats, "conda_env": args.conda_env, "out_dir": (out_root / group / safe_id(str(task_id)) / f"seed{seed}").resolve()})
 
     write_json(out_root / "matrix_manifest.json", {"jobs": [{k: str(v) for k, v in job.items()} for job in jobs]})
     print(f"scheduled jobs={len(jobs)} tasks={len(tasks)} groups={groups} seeds={seeds}")

@@ -30,11 +30,19 @@ GROUP_ALIASES = {
 GROUPS = ["A0_prompt", "A1_raw_corpus_vector_rag", "A2_kb_vector_rag", "A3_ecc_kb", *GROUP_ALIASES]
 
 SKELETONS = {
-    "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y. Do not call torch.softmax.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
-    "reduction": """\"\"\"Candidate kernel for row reduction. Interface: candidate(x, reduce_op) -> y. Do not call torch.sum or torch.max.\"\"\"\n\ndef candidate(x, reduce_op):\n    raise NotImplementedError(\"agent must implement row reduction\")\n""",
+    "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
+    "reduction": """\"\"\"Candidate kernel for row reduction. Interface: candidate(x, reduce_op) -> y.\"\"\"\n\ndef candidate(x, reduce_op):\n    raise NotImplementedError(\"agent must implement row reduction\")\n""",
     "layernorm": """\"\"\"Candidate kernel for LayerNorm forward. Interface: candidate(x, gamma, beta, eps) -> y.\"\"\"\n\ndef candidate(x, gamma, beta, eps):\n    raise NotImplementedError(\"agent must implement layernorm forward\")\n""",
-    "matmul": """\"\"\"Candidate kernel for matmul. Interface: candidate(a, b) -> c. Do not call torch.matmul.\"\"\"\n\ndef candidate(a, b):\n    raise NotImplementedError(\"agent must implement matmul\")\n""",
+    "matmul": """\"\"\"Candidate kernel for matmul. Interface: candidate(a, b) -> c.\"\"\"\n\ndef candidate(a, b):\n    raise NotImplementedError(\"agent must implement matmul\")\n""",
 }
+
+
+FORBIDDEN_TARGET_API_RULE = (
+    "Do not bypass the task by calling any library API that directly implements "
+    "the target operator or an equivalent fused target operator from candidate.py. "
+    "Such calls are invalid for this experiment; implement the operator with "
+    "Triton/CUDA-style kernels or lower-level primitive operations instead."
+)
 
 
 def infer_hidden_path(task_path: Path) -> Path | None:
@@ -79,6 +87,7 @@ def retrieval_command(
     ]
     if embedding_model_path:
         parts.extend(["--embedding-model-path", embedding_model_path])
+    parts.extend(["--query", "\"<write a concrete query for the current problem and phase>\""])
     parts.extend(["--out", f"context_packets/{out_name}"])
     return " ".join(parts)
 
@@ -125,6 +134,7 @@ def workflow_protocol() -> str:
   - correctness passes but latency or profile summary is weak -> `performance_optimize`
   - correctness passes and only launch/configuration knobs remain -> `autotune`
 - Before editing for a selected phase, follow this group's retrieval protocol for that phase.
+- When retrieval is allowed, write a concrete query for the current problem before calling retrieval. The query should describe what you need now, such as the failing symptom, operator, dtype/shape, suspected cause, performance bottleneck, or tuning knob.
 - If retrieval is allowed for this group, do not treat retrieval as optional background reading; preserve the packet as evidence even when it contains no matches.
 - Fix correctness failures before performance tuning. Optimize and autotune only after correctness passes."""
 
@@ -158,6 +168,7 @@ def group_retrieval_protocol(
         return f"""Retrieval protocol:
 - This group may use only raw-corpus vector RAG.
 - Retrieval is mandatory at phase entry: call retrieval with `--group A1_raw_corpus_vector_rag` before acting in each selected phase.
+- You must replace the placeholder after `--query` with your own specific query for this phase/problem. Do not use a generic phase-only query.
 - Do not skip retrieval just because you already have an implementation or tuning idea.
 - Do not read `kb/` directly and do not call retrieval with A2 or A3 groups.
 - Save retrieved packets under `context_packets/`.
@@ -168,6 +179,7 @@ def group_retrieval_protocol(
         return f"""Retrieval protocol:
 - This group may use only vector RAG over flattened KB units.
 - Retrieval is mandatory at phase entry: call retrieval with `--group A2_kb_vector_rag` before acting in each selected phase.
+- You must replace the placeholder after `--query` with your own specific query for this phase/problem. Do not use a generic phase-only query.
 - Do not skip retrieval just because you already have an implementation or tuning idea.
 - Do not read `sources/raw_corpus/` or `sources/raw_archive/` directly and do not call retrieval with A1 or A3 groups.
 - Treat retrieved KB units as ordinary text snippets, not as structured ECC capsules.
@@ -178,6 +190,7 @@ def group_retrieval_protocol(
     return f"""Retrieval protocol:
 - This group uses ECC-KB structured context packets.
 - Retrieval is mandatory at ECC phase entry: call retrieval with `--group A3_ecc_kb` before acting in each selected phase.
+- You must replace the placeholder after `--query` with your own specific query for this phase/problem. Do not use a generic phase-only query.
 - Do not skip retrieval just because you already have an implementation or tuning idea.
 - Use the structured packet fields such as `must_obey`, `recommended_actions`, `anti_actions`, `validation_plan`, `stop_conditions`, and `evidence_refs`.
 - Do not call retrieval with A1 or A2 groups, and do not browse raw corpus files directly.
@@ -250,6 +263,7 @@ Rules:
 - Modify only `candidate.py`. Keep retrieved context packets under `context_packets/`.
 - Preserve the declared interface.
 - Do not hardcode public shapes.
+- {FORBIDDEN_TARGET_API_RULE}
 - Do not read hidden test files or modify the harness.
 
 {workflow}
@@ -265,16 +279,34 @@ Rules:
     return prompt
 
 
-def write_run_sh(workspace: Path, harness: Path, hidden_path: Path | None, warmup: int | None, repeats: int | None) -> None:
-    cmd = ["python", str(harness), "--task", "task.json", "--candidate", "candidate.py", "--out-dir", "."]
+def write_run_sh(
+    workspace: Path,
+    harness: Path,
+    hidden_path: Path | None,
+    warmup: int | None,
+    repeats: int | None,
+    conda_env: str | None,
+) -> None:
+    cmd = ["python", str(harness), "--task", "task.json", "--candidate", "candidate.py", "--out-dir", ".", "--require-cuda"]
     if hidden_path is not None:
         cmd.extend(["--hidden-tests", str(hidden_path.resolve())])
     if warmup is not None:
         cmd.extend(["--warmup", str(warmup)])
     if repeats is not None:
         cmd.extend(["--repeats", str(repeats)])
+    prelude = "#!/usr/bin/env bash\nset -euo pipefail\n"
+    if conda_env:
+        prelude += (
+            "source /data/miniconda3/etc/profile.d/conda.sh\n"
+            f"conda activate {conda_env}\n"
+        )
     path = workspace / "run.sh"
-    path.write_text("#!/usr/bin/env bash\nset -euo pipefail\n" + " ".join(cmd) + "\n", encoding="utf-8")
+    path.write_text(
+        prelude
+        + " ".join(cmd)
+        + "\n",
+        encoding="utf-8",
+    )
     path.chmod(0o755)
 
 
@@ -312,7 +344,7 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
         kb_vector_index,
         args.embedding_model_path,
     )
-    write_run_sh(workspace, (repo_root / args.harness).resolve(), hidden_path, args.warmup, args.repeats)
+    write_run_sh(workspace, (repo_root / args.harness).resolve(), hidden_path, args.warmup, args.repeats, args.conda_env)
     return workspace
 
 
@@ -320,7 +352,7 @@ def run_harness(args: argparse.Namespace, workspace: Path) -> int:
     repo_root = Path.cwd()
     task_path = workspace / "task.json"
     hidden_path = Path(args.hidden_tests).resolve() if args.hidden_tests else infer_hidden_path(Path(args.task).resolve())
-    cmd = [sys.executable, str((repo_root / args.harness).resolve()), "--task", str(task_path), "--candidate", str(workspace / "candidate.py"), "--out-dir", str(workspace), "--seed", str(args.seed)]
+    cmd = [sys.executable, str((repo_root / args.harness).resolve()), "--task", str(task_path), "--candidate", str(workspace / "candidate.py"), "--out-dir", str(workspace), "--seed", str(args.seed), "--require-cuda"]
     if hidden_path is not None:
         cmd.extend(["--hidden-tests", str(hidden_path)])
     if args.warmup is not None:
@@ -376,6 +408,7 @@ def main() -> int:
     parser.add_argument("--raw-vector-index", default="artifacts/indexes/raw_corpus_vector_v0")
     parser.add_argument("--kb-vector-index", default="artifacts/indexes/kb_vector_v0")
     parser.add_argument("--embedding-model-path", default=None)
+    parser.add_argument("--conda-env", default="op_kb_dxd", help="Conda environment activated by generated run.sh. Use an empty value to disable activation.")
     args = parser.parse_args()
 
     workspace = prepare_workspace(args, args.phase)
