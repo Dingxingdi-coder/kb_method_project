@@ -1,0 +1,144 @@
+version: h20_expanded_pilot_sources_v0
+branch: h20-demo-round2
+generated_at: '2026-07-08T00:00:00Z'
+policy: Supplemental source registry for the H20 expanded pilot pointwise and layout/indexing categories. These entries prepare retrieval material only; they are not historical experiment results and do not update existing benchmark claims.
+sources:
+  - source_id: triton_vector_add_pointwise_tail_mask
+    title: Triton vector add tutorial for tail masks and custom-op validation
+    kind: official_doc
+    uri: https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+    local_raw_corpus_path: sources/raw_corpus/pointwise_fusion_corpus.md
+    local_raw_archive_path: null
+    license: unknown
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [triton, pointwise, tail_mask, tl_load, tl_store, benchmark]
+    backends: [nvidia_cuda, amd_rocm]
+    operators: [common, pointwise, layout_indexing]
+    version_or_date: Triton main docs
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for reusable program_id/arange/mask skeleton; no H20 performance claim.
+  - source_id: cuda_best_practices_memory_coalescing
+    title: CUDA Best Practices Guide memory coalescing and effective bandwidth
+    kind: official_doc
+    uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+    local_raw_corpus_path: sources/raw_corpus/pointwise_fusion_corpus.md
+    local_raw_archive_path: null
+    license: unknown
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [cuda, global_memory, coalescing, strided_access, effective_bandwidth, shared_memory]
+    backends: [nvidia_cuda]
+    operators: [common, pointwise, layout_indexing]
+    version_or_date: CUDA 13.3 docs
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for candidate memory/coalescing guidance and stop conditions; H20 validation still required.
+  - source_id: pytorch_broadcasting_expand_semantics
+    title: PyTorch broadcasting and expand semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.expand.html
+    local_raw_corpus_path: sources/raw_corpus/pointwise_fusion_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [pytorch, broadcasting, expand, stride_zero, elementwise]
+    backends: [cpu, nvidia_cuda]
+    operators: [common, pointwise, layout_indexing]
+    version_or_date: PyTorch 2.12
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for broadcast affine, bias activation, and expanded/broadcasted operand address rules.
+  - source_id: pytorch_gelu_silu_semantics
+    title: PyTorch GELU and SiLU activation semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.gelu.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.silu.html
+    local_raw_corpus_path: sources/raw_corpus/pointwise_fusion_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [pytorch, gelu, silu, activation, numerical_semantics]
+    backends: [cpu, nvidia_cuda]
+    operators: [pointwise]
+    version_or_date: PyTorch 2.12
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for activation semantic capsules; high-level API calls remain illegal in kernel-authoring submitted paths.
+  - source_id: pytorch_stride_contiguous_tensor_views
+    title: PyTorch tensor views, strides, and contiguous semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/2.12/tensor_view.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+      - https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+    local_raw_corpus_path: sources/raw_corpus/layout_indexing_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [pytorch, stride, tensor_view, contiguous, non_contiguous]
+    backends: [cpu, nvidia_cuda]
+    operators: [common, layout_indexing]
+    version_or_date: PyTorch 2.12
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for stride-aware indexing and high-level copy fallback boundaries.
+  - source_id: pytorch_gather_index_select_semantics
+    title: PyTorch gather and index_select semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/2.12/generated/torch.gather.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/2.12/generated/torch.index_select.html
+    local_raw_corpus_path: sources/raw_corpus/layout_indexing_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [pytorch, gather, index_select, embedding_lookup, index_dtype, bounds]
+    backends: [cpu, nvidia_cuda]
+    operators: [layout_indexing]
+    version_or_date: PyTorch 2.12
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for gather rows and embedding lookup semantic constraints.
+  - source_id: pytorch_scatter_add_semantics
+    title: PyTorch scatter_add and scatter semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.scatter_add_.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.scatter_.html
+    local_raw_corpus_path: sources/raw_corpus/layout_indexing_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [pytorch, scatter_add, scatter, collision, nondeterminism, index_dtype]
+    backends: [cpu, nvidia_cuda]
+    operators: [layout_indexing]
+    version_or_date: PyTorch 2.12
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for scatter-add collision and validation rules; no H20 atomic performance claim.
+  - source_id: h20_formal_kernel_authoring_rules
+    title: H20 formal experiment kernel-authoring legality rules
+    kind: project_protocol
+    uri: docs/h20_formal_experiment_protocol.md
+    local_raw_corpus_path: sources/raw_corpus/pointwise_fusion_corpus.md
+    local_raw_archive_path: null
+    license: repository
+    trust_level: project_report
+    retrieved_at: '2026-07-08'
+    ingested_at: '2026-07-08'
+    topics: [legality, anti_cheating, kernel_authoring, high_level_fallback]
+    backends: [nvidia_cuda]
+    operators: [common, pointwise, layout_indexing]
+    version_or_date: repository h20 formal protocol
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Project legality rule for submitted candidate path; not an upstream performance source.
