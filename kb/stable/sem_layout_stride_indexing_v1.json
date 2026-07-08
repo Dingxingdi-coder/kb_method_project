@@ -1,0 +1,188 @@
+{
+  "id": "sem_layout_stride_indexing_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": [
+    "plan",
+    "generate",
+    "correctness_repair"
+  ],
+  "operator_scope": {
+    "families": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular_memory"
+    ],
+    "op_names": [
+      "transpose_copy",
+      "permute_copy",
+      "gather_rows",
+      "embedding_lookup",
+      "slice_concat",
+      "strided_copy",
+      "layout_transform"
+    ],
+    "semantic_signature": "layout transform or irregular read/write with explicit shape, stride, and bounds semantics",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "*",
+      "non_contiguous",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "tile"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "shared_or_scratchpad",
+      "register"
+    ],
+    "synchronization": [
+      "block_local_sync_if_shared_tile_used"
+    ],
+    "profile_symptoms": [
+      "memory_bound",
+      "divergence",
+      "atomic_contention",
+      "uncoalesced_memory"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "Task includes transpose/permute materialization, slice/concat, gather/embedding lookup, or strided copy/layout transform.",
+      "Input or output may be non-contiguous, broadcasted, sliced, transposed, or otherwise stride-dependent."
+    ],
+    "invalid_when": [
+      "The OpSpec explicitly declares every operand contiguous and no stride/view behavior must be preserved."
+    ],
+    "preconditions": [
+      "Read sizes, strides, storage offset assumptions, index dtype, and output layout from OpSpec before writing memory offsets."
+    ]
+  },
+  "mechanism": "PyTorch views can represent non-contiguous tensors by changing sizes and strides without copying; a custom kernel must reproduce logical indexing rather than assume linear contiguous storage.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "For each logical output element, compute source and destination storage offsets from logical indices and declared strides; do not assume contiguous layout unless OpSpec declares it.",
+      "Distinguish metadata-only view semantics from materialized copy semantics: transpose/permute copy tasks must write the declared output layout, while view-only tasks should not fabricate a copy unless allowed.",
+      "Apply bounds checks or masks for every sliced range, tail tile, gather index, and output store.",
+      "For slice + concat, partition the output index space explicitly and route each region to the correct source base offset.",
+      "Validate non-contiguous, transposed, sliced, and odd-size cases before performance tuning."
+    ],
+    "patch_hint": "Carry shape and stride parameters into the Triton/CUDA kernel. Replace out_ptr + linear with out_ptr + sum_i(logical_i * out_stride_i), and do the analogous source calculation."
+  },
+  "expected_effect": {
+    "correctness": "Prevents hidden failures on non-contiguous and strided layout cases.",
+    "performance": "No direct performance claim; it preserves legality and correctness before schedule tuning.",
+    "search_efficiency": "Reduces repeated debugging caused by accidental contiguous-only kernels.",
+    "risk": "Stride-aware address math adds integer overhead; optimize only after correctness gates pass."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:pytorch_stride_contiguous_tensor_views",
+      "source:pytorch_broadcasting_expand_semantics",
+      "claim:clm_layout_stride_indexing_01"
+    ],
+    "evidence_level": "claim",
+    "confidence": 0.88
+  },
+  "validation": {
+    "gates": [
+      "schema",
+      "static_legality",
+      "compile",
+      "smoke_correctness",
+      "quick_correctness",
+      "hidden_correctness",
+      "anti_cheating"
+    ],
+    "correctness_matrix": [
+      "contiguous input",
+      "non-contiguous transpose or slice input",
+      "non-unit stride",
+      "odd tile edge",
+      "output layout declared by task"
+    ],
+    "promotion_policy": "Stable semantic rule; performance conclusions require separate H20 evidence."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Using contiguous linear offsets silently passes contiguous public cases but fails non-contiguous hidden cases.",
+      "Calling contiguous() or permute() in Python may perform the target layout transform as a high-level fallback and requires legality review.",
+      "Missing output-store mask can corrupt memory for edge tiles."
+    ],
+    "boundary_tests": [
+      "non-contiguous stride seed",
+      "slice with non-zero base offset",
+      "transpose/permute copy with asymmetric dimensions",
+      "tail tile smaller than block size"
+    ],
+    "do_not_apply": [
+      "pure pointwise contiguous tasks without stride-sensitive operands"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "portable",
+    "portable_part": [
+      "shape/stride offset semantics",
+      "bounds masking",
+      "view-vs-copy distinction"
+    ],
+    "replace_on_new_backend": [
+      "integer-vector indexing idiom and memory coalescing schedule"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular",
+      "transpose_copy",
+      "permute_copy",
+      "slice_concat",
+      "strided_copy",
+      "layout_transform",
+      "stride",
+      "strided",
+      "non_contiguous",
+      "contiguous",
+      "bounds",
+      "tail_mask",
+      "view",
+      "copy"
+    ],
+    "negative_keys": [
+      "contiguous_only",
+      "unverified_speedup"
+    ],
+    "priority": 91,
+    "max_context_tokens": 560
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
