@@ -1,0 +1,206 @@
+{
+  "id": "perf_irregular_gather_scatter_coalescing_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "optimization_motif",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": [
+    "performance_optimize",
+    "autotune"
+  ],
+  "operator_scope": {
+    "families": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular_memory"
+    ],
+    "op_names": [
+      "gather_rows",
+      "embedding_lookup",
+      "scatter_add"
+    ],
+    "semantic_signature": "irregular indexed memory access after correctness passes",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "*",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "vector"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "register"
+    ],
+    "synchronization": [
+      "atomic_or_conflict_resolution_for_scatter_add"
+    ],
+    "profile_symptoms": [
+      "uncoalesced_memory",
+      "atomic_contention",
+      "memory_bound",
+      "divergence"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "Task uses gather rows, embedding lookup, or scatter-add with an explicit index tensor and a correct candidate exists.",
+      "Profile summary indicates irregular/uncoalesced memory or atomic contention."
+    ],
+    "invalid_when": [
+      "The access pattern is a regular transpose/permute copy with affine strides only.",
+      "Correctness for bounds, index dtype, and duplicate scatter indices has not passed."
+    ],
+    "preconditions": [
+      "Apply sem_layout_stride_indexing_v1 and sem_scatter_add_collision_v1 first when applicable."
+    ]
+  },
+  "mechanism": "Irregular indices break the coalescing assumptions of regular copies. The implementation must separately reason about index loads, source row reads, destination writes, and scatter collisions; performance depends strongly on index distribution.",
+  "action": {
+    "kind": "recommend",
+    "instructions": [
+      "Separate the schedule into index load, source/gather read or scatter destination calculation, and output write; inspect which leg is contiguous and coalesce that leg first.",
+      "For gather_rows or embedding_lookup, tile within each row so lanes copy contiguous columns when the row payload is contiguous; do not assume adjacent row indices are adjacent in memory.",
+      "For scatter_add, choose atomics for general duplicates or a staged per-block reduction only when the task and index distribution justify it.",
+      "Keep bounds checks on index values even in performance candidates; mask or reject out-of-range indices according to OpSpec.",
+      "Benchmark with both low-collision and high-collision index distributions before promoting any scatter-add performance rule."
+    ],
+    "knob_space": {
+      "row_block": [
+        "1",
+        "2",
+        "4"
+      ],
+      "cols_per_program": [
+        "32",
+        "64",
+        "128",
+        "256"
+      ],
+      "num_warps": [
+        "4",
+        "8"
+      ],
+      "scatter_strategy": [
+        "atomic_general",
+        "block_local_preaggregate_candidate"
+      ]
+    }
+  },
+  "expected_effect": {
+    "correctness": "No effect if semantic capsules are followed; can reveal missing bounds/collision checks during tuning.",
+    "performance": "Candidate-only: may improve coalescing for row-wise gathers or reduce wasted scatter attempts; no stable H20 claim.",
+    "search_efficiency": "Prevents applying regular transpose tiling blindly to irregular memory tasks.",
+    "risk": "Index distribution can dominate performance; a schedule tuned on one visible distribution may fail held-out distributions."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:pytorch_gather_index_select_semantics",
+      "source:pytorch_scatter_add_semantics",
+      "source:cuda_best_practices_memory_coalescing",
+      "claim:clm_irregular_gather_scatter_coalescing_01"
+    ],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.58
+  },
+  "validation": {
+    "gates": [
+      "hidden_correctness",
+      "benchmark_repeat",
+      "profile_attribution",
+      "reproducibility"
+    ],
+    "correctness_matrix": [
+      "random index order",
+      "repeated indices",
+      "boundary indices",
+      "empty index",
+      "row payload widths not divisible by tile"
+    ],
+    "performance_requirements": [
+      "Report index distribution assumptions with benchmark results.",
+      "Do not promote from a single collision pattern."
+    ],
+    "promotion_policy": "Requires H20 measurements across at least low-collision and high-collision cases plus profile attribution."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Assuming gather indices are sorted or contiguous can overfit public inputs.",
+      "Plain stores in scatter-add lose updates under collisions.",
+      "Removing bounds checks for speed can create illegal memory accesses."
+    ],
+    "boundary_tests": [
+      "random unsorted gather rows",
+      "duplicate scatter indices",
+      "all indices target one row",
+      "row length tail"
+    ],
+    "do_not_apply": [
+      "regular transpose_copy",
+      "permute_copy without explicit index tensor",
+      "contiguous pointwise"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "requires_revalidation",
+    "portable_part": [
+      "separate index/source/destination legs",
+      "collision-aware scatter semantics"
+    ],
+    "replace_on_new_backend": [
+      "atomic dtype support, cache behavior, coalescing granularity"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "layout_indexing",
+      "irregular",
+      "gather",
+      "gather_rows",
+      "embedding_lookup",
+      "scatter_add",
+      "scatter",
+      "atomic",
+      "atomics",
+      "collision",
+      "index_distribution",
+      "coalescing",
+      "uncoalesced",
+      "bounds",
+      "performance_optimize"
+    ],
+    "negative_keys": [
+      "regular_transpose",
+      "view_only",
+      "unique_indices_only"
+    ],
+    "priority": 72,
+    "max_context_tokens": 640
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
