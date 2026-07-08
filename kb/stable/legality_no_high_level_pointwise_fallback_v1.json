@@ -1,0 +1,159 @@
+{
+  "id": "legality_no_high_level_pointwise_fallback_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "legality_constraint",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": [
+    "plan",
+    "generate",
+    "correctness_repair",
+    "performance_optimize"
+  ],
+  "operator_scope": {
+    "families": [
+      "pointwise",
+      "elementwise"
+    ],
+    "op_names": [
+      "bias_gelu",
+      "bias_silu",
+      "residual_activation",
+      "broadcast_affine",
+      "gated_multiply",
+      "clamp_mul_add"
+    ],
+    "semantic_signature": "kernel-authoring legality for fused pointwise tasks",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "*"
+    ],
+    "layout_scope": [
+      "*"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "vector"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "register"
+    ],
+    "synchronization": [],
+    "profile_symptoms": [
+      "memory_bound",
+      "launch_bound"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "Experiment mode is kernel-authoring mode and the submitted candidate path must implement the target pointwise semantics in a custom CUDA/Triton/custom kernel."
+    ],
+    "invalid_when": [
+      "A separate library-composition mode explicitly permits high-level PyTorch/ATen composition and reports it separately."
+    ],
+    "preconditions": [
+      "Check task-specific banned API list before generating candidate code."
+    ]
+  },
+  "mechanism": "Calling high-level PyTorch or torch.nn.functional activation/composition APIs in the submitted path delegates the target semantics to the framework and invalidates kernel-authoring evaluation.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "Do not call torch.nn.functional.gelu, torch.nn.functional.silu, torch.gelu, torch.silu, torch.clamp, torch.add, torch.mul, or equivalent ATen/PyTorch high-level ops to complete the target pointwise expression in the submitted path.",
+      "Allowed host-side actions are limited to metadata reads, output allocation, and launching the custom low-level kernel unless the task spec says otherwise.",
+      "If a PyTorch call is used only to allocate or inspect metadata, keep it outside the target semantic path and make the boundary explicit for legality review."
+    ],
+    "patch_hint": "Move activation and affine arithmetic into the Triton/CUDA kernel body; keep Python wrapper to shape checks, output allocation, and launch."
+  },
+  "expected_effect": {
+    "correctness": "Does not change numerical semantics when the low-level kernel is correct.",
+    "performance": "Prevents illegal fast paths from being counted as legal performance results.",
+    "search_efficiency": "Avoids wasting iterations on candidates that will be rejected by legality review.",
+    "risk": "Static string filters alone are insufficient; dynamic trace or manual review may still be required."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:h20_formal_kernel_authoring_rules",
+      "claim:clm_pointwise_no_high_level_fallback_01"
+    ],
+    "evidence_level": "claim",
+    "confidence": 0.9
+  },
+  "validation": {
+    "gates": [
+      "schema",
+      "static_legality",
+      "anti_cheating",
+      "compile",
+      "smoke_correctness",
+      "hidden_correctness"
+    ],
+    "correctness_matrix": [
+      "candidate path trace contains no target high-level fallback",
+      "wrapper only allocates output and launches custom kernel"
+    ],
+    "promotion_policy": "Stable legality rule for this repository protocol; not a hardware performance rule."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "A candidate can pass correctness by delegating GELU/SILU/clamp/affine work to PyTorch, but is illegal under kernel-authoring mode.",
+      "Using contiguous(), reshape(), permute(), or as_strided() to trigger the target data movement may require review."
+    ],
+    "boundary_tests": [
+      "static scan for torch.nn.functional and torch target ops",
+      "dynamic trace of submitted candidate path"
+    ],
+    "do_not_apply": [
+      "secondary library-composition mode with separate reporting"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "portable",
+    "portable_part": [
+      "kernel-authoring separation of low-level implementation from high-level target fallback"
+    ],
+    "replace_on_new_backend": [
+      "backend-specific list of low-level kernel launch and allocation APIs"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "pointwise",
+      "bias_gelu",
+      "bias_silu",
+      "gelu",
+      "silu",
+      "activation",
+      "clamp_mul_add",
+      "high_level_fallback",
+      "torch.nn.functional.gelu",
+      "torch.nn.functional.silu",
+      "legality",
+      "anti_cheating",
+      "kernel_authoring"
+    ],
+    "negative_keys": [
+      "library_composition_mode"
+    ],
+    "priority": 92,
+    "max_context_tokens": 420
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
