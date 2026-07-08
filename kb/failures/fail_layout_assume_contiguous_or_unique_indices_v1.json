@@ -1,0 +1,183 @@
+{
+  "id": "fail_layout_assume_contiguous_or_unique_indices_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "failure_signature",
+  "status": "candidate",
+  "abstraction_level": "portable",
+  "task_phases": [
+    "correctness_repair",
+    "retrospective"
+  ],
+  "operator_scope": {
+    "families": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular_memory"
+    ],
+    "op_names": [
+      "transpose_copy",
+      "permute_copy",
+      "gather_rows",
+      "embedding_lookup",
+      "scatter_add",
+      "slice_concat",
+      "strided_copy",
+      "layout_transform"
+    ],
+    "semantic_signature": "correctness failure from contiguous-only address math or unique-index assumption",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "*"
+    ],
+    "layout_scope": [
+      "*",
+      "non_contiguous",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "tile"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "shared_or_scratchpad",
+      "register"
+    ],
+    "synchronization": [
+      "block_local_sync_if_shared_tile_used"
+    ],
+    "profile_symptoms": [
+      "memory_bound",
+      "divergence",
+      "atomic_contention",
+      "uncoalesced_memory"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "A candidate passes contiguous public cases but fails hidden or robustness cases involving non-contiguous strides, broadcasted/expanded operands, gather/scatter indices, or duplicate scatter-add destinations."
+    ],
+    "invalid_when": [
+      "Failure is a compile error, dtype unsupported error, or pure numerical tolerance issue unrelated to indexing/layout."
+    ],
+    "preconditions": [
+      "Inspect task trace for shape, stride, index dtype, and duplicate-index coverage."
+    ]
+  },
+  "mechanism": "The common failure is treating logical tensor order as physical contiguous order or treating scatter-add as unique-index scatter; both can survive simple public tests and fail hidden layout/indexing cases.",
+  "action": {
+    "kind": "repair",
+    "instructions": [
+      "Replace linear contiguous pointer arithmetic with explicit shape/stride offset calculation for every non-contiguous or broadcast-capable operand.",
+      "Add or restore masks for tail tiles and index bounds checks.",
+      "For scatter-add mismatch, check whether duplicate indices were overwritten instead of accumulated, then switch to atomics or a staged reduction consistent with OpSpec.",
+      "Remove Python-side contiguous(), permute(), reshape(), or high-level indexing calls if they perform the target layout operation in the submitted path.",
+      "Add local tests that vary strides, base offsets, singleton broadcast dimensions, and duplicate indices without using hidden shapes."
+    ],
+    "patch_hint": "Print or inspect public tensor strides in the harness-visible path if allowed; do not hardcode a stride pattern inferred from one input."
+  },
+  "expected_effect": {
+    "correctness": "Targets a recurring semantic failure class for layout/indexing tasks.",
+    "performance": "No performance claim; repairs may initially slow the kernel due to extra address arithmetic.",
+    "search_efficiency": "Directs correctness repair toward stride/index/collision bugs rather than blind tile tuning.",
+    "risk": "Over-generalizing all operands as arbitrary-stride can add overhead; specialize only after correctness and legality are established."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:pytorch_stride_contiguous_tensor_views",
+      "source:pytorch_broadcasting_expand_semantics",
+      "source:pytorch_gather_index_select_semantics",
+      "source:pytorch_scatter_add_semantics",
+      "claim:clm_fail_layout_assume_contiguous_01"
+    ],
+    "evidence_level": "claim",
+    "confidence": 0.75
+  },
+  "validation": {
+    "gates": [
+      "compile",
+      "smoke_correctness",
+      "quick_correctness",
+      "hidden_correctness",
+      "anti_cheating"
+    ],
+    "correctness_matrix": [
+      "contiguous and non-contiguous operands",
+      "expanded singleton dimension",
+      "duplicate scatter-add index",
+      "edge index and tail tile"
+    ],
+    "promotion_policy": "Promote only after actual A3 traces show this signature predicts and repairs failures."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "This repair does not address wrong activation formulas or reduction accumulation dtype.",
+      "Stride-aware arithmetic can hide an unrelated output layout mismatch if output strides are also wrong."
+    ],
+    "boundary_tests": [
+      "non-contiguous input public seed",
+      "slice with non-zero base offset",
+      "duplicate index scatter-add",
+      "gather index at upper bound"
+    ],
+    "do_not_apply": [
+      "pointwise contiguous activation-only mismatch",
+      "matmul tile shape bug",
+      "softmax numerical stability bug"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "portable",
+    "portable_part": [
+      "failure diagnosis from contiguous-only assumptions",
+      "duplicate-index scatter-add diagnosis"
+    ],
+    "replace_on_new_backend": [
+      "instrumentation and sanitizer tools"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular",
+      "failure",
+      "correctness_repair",
+      "assume_contiguous",
+      "contiguous_only",
+      "non_contiguous",
+      "stride",
+      "broadcast",
+      "scatter_add",
+      "duplicate_indices",
+      "unique_indices",
+      "bounds"
+    ],
+    "negative_keys": [
+      "activation_formula",
+      "matmul",
+      "softmax"
+    ],
+    "priority": 78,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
