@@ -1,0 +1,55 @@
+{
+  "description": "H20 formal experiment metrics hooks for Codex subagents. Copy this file to .codex/hooks.json in an experiment checkout, review/trust it with /hooks, and run Codex from the workspace or a child directory of the repository.",
+  "hooks": {
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
+            "timeout": 5,
+            "statusMessage": "H20 metrics: subagent start"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(Bash|Shell|shell|apply_patch|Edit|Write|MultiEdit)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
+            "timeout": 5,
+            "statusMessage": "H20 metrics: pre tool"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(Bash|Shell|shell|apply_patch|Edit|Write|MultiEdit)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
+            "timeout": 10,
+            "statusMessage": "H20 metrics: post tool"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
+            "timeout": 10,
+            "statusMessage": "H20 metrics: subagent stop"
+          }
+        ]
+      }
+    ]
+  }
+}
