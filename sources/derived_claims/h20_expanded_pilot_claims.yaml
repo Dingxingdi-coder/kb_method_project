@@ -1,0 +1,58 @@
+version: h20_expanded_pilot_claims_v0
+generated_at: '2026-07-08T00:00:00Z'
+scope: Claims extracted only from the supplemental expanded-pilot raw corpus. They prepare KB retrieval and do not encode H20 benchmark outcomes.
+claims:
+  - claim_id: clm_pointwise_broadcast_activation_01
+    source_refs: [source:pytorch_broadcasting_expand_semantics, source:pytorch_gelu_silu_semantics, source:triton_vector_add_pointwise_tail_mask]
+    derived_kb_units: [sem_pointwise_broadcast_activation_v1]
+    claim: Fused pointwise kernels must preserve PyTorch broadcasting and activation formulas, use tail masks, and validate fp16/bf16 activation precision against OpSpec tolerance.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_pointwise_no_high_level_fallback_01
+    source_refs: [source:h20_formal_kernel_authoring_rules]
+    derived_kb_units: [legality_no_high_level_pointwise_fallback_v1]
+    claim: In kernel-authoring mode, high-level PyTorch/ATen calls must not implement target pointwise semantics in the submitted path.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_pointwise_fusion_memory_bound_01
+    source_refs: [source:triton_vector_add_pointwise_tail_mask, source:cuda_best_practices_memory_coalescing]
+    derived_kb_units: [perf_pointwise_fusion_memory_bound_candidate_v1]
+    claim: A single-pass fused pointwise kernel is a candidate optimization for memory-bound chains, but the benefit requires H20 benchmark/profile validation.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_pointwise_memory_bound_stop_01
+    source_refs: [source:cuda_best_practices_memory_coalescing, source:h20_mvp_benchmark_profile_protocol]
+    derived_kb_units: [stop_memory_bound_pointwise_candidate_v1]
+    claim: Stop broad pointwise tuning only after hidden correctness, repeated benchmarks, and profile attribution indicate a memory-bound plateau.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_layout_stride_indexing_01
+    source_refs: [source:pytorch_stride_contiguous_tensor_views, source:pytorch_broadcasting_expand_semantics]
+    derived_kb_units: [sem_layout_stride_indexing_v1]
+    claim: Layout/indexing kernels must compute storage offsets from logical indices and declared strides instead of assuming contiguous layout.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_scatter_add_collision_01
+    source_refs: [source:pytorch_scatter_add_semantics]
+    derived_kb_units: [sem_scatter_add_collision_v1]
+    claim: Scatter-add must accumulate all contributions for duplicate target indices and validate index dtype, bounds, and nondeterminism/tolerance behavior.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_layout_transpose_tile_copy_01
+    source_refs: [source:cuda_best_practices_memory_coalescing, source:pytorch_stride_contiguous_tensor_views]
+    derived_kb_units: [perf_layout_transpose_tile_copy_candidate_v1]
+    claim: Tiled schedules are candidate optimizations for regular materialized transpose/permute copies, but tile sizes and shared-memory choices require H20 validation.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_irregular_gather_scatter_coalescing_01
+    source_refs: [source:pytorch_gather_index_select_semantics, source:pytorch_scatter_add_semantics, source:cuda_best_practices_memory_coalescing]
+    derived_kb_units: [perf_irregular_gather_scatter_coalescing_candidate_v1]
+    claim: Irregular gather/scatter tuning must distinguish index loads, source reads, destination writes, and collision behavior; performance depends on index distribution.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_fail_layout_assume_contiguous_01
+    source_refs: [source:pytorch_stride_contiguous_tensor_views, source:pytorch_broadcasting_expand_semantics, source:pytorch_gather_index_select_semantics, source:pytorch_scatter_add_semantics]
+    derived_kb_units: [fail_layout_assume_contiguous_or_unique_indices_v1]
+    claim: Contiguous-only address math and unique-index assumptions are likely correctness failure signatures for layout/indexing tasks with hidden stride or duplicate-index cases.
+    evidence_level: claim
+    h20_measured: false
