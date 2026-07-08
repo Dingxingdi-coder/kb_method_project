@@ -1,0 +1,183 @@
+{
+  "id": "sem_pointwise_broadcast_activation_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": [
+    "plan",
+    "generate",
+    "correctness_repair"
+  ],
+  "operator_scope": {
+    "families": [
+      "pointwise",
+      "elementwise"
+    ],
+    "op_names": [
+      "bias_gelu",
+      "bias_silu",
+      "residual_activation",
+      "broadcast_affine",
+      "gated_multiply",
+      "clamp_mul_add"
+    ],
+    "semantic_signature": "fused elementwise pointwise expression with optional broadcasting and activation",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "*"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "vector"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "register"
+    ],
+    "synchronization": [],
+    "profile_symptoms": [
+      "memory_bound",
+      "launch_bound"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "OpSpec is elementwise or fused pointwise and output shape follows PyTorch broadcasting rules.",
+      "Inputs may include singleton broadcast dimensions, bias or scale vectors, residual tensors, gated tensors, or clamp bounds."
+    ],
+    "invalid_when": [
+      "The target op includes a reduction, matmul/tensor-core contraction, softmax/logsumexp, or normalization statistic.",
+      "The candidate relies on in-place updates whose shape would change under broadcasting."
+    ],
+    "preconditions": [
+      "Read OpSpec for output dtype, activation approximation mode, broadcasted operand shapes, and declared strides before writing pointer arithmetic."
+    ]
+  },
+  "mechanism": "Broadcasted input addresses must be reconstructed from output indices and per-input shape/stride metadata; activation subexpressions must preserve the reference formula before schedule-level optimization.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "Derive the output element index first, then compute each input pointer with its declared shape and stride; use a zero offset along dimensions broadcast from size 1.",
+      "Guard every tail element with a mask before tl.load/tl.store or equivalent low-level memory operation.",
+      "For GELU, implement the OpSpec-selected exact or tanh-approximate formula; for SiLU, implement x * sigmoid(x); do not substitute a different activation.",
+      "When inputs are fp16 or bf16 and OpSpec tolerance expects high-precision activation math, cast activation intermediates to fp32 before converting the final result to the declared output dtype.",
+      "Validate broadcast affine, residual + activation, gated multiply, and clamp/mul/add on non-power-of-two element counts and singleton broadcast dimensions."
+    ],
+    "patch_hint": "Use a linear output offset for contiguous outputs; for each operand, convert that output offset to logical indices and then to a storage offset using operand strides."
+  },
+  "expected_effect": {
+    "correctness": "Preserves PyTorch-like broadcasting and activation semantics for fused pointwise tasks.",
+    "performance": "No direct performance claim; it prevents semantic bugs before optimization.",
+    "search_efficiency": "Reduces repeated correctness-repair loops caused by wrong broadcast or activation math.",
+    "risk": "H20 latency improvement remains unverified until hidden correctness and repeated benchmark gates pass."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:pytorch_broadcasting_expand_semantics",
+      "source:pytorch_gelu_silu_semantics",
+      "source:triton_vector_add_pointwise_tail_mask",
+      "claim:clm_pointwise_broadcast_activation_01"
+    ],
+    "evidence_level": "claim",
+    "confidence": 0.86
+  },
+  "validation": {
+    "gates": [
+      "schema",
+      "static_legality",
+      "compile",
+      "smoke_correctness",
+      "quick_correctness",
+      "hidden_correctness",
+      "anti_cheating"
+    ],
+    "correctness_matrix": [
+      "fp16/bf16/fp32 as declared by task",
+      "singleton broadcast dimensions",
+      "non-power-of-two numel",
+      "positive and negative activation inputs",
+      "contiguous and non-contiguous operands when OpSpec allows"
+    ],
+    "promotion_policy": "Keep as semantic stable only; do not promote to a performance motif without H20 runs."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Using a flat contiguous offset for a broadcasted or strided input reads wrong elements.",
+      "Applying GELU tanh approximation when OpSpec requires exact GELU changes numerical reference.",
+      "Using fp16 activation intermediates can exceed tolerance for some inputs."
+    ],
+    "boundary_tests": [
+      "broadcast scale vector over trailing dimension",
+      "broadcast bias over leading or singleton dimension",
+      "odd tail length",
+      "large positive and negative activation values"
+    ],
+    "do_not_apply": [
+      "tasks whose core operation is reduction, softmax, normalization, or matmul rather than pointwise fusion"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "portable",
+    "portable_part": [
+      "broadcast address semantics",
+      "activation formula semantics",
+      "tail masking"
+    ],
+    "replace_on_new_backend": [
+      "DSL-specific load/store syntax and vector width choices"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "pointwise",
+      "elementwise",
+      "fused",
+      "fusion",
+      "bias_gelu",
+      "bias_silu",
+      "residual_activation",
+      "broadcast_affine",
+      "gated_multiply",
+      "clamp_mul_add",
+      "gelu",
+      "silu",
+      "activation",
+      "broadcast",
+      "tail_mask",
+      "fp32_intermediate",
+      "correctness_repair"
+    ],
+    "negative_keys": [
+      "reduction",
+      "softmax",
+      "matmul",
+      "layernorm",
+      "high_level_fallback"
+    ],
+    "priority": 90,
+    "max_context_tokens": 520
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
