@@ -30,10 +30,12 @@ GROUP_ALIASES = {
 GROUPS = ["A0_prompt", "A1_raw_corpus_vector_rag", "A2_kb_vector_rag", "A3_ecc_kb", *GROUP_ALIASES]
 
 SKELETONS = {
+    "pointwise": """\"\"\"Candidate kernel for a fused pointwise task. See task.json for the exact interface.\"\"\"\n\ndef candidate(*args):\n    raise NotImplementedError(\"agent must implement the fused pointwise operator declared in task.json\")\n""",
     "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
     "reduction": """\"\"\"Candidate kernel for row reduction. Interface: candidate(x, reduce_op) -> y.\"\"\"\n\ndef candidate(x, reduce_op):\n    raise NotImplementedError(\"agent must implement row reduction\")\n""",
     "layernorm": """\"\"\"Candidate kernel for LayerNorm forward. Interface: candidate(x, gamma, beta, eps) -> y.\"\"\"\n\ndef candidate(x, gamma, beta, eps):\n    raise NotImplementedError(\"agent must implement layernorm forward\")\n""",
     "matmul": """\"\"\"Candidate kernel for matmul. Interface: candidate(a, b) -> c.\"\"\"\n\ndef candidate(a, b):\n    raise NotImplementedError(\"agent must implement matmul\")\n""",
+    "layout": """\"\"\"Candidate kernel for a layout/irregular-memory task. See task.json for the exact interface.\"\"\"\n\ndef candidate(*args):\n    raise NotImplementedError(\"agent must implement the layout operator declared in task.json\")\n""",
 }
 
 

@@ -2,10 +2,12 @@
 """Fixed H20 MVP harness for Triton/PyTorch candidate kernels.
 
 Candidate interface:
+- pointwise: variant-specific, see task.json op_spec.candidate_interface
 - reduction: candidate(x, reduce_op) -> y
 - softmax: candidate(x) -> y
 - layernorm: candidate(x, gamma, beta, eps) -> y
 - matmul: candidate(a, b) -> c
+- layout: variant-specific, see task.json op_spec.candidate_interface
 """
 
 from __future__ import annotations
@@ -63,6 +65,19 @@ def make_tensor_2d(shape: list[int], dtype_name: str, seed: int, layout: str, de
     return torch.randn((b, n), device=device, dtype=dtype)
 
 
+def make_vector(length: int, dtype_name: str, seed: int, device: str, scale: float = 1.0):
+    import torch
+    torch.manual_seed(seed)
+    return torch.randn((int(length),), device=device, dtype=torch_dtype(dtype_name)) * scale
+
+
+def make_strided_2d(m: int, n: int, dtype_name: str, seed: int, device: str, row_stride: int = 2):
+    import torch
+    torch.manual_seed(seed)
+    base = torch.randn((int(m) * int(row_stride), int(n)), device=device, dtype=torch_dtype(dtype_name))
+    return base[:: int(row_stride)]
+
+
 def make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, device: str):
     import torch
     op_family = task["op_family"]
@@ -71,6 +86,24 @@ def make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, devi
     layout = test.get("layout", "contiguous")
     seed = base_seed + int(test.get("seed_offset", 0))
     shape = test.get("shape", task["shape"])
+    if op_family == "pointwise":
+        x = make_tensor_2d(shape, dtype_name, seed, layout, device)
+        n = int(shape[1])
+        if variant in {"bias_gelu", "bias_silu"}:
+            return x, make_vector(n, dtype_name, seed + 17, device)
+        if variant == "residual_relu":
+            residual = make_tensor_2d(shape, dtype_name, seed + 17, layout, device)
+            return x, residual
+        if variant == "broadcast_affine":
+            return x, make_vector(n, dtype_name, seed + 17, device, scale=0.25), make_vector(n, dtype_name, seed + 23, device)
+        if variant == "gated_silu_multiply":
+            x2 = make_tensor_2d(shape, dtype_name, seed + 17, layout, device)
+            return x, x2
+        if variant == "clamp_mul_add":
+            scale = make_vector(n, dtype_name, seed + 17, device, scale=0.25)
+            bias = make_vector(n, dtype_name, seed + 23, device)
+            return x, scale, bias, -2.0, 2.0
+        raise ValueError(f"unsupported pointwise variant: {variant}")
     if op_family in {"reduction", "softmax", "layernorm"}:
         x = make_tensor_2d(shape, dtype_name, seed, layout, device)
         if op_family == "layernorm":
@@ -90,12 +123,75 @@ def make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, devi
         torch.manual_seed(seed + 1)
         b = torch.randn((k, n), device=device, dtype=dtype)
         return a, b
+    if op_family == "layout":
+        dtype = torch_dtype(dtype_name)
+        torch.manual_seed(seed)
+        if variant == "transpose_copy":
+            m, n = int(shape["M"]), int(shape["N"])
+            if layout == "non_contiguous":
+                x = torch.randn((n, m), device=device, dtype=dtype).t()
+            else:
+                x = torch.randn((m, n), device=device, dtype=dtype)
+            return (x,)
+        if variant == "gather_rows":
+            rows, width, out_rows = int(shape["rows"]), int(shape["width"]), int(shape["out_rows"])
+            x = torch.randn((rows, width), device=device, dtype=dtype)
+            index_dtype = torch.int32 if layout == "index_int32" else torch.int64
+            indices = torch.randint(0, rows, (out_rows,), device=device, dtype=index_dtype)
+            return x, indices
+        if variant == "embedding_lookup":
+            vocab, dim = int(shape["vocab"]), int(shape["dim"])
+            batch, seq = int(shape["batch"]), int(shape["seq"])
+            weight = torch.randn((vocab, dim), device=device, dtype=dtype)
+            index_dtype = torch.int32 if layout == "index_int32" else torch.int64
+            indices = torch.randint(0, vocab, (batch, seq), device=device, dtype=index_dtype)
+            return weight, indices
+        if variant == "scatter_add":
+            nnz, width, out_rows = int(shape["nnz"]), int(shape["width"]), int(shape["out_rows"])
+            src = torch.randn((nnz, width), device=device, dtype=dtype)
+            high = max(1, out_rows // 8) if layout == "collision_heavy" else out_rows
+            indices = torch.randint(0, high, (nnz,), device=device, dtype=torch.int64)
+            return src, indices, out_rows
+        if variant == "slice_concat":
+            b, n, cut = int(shape["B"]), int(shape["N"]), int(shape["cut"])
+            if layout == "non_contiguous":
+                a = torch.randn((n, b), device=device, dtype=dtype).t()
+                other = torch.randn((n, b), device=device, dtype=dtype).t()
+            else:
+                a = torch.randn((b, n), device=device, dtype=dtype)
+                other = torch.randn((b, n), device=device, dtype=dtype)
+            return a, other, cut
+        if variant == "strided_copy":
+            return (make_strided_2d(int(shape["M"]), int(shape["N"]), dtype_name, seed, device, int(shape.get("row_stride", 2))),)
+        raise ValueError(f"unsupported layout variant: {variant}")
     raise ValueError(f"unsupported op_family: {op_family}")
 
 
 def reference(task: dict[str, Any], inputs: tuple[Any, ...]):
     import torch
     op_family = task["op_family"]
+    variant = task.get("variant", task.get("op_name", ""))
+    if op_family == "pointwise":
+        import torch.nn.functional as F
+        if variant == "bias_gelu":
+            x, bias = inputs
+            return F.gelu(x.float() + bias.float()).to(x.dtype)
+        if variant == "bias_silu":
+            x, bias = inputs
+            return F.silu(x.float() + bias.float()).to(x.dtype)
+        if variant == "residual_relu":
+            x, residual = inputs
+            return torch.relu(x.float() + residual.float()).to(x.dtype)
+        if variant == "broadcast_affine":
+            x, scale, bias = inputs
+            return (x.float() * scale.float() + bias.float()).to(x.dtype)
+        if variant == "gated_silu_multiply":
+            x1, x2 = inputs
+            return (F.silu(x1.float()) * x2.float()).to(x1.dtype)
+        if variant == "clamp_mul_add":
+            x, scale, bias, min_value, max_value = inputs
+            return (torch.clamp(x.float(), float(min_value), float(max_value)) * scale.float() + bias.float()).to(x.dtype)
+        raise ValueError(f"unsupported pointwise variant: {variant}")
     if op_family == "reduction":
         x, reduce_op = inputs
         if reduce_op == "sum":
@@ -116,6 +212,27 @@ def reference(task: dict[str, Any], inputs: tuple[Any, ...]):
     if op_family == "matmul":
         a, b = inputs
         return torch.matmul(a, b)
+    if op_family == "layout":
+        if variant == "transpose_copy":
+            (x,) = inputs
+            return x.t().contiguous()
+        if variant == "gather_rows":
+            x, indices = inputs
+            return x[indices.long()]
+        if variant == "embedding_lookup":
+            weight, indices = inputs
+            return weight[indices.long()]
+        if variant == "scatter_add":
+            src, indices, out_rows = inputs
+            out = torch.zeros((int(out_rows), src.shape[1]), device=src.device, dtype=src.dtype)
+            return out.index_add(0, indices.long(), src)
+        if variant == "slice_concat":
+            a, b, cut = inputs
+            return torch.cat((a[:, : int(cut)], b[:, int(cut):]), dim=-1).contiguous()
+        if variant == "strided_copy":
+            (x,) = inputs
+            return x.contiguous()
+        raise ValueError(f"unsupported layout variant: {variant}")
     raise ValueError(f"unsupported op_family: {op_family}")
 
 

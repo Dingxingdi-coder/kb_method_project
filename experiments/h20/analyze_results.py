@@ -141,6 +141,16 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
     if first_correct is None and hidden_pass:
         first_correct = len(trace) or 1
 
+    failure_reason = ""
+    if not compile_pass:
+        failure_reason = str(get_nested(results, "compile.reason", "") or "compile failed")
+    elif not smoke_pass:
+        failure_reason = str(get_nested(results, "correctness.smoke.tests.0.reason", "") or "smoke correctness failed")
+    elif not quick_pass:
+        failure_reason = "quick correctness failed"
+    elif not hidden_pass:
+        failure_reason = str(results.get("diagnosis") or "hidden correctness failed")
+
     return {
         "run_dir": str(run_dir),
         "group": group,
@@ -171,6 +181,8 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
         "agent_started_at": agent_metrics.get("agent_started_at", ""),
         "agent_completed_at": agent_metrics.get("agent_completed_at", ""),
         "agent_status": agent_metrics.get("status", ""),
+        "gpu_id": agent_metrics.get("gpu_id", agent_metrics.get("cuda_visible_devices", "")),
+        "failure_reason": failure_reason,
         "gpu_benchmark_runs": int(get_nested(results, "cost.gpu_benchmark_runs", 0) or 0),
         "invalid_compile_attempts": invalid_compiles,
         "context_token_count": len(str(context).split()),
@@ -249,6 +261,50 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
+def summarize_overall(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        groups[str(row["group"])].append(row)
+    out = []
+    for group, items in sorted(groups.items()):
+        out.append({
+            "group": group,
+            "runs": len(items),
+            "op_families": ",".join(sorted({str(row["op_family"]) for row in items})),
+            "compile_success_rate": rate([r["compile_success"] for r in items]),
+            "hidden_correctness_pass_rate": rate([r["hidden_pass"] for r in items]),
+            "correct_and_faster_rate_vs_eager": rate([r["correct_and_faster_vs_eager"] for r in items]),
+            "correct_and_faster_rate_vs_torch_compile": rate([r["correct_and_faster_vs_torch_compile"] for r in items]),
+            "median_latency_p50_ms": median([r["latency_p50_ms"] for r in items if r["hidden_pass"]]),
+            "median_latency_p95_ms": median([r["latency_p95_ms"] for r in items if r["hidden_pass"]]),
+            "median_speedup_vs_eager_p50": median([r["speedup_vs_eager_p50"] for r in items if r["hidden_pass"]]),
+            "median_speedup_vs_torch_compile_p50": median([r["speedup_vs_torch_compile_p50"] for r in items if r["hidden_pass"]]),
+            "median_agent_wall_time_s": median([r["agent_wall_time_s"] for r in items]),
+            "median_harness_wall_time_s": median([r["harness_wall_time_s"] for r in items]),
+            "median_retrieved_context_tokens_proxy": median([r["retrieved_context_tokens_proxy"] for r in items]),
+            "median_retrieved_item_count": median([r["retrieved_item_count"] for r in items]),
+        })
+    return out
+
+
+def failed_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out = []
+    for row in rows:
+        if row["compile_success"] and row["hidden_pass"]:
+            continue
+        out.append({
+            "group": row["group"],
+            "task_id": row["task_id"],
+            "op_family": row["op_family"],
+            "seed": row["seed"],
+            "compile_success": row["compile_success"],
+            "hidden_pass": row["hidden_pass"],
+            "failure_reason": row["failure_reason"],
+            "run_dir": row["run_dir"],
+        })
+    return out
+
+
 def markdown_table(rows: list[dict[str, Any]], columns: list[str]) -> str:
     lines = ["| " + " | ".join(columns) + " |", "| " + " | ".join("---" for _ in columns) + " |"]
     for row in rows:
@@ -276,6 +332,8 @@ def main() -> int:
             if row:
                 rows.append(row)
     summaries = summarize(rows)
+    overall = summarize_overall(rows)
+    failures = failed_rows(rows)
     out_path = Path(args.out)
     if out_path.exists() and out_path.is_dir():
         out_path = out_path / "report.md"
@@ -288,9 +346,38 @@ def main() -> int:
             writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
             writer.writeheader(); writer.writerows(rows)
     json_path = Path(args.json_out) if args.json_out else out_path.with_suffix(".json")
-    write_json(json_path, {"runs": rows, "summary": summaries})
+    write_json(json_path, {"runs": rows, "summary": summaries, "overall_summary": overall, "failures": failures})
     columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_invalid_compile_attempts", "median_retrieved_context_tokens_proxy", "median_retrieved_item_count"]
-    report = ["# H20 MVP Experiment Report", "", f"- run_records: {len(rows)}", f"- csv: `{csv_path}`", f"- json: `{json_path}`", "", "## Group summary", "", markdown_table(summaries, columns) if summaries else "No results found.", "", "## Interpretation checklist", "", "- Compare A3 against A0/A1/A2 under the same task, seed, and budget.", "- Treat hidden correctness as a hard gate before reading performance metrics.", "- Check whether A3 reduces iterations, wall time, invalid compile attempts, and context cost.", "- For self-evolution, compare A3(v1) against A3(v0) on Round-2 held-out tasks."]
+    overall_columns = ["group", "runs", "op_families", "compile_success_rate", "hidden_correctness_pass_rate", "median_latency_p50_ms", "median_latency_p95_ms", "median_speedup_vs_eager_p50", "median_speedup_vs_torch_compile_p50", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_retrieved_context_tokens_proxy", "median_retrieved_item_count"]
+    failure_columns = ["group", "task_id", "op_family", "seed", "compile_success", "hidden_pass", "failure_reason"]
+    report = [
+        "# H20 MVP Experiment Report",
+        "",
+        f"- run_records: {len(rows)}",
+        f"- failed_or_incorrect_records: {len(failures)}",
+        f"- csv: `{csv_path}`",
+        f"- json: `{json_path}`",
+        "",
+        "## Overall group summary",
+        "",
+        markdown_table(overall, overall_columns) if overall else "No results found.",
+        "",
+        "## Group summary by op family",
+        "",
+        markdown_table(summaries, columns) if summaries else "No results found.",
+        "",
+        "## Failures",
+        "",
+        markdown_table(failures, failure_columns) if failures else "No compile or hidden-correctness failures found.",
+        "",
+        "## Interpretation checklist",
+        "",
+        "- Compare A3 against A0/A1/A2 under the same task, seed, and budget.",
+        "- Treat hidden correctness as a hard gate before reading performance metrics.",
+        "- Check whether A3 reduces iterations, wall time, invalid compile attempts, and context cost.",
+        "- Manually review final `candidate.py` files for target high-level API fallback before claiming legal performance.",
+        "- For self-evolution, compare A3(v1) against A3(v0) on Round-2 held-out tasks.",
+    ]
     out_path.write_text("\n".join(report) + "\n", encoding="utf-8")
     print(f"wrote {out_path}")
     return 0
