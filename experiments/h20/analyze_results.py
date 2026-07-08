@@ -276,7 +276,12 @@ def main() -> int:
             if row:
                 rows.append(row)
     summaries = summarize(rows)
-    out_path = Path(args.out); out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path = Path(args.out)
+    if out_path.exists() and out_path.is_dir():
+        out_path = out_path / "report.md"
+    elif str(args.out).endswith(("/", "\\")):
+        out_path = out_path / "report.md"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     csv_path = Path(args.csv_out) if args.csv_out else out_path.with_suffix(".csv")
     if rows:
         with csv_path.open("w", encoding="utf-8", newline="") as handle:

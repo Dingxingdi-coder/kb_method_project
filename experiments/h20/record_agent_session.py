@@ -46,6 +46,7 @@ def main() -> int:
     parser.add_argument("--event", choices=["start", "complete"], required=True)
     parser.add_argument("--agent-id", default=None)
     parser.add_argument("--agent-nickname", default=None)
+    parser.add_argument("--cuda-visible-devices", default=None)
     parser.add_argument("--status", default=None)
     parser.add_argument("--final-report", default=None)
     parser.add_argument("--metrics-file", default="agent_session_metrics.json")
@@ -63,6 +64,8 @@ def main() -> int:
         metrics["agent_id"] = args.agent_id
     if args.agent_nickname:
         metrics["agent_nickname"] = args.agent_nickname
+    if args.cuda_visible_devices is not None:
+        metrics["cuda_visible_devices"] = args.cuda_visible_devices
 
     now = utc_now()
     if args.event == "start":
