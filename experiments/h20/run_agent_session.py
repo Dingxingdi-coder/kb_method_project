@@ -130,8 +130,12 @@ def workflow_protocol() -> str:
 - All experiment groups use this same phase-control loop. The only intended difference is the retrieval protocol below.
 - You choose your own phase: `generate`, `correctness_repair`, `performance_optimize`, or `autotune`.
 - Before the first substantial edit, enter `generate` and follow this group's retrieval protocol.
-- Use `./run.sh` whenever you need measurement evidence from the GPU.
-- After every `./run.sh`, classify the next phase from the harness output:
+- Use staged harness runs whenever you need measurement evidence from the GPU:
+  - `./run.sh --stage compile` for import/build feedback.
+  - `./run.sh --stage smoke`, `./run.sh --stage quick`, or `./run.sh --stage hidden` for correctness feedback.
+  - `./run.sh --stage benchmark` after hidden correctness passes and you need latency evidence.
+  - `./run.sh` is the full local check when you need compile, all correctness suites, and benchmark together.
+- After every `./run.sh` run, classify the next phase from the harness output:
   - compile, smoke, quick, or hidden failure -> `correctness_repair`
   - correctness passes but latency or profile summary is weak -> `performance_optimize`
   - correctness passes and only launch/configuration knobs remain -> `autotune`
@@ -306,7 +310,7 @@ def write_run_sh(
     path.write_text(
         prelude
         + " ".join(cmd)
-        + "\n",
+        + ' "$@"\n',
         encoding="utf-8",
     )
     path.chmod(0o755)

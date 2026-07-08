@@ -351,17 +351,11 @@ A3 pilot 的主要短板是 wall time，所以正式实验必须做：
 | 指标 | 定义 |
 | --- | --- |
 | retrieved context tokens | 检索返回内容 tokens |
-| total input tokens | 所有 prompt/context/history 输入 tokens |
-| completion tokens | 模型输出 tokens |
 | total tokens | input + completion |
-| retrieved tokens-to-correct | 到首次 legal correct candidate 为止的 retrieved tokens |
-| total tokens-to-correct | 到首次 legal correct candidate 为止的 total tokens |
-| retrieved tokens-to-best | 生成 oracle-best candidate 前消耗的 retrieved tokens |
-| total tokens-to-best | 生成 oracle-best candidate 前消耗的 total tokens |
 | speedup per 1k retrieved tokens | context efficiency secondary metric |
 | latency reduction per 1k total tokens | cost-normalized secondary metric |
 
-pilot 的 retrieved context tokens 更少是有用信号，但正式实验还要看 total tokens。A3 可能 retrieved tokens 少，但因为多轮推理导致 total input tokens 或 completion tokens 更高。
+pilot 的 retrieved context tokens 更少是有用信号，但正式实验还要看 total tokens。
 
 ### 5.5 Legality / Cheating 指标
 
