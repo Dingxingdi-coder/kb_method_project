@@ -1,18 +1,6 @@
 {
-  "description": "H20 formal experiment metrics hooks for Codex. Copy this file to .codex/hooks.json in an experiment checkout, review/trust it with /hooks, and run Codex from the workspace or a child directory of the repository.",
+  "description": "H20 formal experiment metrics hooks for Codex subagents. Copy this file to .codex/hooks.json in an experiment checkout, review/trust it with /hooks, and run Codex from the workspace or a child directory of the repository.",
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
-            "timeout": 5,
-            "statusMessage": "H20 metrics: session start"
-          }
-        ]
-      }
-    ],
     "SubagentStart": [
       {
         "hooks": [
@@ -59,18 +47,6 @@
             "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
             "timeout": 10,
             "statusMessage": "H20 metrics: subagent stop"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$(git rev-parse --show-toplevel)/tools/codex_h20_hooks/h20_codex_hook.py\"",
-            "timeout": 10,
-            "statusMessage": "H20 metrics: finalize"
           }
         ]
       }
