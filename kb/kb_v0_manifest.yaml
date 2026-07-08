@@ -1,0 +1,320 @@
+version_name: kb_v0
+freeze_timestamp: '2026-07-06T00:00:00Z'
+branch: h20-demo-round2
+repository: Dingxingdi-coder/kb_method_project
+derived_from:
+  raw_corpus_version: raw_corpus_v0
+  source_registry: sources/registry/sources.yaml
+  claim_files:
+  - sources/derived_claims/common_claims.claims.yaml
+  - sources/derived_claims/layernorm_claims.claims.yaml
+  - sources/derived_claims/matmul_claims.claims.yaml
+  - sources/derived_claims/row_reduction_claims.claims.yaml
+  - sources/derived_claims/softmax_claims.claims.yaml
+  lineage: sources/derived_claims/kb_v0_lineage.yaml
+counts:
+  capsules: 220
+  stable: 24
+  quarantine: 96
+  failures: 100
+  sources: 128
+  claims: 640
+status_distribution:
+  stable: 24
+  quarantine: 196
+unit_type_distribution:
+  op_contract: 12
+  legality_constraint: 8
+  validation_policy: 16
+  implementation_skeleton: 40
+  optimization_motif: 40
+  stop_capsule: 4
+  failure_signature: 100
+abstraction_level_distribution:
+  portable: 35
+  backend_abstract: 69
+  backend_instance: 116
+coverage_summary:
+  common_capsules: 79
+  operator_family_capsules_total: 141
+  row_reduction_capsules: 35
+  softmax_capsules: 35
+  layernorm_capsules: 35
+  matmul_capsules: 36
+files:
+  stable:
+  - kb/stable/sem_softmax_stability_v1.json
+  - kb/stable/sem_softmax_dtype_output_v1.json
+  - kb/stable/sem_softmax_log_boundary_v1.json
+  - kb/stable/sem_reduction_sum_dtype_v1.json
+  - kb/stable/sem_reduction_max_axis_v1.json
+  - kb/stable/sem_reduction_mean_boundary_v1.json
+  - kb/stable/sem_layernorm_formula_v1.json
+  - kb/stable/sem_layernorm_eps_v1.json
+  - kb/stable/sem_layernorm_affine_v1.json
+  - kb/stable/sem_matmul_contract_v1.json
+  - kb/stable/sem_matmul_broadcast_v1.json
+  - kb/stable/sem_matmul_bias_boundary_v1.json
+  - kb/stable/leg_triton_constexpr_meta_v1.json
+  - kb/stable/leg_triton_load_mask_v1.json
+  - kb/stable/leg_triton_store_mask_v1.json
+  - kb/stable/leg_triton_arange_v1.json
+  - kb/stable/leg_triton_program_id_v1.json
+  - kb/stable/leg_triton_dot_v1.json
+  - kb/stable/leg_cuda_event_timing_v1.json
+  - kb/stable/leg_torch_compile_baseline_v1.json
+  - kb/stable/val_allclose_tolerance_v1.json
+  - kb/stable/val_benchmark_after_correctness_v1.json
+  - kb/stable/val_numerical_accuracy_v1.json
+  - kb/stable/val_profile_attribution_v1.json
+  quarantine:
+  - kb/quarantine/skel_row_reduction_one_program_per_row_skeleton_v1.json
+  - kb/quarantine/opt_row_reduction_one_program_per_row_skeleton_v1.json
+  - kb/quarantine/skel_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1.json
+  - kb/quarantine/opt_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1.json
+  - kb/quarantine/skel_row_reduction_neutral_value_for_masked_lanes_v1.json
+  - kb/quarantine/opt_row_reduction_neutral_value_for_masked_lanes_v1.json
+  - kb/quarantine/skel_row_reduction_power_of_two_block_with_mask_v1.json
+  - kb/quarantine/opt_row_reduction_power_of_two_block_with_mask_v1.json
+  - kb/quarantine/skel_row_reduction_bandwidth_based_stop_check_v1.json
+  - kb/quarantine/opt_row_reduction_bandwidth_based_stop_check_v1.json
+  - kb/quarantine/skel_row_reduction_non_contiguous_stride_guard_v1.json
+  - kb/quarantine/opt_row_reduction_non_contiguous_stride_guard_v1.json
+  - kb/quarantine/skel_row_reduction_two_stage_split_for_very_wide_rows_v1.json
+  - kb/quarantine/opt_row_reduction_two_stage_split_for_very_wide_rows_v1.json
+  - kb/quarantine/skel_row_reduction_compare_eager_and_compile_baselines_v1.json
+  - kb/quarantine/opt_row_reduction_compare_eager_and_compile_baselines_v1.json
+  - kb/quarantine/skel_row_reduction_avoid_warp_only_assumption_v1.json
+  - kb/quarantine/opt_row_reduction_avoid_warp_only_assumption_v1.json
+  - kb/quarantine/skel_row_reduction_profile_bytes_read_write_v1.json
+  - kb/quarantine/opt_row_reduction_profile_bytes_read_write_v1.json
+  - kb/quarantine/val_row_reduction_one_program_per_row_skeleton_v1.json
+  - kb/quarantine/val_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1.json
+  - kb/quarantine/val_row_reduction_neutral_value_for_masked_lanes_v1.json
+  - kb/quarantine/stop_row_reduction_unverified_tuning_v1.json
+  - kb/quarantine/skel_softmax_row_wise_fused_skeleton_v1.json
+  - kb/quarantine/opt_softmax_row_wise_fused_skeleton_v1.json
+  - kb/quarantine/skel_softmax_max_subtract_exp_sum_divide_sequence_v1.json
+  - kb/quarantine/opt_softmax_max_subtract_exp_sum_divide_sequence_v1.json
+  - kb/quarantine/skel_softmax_mask_padded_denominator_lanes_v1.json
+  - kb/quarantine/opt_softmax_mask_padded_denominator_lanes_v1.json
+  - kb/quarantine/skel_softmax_tune_block_n_next_power_of_two_v1.json
+  - kb/quarantine/opt_softmax_tune_block_n_next_power_of_two_v1.json
+  - kb/quarantine/skel_softmax_dtype_tolerance_for_approximate_exp_v1.json
+  - kb/quarantine/opt_softmax_dtype_tolerance_for_approximate_exp_v1.json
+  - kb/quarantine/skel_softmax_large_value_stress_test_v1.json
+  - kb/quarantine/opt_softmax_large_value_stress_test_v1.json
+  - kb/quarantine/skel_softmax_avoid_public_n_hardcode_v1.json
+  - kb/quarantine/opt_softmax_avoid_public_n_hardcode_v1.json
+  - kb/quarantine/skel_softmax_profile_memory_pass_reduction_v1.json
+  - kb/quarantine/opt_softmax_profile_memory_pass_reduction_v1.json
+  - kb/quarantine/skel_softmax_stop_low_yield_local_tuning_v1.json
+  - kb/quarantine/opt_softmax_stop_low_yield_local_tuning_v1.json
+  - kb/quarantine/skel_softmax_fallback_free_reference_path_v1.json
+  - kb/quarantine/opt_softmax_fallback_free_reference_path_v1.json
+  - kb/quarantine/val_softmax_row_wise_fused_skeleton_v1.json
+  - kb/quarantine/val_softmax_max_subtract_exp_sum_divide_sequence_v1.json
+  - kb/quarantine/val_softmax_mask_padded_denominator_lanes_v1.json
+  - kb/quarantine/stop_softmax_unverified_tuning_v1.json
+  - kb/quarantine/skel_layernorm_row_wise_mean_variance_skeleton_v1.json
+  - kb/quarantine/opt_layernorm_row_wise_mean_variance_skeleton_v1.json
+  - kb/quarantine/skel_layernorm_fp32_accumulation_v1.json
+  - kb/quarantine/opt_layernorm_fp32_accumulation_v1.json
+  - kb/quarantine/skel_layernorm_eps_inside_sqrt_v1.json
+  - kb/quarantine/opt_layernorm_eps_inside_sqrt_v1.json
+  - kb/quarantine/skel_layernorm_gamma_beta_hidden_index_broadcast_v1.json
+  - kb/quarantine/opt_layernorm_gamma_beta_hidden_index_broadcast_v1.json
+  - kb/quarantine/skel_layernorm_register_pressure_guard_v1.json
+  - kb/quarantine/opt_layernorm_register_pressure_guard_v1.json
+  - kb/quarantine/skel_layernorm_hidden_size_knob_sweep_v1.json
+  - kb/quarantine/opt_layernorm_hidden_size_knob_sweep_v1.json
+  - kb/quarantine/skel_layernorm_non_contiguous_stride_guard_v1.json
+  - kb/quarantine/opt_layernorm_non_contiguous_stride_guard_v1.json
+  - kb/quarantine/skel_layernorm_variance_formula_reference_check_v1.json
+  - kb/quarantine/opt_layernorm_variance_formula_reference_check_v1.json
+  - kb/quarantine/skel_layernorm_profile_occupancy_summary_v1.json
+  - kb/quarantine/opt_layernorm_profile_occupancy_summary_v1.json
+  - kb/quarantine/skel_layernorm_stop_before_random_knobs_v1.json
+  - kb/quarantine/opt_layernorm_stop_before_random_knobs_v1.json
+  - kb/quarantine/val_layernorm_row_wise_mean_variance_skeleton_v1.json
+  - kb/quarantine/val_layernorm_fp32_accumulation_v1.json
+  - kb/quarantine/val_layernorm_eps_inside_sqrt_v1.json
+  - kb/quarantine/stop_layernorm_unverified_tuning_v1.json
+  - kb/quarantine/skel_matmul_m_n_k_tiled_skeleton_v1.json
+  - kb/quarantine/opt_matmul_m_n_k_tiled_skeleton_v1.json
+  - kb/quarantine/skel_matmul_boundary_masks_for_tail_tiles_v1.json
+  - kb/quarantine/opt_matmul_boundary_masks_for_tail_tiles_v1.json
+  - kb/quarantine/skel_matmul_tl_dot_legality_guard_v1.json
+  - kb/quarantine/opt_matmul_tl_dot_legality_guard_v1.json
+  - kb/quarantine/skel_matmul_num_warps_and_stages_sweep_v1.json
+  - kb/quarantine/opt_matmul_num_warps_and_stages_sweep_v1.json
+  - kb/quarantine/skel_matmul_tf32_policy_declaration_v1.json
+  - kb/quarantine/opt_matmul_tf32_policy_declaration_v1.json
+  - kb/quarantine/skel_matmul_split_k_requires_reduction_correctness_v1.json
+  - kb/quarantine/opt_matmul_split_k_requires_reduction_correctness_v1.json
+  - kb/quarantine/skel_matmul_shared_memory_coalescing_motif_v1.json
+  - kb/quarantine/opt_matmul_shared_memory_coalescing_motif_v1.json
+  - kb/quarantine/skel_matmul_persistent_matmul_requires_revalidation_v1.json
+  - kb/quarantine/opt_matmul_persistent_matmul_requires_revalidation_v1.json
+  - kb/quarantine/skel_matmul_baseline_strength_stop_check_v1.json
+  - kb/quarantine/opt_matmul_baseline_strength_stop_check_v1.json
+  - kb/quarantine/skel_matmul_avoid_cublas_fallback_v1.json
+  - kb/quarantine/opt_matmul_avoid_cublas_fallback_v1.json
+  - kb/quarantine/val_matmul_m_n_k_tiled_skeleton_v1.json
+  - kb/quarantine/val_matmul_boundary_masks_for_tail_tiles_v1.json
+  - kb/quarantine/val_matmul_tl_dot_legality_guard_v1.json
+  - kb/quarantine/stop_matmul_unverified_tuning_v1.json
+  failures:
+  - kb/failures/fail_row_reduction_one_program_per_row_skeleton_v1.json
+  - kb/failures/fail_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1.json
+  - kb/failures/fail_row_reduction_neutral_value_for_masked_lanes_v1.json
+  - kb/failures/fail_row_reduction_power_of_two_block_with_mask_v1.json
+  - kb/failures/fail_row_reduction_bandwidth_based_stop_check_v1.json
+  - kb/failures/fail_row_reduction_non_contiguous_stride_guard_v1.json
+  - kb/failures/fail_row_reduction_two_stage_split_for_very_wide_rows_v1.json
+  - kb/failures/fail_row_reduction_compare_eager_and_compile_baselines_v1.json
+  - kb/failures/fail_softmax_row_wise_fused_skeleton_v1.json
+  - kb/failures/fail_softmax_max_subtract_exp_sum_divide_sequence_v1.json
+  - kb/failures/fail_softmax_mask_padded_denominator_lanes_v1.json
+  - kb/failures/fail_softmax_tune_block_n_next_power_of_two_v1.json
+  - kb/failures/fail_softmax_dtype_tolerance_for_approximate_exp_v1.json
+  - kb/failures/fail_softmax_large_value_stress_test_v1.json
+  - kb/failures/fail_softmax_avoid_public_n_hardcode_v1.json
+  - kb/failures/fail_softmax_profile_memory_pass_reduction_v1.json
+  - kb/failures/fail_layernorm_row_wise_mean_variance_skeleton_v1.json
+  - kb/failures/fail_layernorm_fp32_accumulation_v1.json
+  - kb/failures/fail_layernorm_eps_inside_sqrt_v1.json
+  - kb/failures/fail_layernorm_gamma_beta_hidden_index_broadcast_v1.json
+  - kb/failures/fail_layernorm_register_pressure_guard_v1.json
+  - kb/failures/fail_layernorm_hidden_size_knob_sweep_v1.json
+  - kb/failures/fail_layernorm_non_contiguous_stride_guard_v1.json
+  - kb/failures/fail_layernorm_variance_formula_reference_check_v1.json
+  - kb/failures/fail_matmul_m_n_k_tiled_skeleton_v1.json
+  - kb/failures/fail_matmul_boundary_masks_for_tail_tiles_v1.json
+  - kb/failures/fail_matmul_tl_dot_legality_guard_v1.json
+  - kb/failures/fail_matmul_num_warps_and_stages_sweep_v1.json
+  - kb/failures/fail_matmul_tf32_policy_declaration_v1.json
+  - kb/failures/fail_matmul_split_k_requires_reduction_correctness_v1.json
+  - kb/failures/fail_matmul_shared_memory_coalescing_motif_v1.json
+  - kb/failures/fail_matmul_persistent_matmul_requires_revalidation_v1.json
+  - kb/failures/fail_common_152_v1.json
+  - kb/failures/fail_common_153_v1.json
+  - kb/failures/fail_common_154_v1.json
+  - kb/failures/fail_common_155_v1.json
+  - kb/failures/fail_common_156_v1.json
+  - kb/failures/fail_common_157_v1.json
+  - kb/failures/fail_common_158_v1.json
+  - kb/failures/fail_common_159_v1.json
+  - kb/failures/fail_common_160_v1.json
+  - kb/failures/fail_common_161_v1.json
+  - kb/failures/fail_common_162_v1.json
+  - kb/failures/fail_common_163_v1.json
+  - kb/failures/fail_common_164_v1.json
+  - kb/failures/fail_common_165_v1.json
+  - kb/failures/fail_common_166_v1.json
+  - kb/failures/fail_common_167_v1.json
+  - kb/failures/fail_common_168_v1.json
+  - kb/failures/fail_common_169_v1.json
+  - kb/failures/fail_common_170_v1.json
+  - kb/failures/fail_common_171_v1.json
+  - kb/failures/fail_common_172_v1.json
+  - kb/failures/fail_common_173_v1.json
+  - kb/failures/fail_common_174_v1.json
+  - kb/failures/fail_common_175_v1.json
+  - kb/failures/fail_common_176_v1.json
+  - kb/failures/fail_common_177_v1.json
+  - kb/failures/fail_common_178_v1.json
+  - kb/failures/fail_common_179_v1.json
+  - kb/failures/fail_common_180_v1.json
+  - kb/failures/fail_common_181_v1.json
+  - kb/failures/fail_common_182_v1.json
+  - kb/failures/fail_common_183_v1.json
+  - kb/failures/fail_common_184_v1.json
+  - kb/failures/fail_common_185_v1.json
+  - kb/failures/fail_common_186_v1.json
+  - kb/failures/fail_common_187_v1.json
+  - kb/failures/fail_common_188_v1.json
+  - kb/failures/fail_common_189_v1.json
+  - kb/failures/fail_common_190_v1.json
+  - kb/failures/fail_common_191_v1.json
+  - kb/failures/fail_common_192_v1.json
+  - kb/failures/fail_common_193_v1.json
+  - kb/failures/fail_common_194_v1.json
+  - kb/failures/fail_common_195_v1.json
+  - kb/failures/fail_common_196_v1.json
+  - kb/failures/fail_common_197_v1.json
+  - kb/failures/fail_common_198_v1.json
+  - kb/failures/fail_common_199_v1.json
+  - kb/failures/fail_common_200_v1.json
+  - kb/failures/fail_common_201_v1.json
+  - kb/failures/fail_common_202_v1.json
+  - kb/failures/fail_common_203_v1.json
+  - kb/failures/fail_common_204_v1.json
+  - kb/failures/fail_common_205_v1.json
+  - kb/failures/fail_common_206_v1.json
+  - kb/failures/fail_common_207_v1.json
+  - kb/failures/fail_common_208_v1.json
+  - kb/failures/fail_common_209_v1.json
+  - kb/failures/fail_common_210_v1.json
+  - kb/failures/fail_common_211_v1.json
+  - kb/failures/fail_common_212_v1.json
+  - kb/failures/fail_common_213_v1.json
+  - kb/failures/fail_common_214_v1.json
+  - kb/failures/fail_common_215_v1.json
+  - kb/failures/fail_common_216_v1.json
+  - kb/failures/fail_common_217_v1.json
+  - kb/failures/fail_common_218_v1.json
+  - kb/failures/fail_common_219_v1.json
+stable_capsules:
+- id: sem_softmax_stability_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_softmax_dtype_output_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_softmax_log_boundary_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_reduction_sum_dtype_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_reduction_max_axis_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_reduction_mean_boundary_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_layernorm_formula_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_layernorm_eps_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_layernorm_affine_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_matmul_contract_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_matmul_broadcast_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: sem_matmul_bias_boundary_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_triton_constexpr_meta_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_triton_load_mask_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_triton_store_mask_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_triton_arange_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_triton_program_id_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_triton_dot_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_cuda_event_timing_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: leg_torch_compile_baseline_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: val_allclose_tolerance_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: val_benchmark_after_correctness_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: val_numerical_accuracy_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+- id: val_profile_attribution_v1
+  reason: Stable because it is a mathematical/reference/API/validation constraint, not an H20 performance claim.
+residual_risks:
+- No H20 in-repo measurements are included in KB v0.
+- License-unknown sources are not fully archived.
+- Public benchmark and neighbor-GPU evidence remains requires_revalidation.

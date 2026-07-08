@@ -1,0 +1,2339 @@
+claim_file: row_reduction_claims
+derived_from: raw_corpus_v0
+generated_at: '2026-07-06T00:00:00Z'
+claims:
+- claim_id: clm_triton_sum_api_01
+  source_id: triton_sum_api
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id001
+    - common
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id002
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_api_02
+  source_id: triton_sum_api
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_api_03
+  source_id: triton_sum_api
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_api_04
+  source_id: triton_sum_api
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_api_05
+  source_id: triton_sum_api
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_max_api_01
+  source_id: triton_max_api
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Triton tl.max API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id003
+    - common
+    - row_reduction
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id004
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_max_api_02
+  source_id: triton_max_api
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Triton tl.max API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_max_api_03
+  source_id: triton_max_api
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Triton tl.max API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_max_api_04
+  source_id: triton_max_api
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Triton tl.max API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_max_api_05
+  source_id: triton_max_api
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Triton tl.max API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_sum_01
+  source_id: pytorch_sum
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.sum API / https://docs.pytorch.org/docs/2.12/generated/torch.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id005
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id006
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_sum_02
+  source_id: pytorch_sum
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.sum API / https://docs.pytorch.org/docs/2.12/generated/torch.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_sum_03
+  source_id: pytorch_sum
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.sum API / https://docs.pytorch.org/docs/2.12/generated/torch.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_sum_04
+  source_id: pytorch_sum
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.sum API / https://docs.pytorch.org/docs/2.12/generated/torch.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_sum_05
+  source_id: pytorch_sum
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.sum API / https://docs.pytorch.org/docs/2.12/generated/torch.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_amax_01
+  source_id: pytorch_amax
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.amax API / https://docs.pytorch.org/docs/2.12/generated/torch.amax.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id007
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id008
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_amax_02
+  source_id: pytorch_amax
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.amax API / https://docs.pytorch.org/docs/2.12/generated/torch.amax.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_amax_03
+  source_id: pytorch_amax
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.amax API / https://docs.pytorch.org/docs/2.12/generated/torch.amax.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_amax_04
+  source_id: pytorch_amax
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.amax API / https://docs.pytorch.org/docs/2.12/generated/torch.amax.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_amax_05
+  source_id: pytorch_amax
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.amax API / https://docs.pytorch.org/docs/2.12/generated/torch.amax.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_max_01
+  source_id: pytorch_max
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.max API / https://docs.pytorch.org/docs/2.12/generated/torch.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id009
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id010
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_max_02
+  source_id: pytorch_max
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.max API / https://docs.pytorch.org/docs/2.12/generated/torch.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_max_03
+  source_id: pytorch_max
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.max API / https://docs.pytorch.org/docs/2.12/generated/torch.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_max_04
+  source_id: pytorch_max
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.max API / https://docs.pytorch.org/docs/2.12/generated/torch.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_max_05
+  source_id: pytorch_max
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.max API / https://docs.pytorch.org/docs/2.12/generated/torch.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mean_01
+  source_id: pytorch_mean
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mean API / https://docs.pytorch.org/docs/2.12/generated/torch.mean.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id011
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id012
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mean_02
+  source_id: pytorch_mean
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mean API / https://docs.pytorch.org/docs/2.12/generated/torch.mean.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mean_03
+  source_id: pytorch_mean
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mean API / https://docs.pytorch.org/docs/2.12/generated/torch.mean.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mean_04
+  source_id: pytorch_mean
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mean API / https://docs.pytorch.org/docs/2.12/generated/torch.mean.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mean_05
+  source_id: pytorch_mean
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mean API / https://docs.pytorch.org/docs/2.12/generated/torch.mean.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_reduction_01
+  source_id: triton_sum_reduction
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum reduction API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id013
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id014
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_reduction_02
+  source_id: triton_sum_reduction
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum reduction API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_reduction_03
+  source_id: triton_sum_reduction
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum reduction API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_reduction_04
+  source_id: triton_sum_reduction
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum reduction API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_sum_reduction_05
+  source_id: triton_sum_reduction
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Triton tl.sum reduction API / https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_max_reduction_01
+  source_id: triton_max_reduction
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Triton tl.max reduction API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id015
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id016
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_max_reduction_02
+  source_id: triton_max_reduction
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Triton tl.max reduction API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_max_reduction_03
+  source_id: triton_max_reduction
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Triton tl.max reduction API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_max_reduction_04
+  source_id: triton_max_reduction
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Triton tl.max reduction API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_max_reduction_05
+  source_id: triton_max_reduction
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Triton tl.max reduction API / https://triton-lang.org/main/python-api/generated/triton.language.max.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_cuda_reduction_sample_01
+  source_id: cuda_reduction_sample
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: CUDA reduction sample / https://github.com/NVIDIA/cuda-samples
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id017
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id018
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_reduction_sample_02
+  source_id: cuda_reduction_sample
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: CUDA reduction sample / https://github.com/NVIDIA/cuda-samples
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_reduction_sample_03
+  source_id: cuda_reduction_sample
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: CUDA reduction sample / https://github.com/NVIDIA/cuda-samples
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_reduction_sample_04
+  source_id: cuda_reduction_sample
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: CUDA reduction sample / https://github.com/NVIDIA/cuda-samples
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_reduction_sample_05
+  source_id: cuda_reduction_sample
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: CUDA reduction sample / https://github.com/NVIDIA/cuda-samples
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_parallel_reduction_whitepaper_01
+  source_id: cuda_parallel_reduction_whitepaper
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: CUDA parallel reduction whitepaper / https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id019
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id020
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_parallel_reduction_whitepaper_02
+  source_id: cuda_parallel_reduction_whitepaper
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: CUDA parallel reduction whitepaper / https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_parallel_reduction_whitepaper_03
+  source_id: cuda_parallel_reduction_whitepaper
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: CUDA parallel reduction whitepaper / https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_parallel_reduction_whitepaper_04
+  source_id: cuda_parallel_reduction_whitepaper
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: CUDA parallel reduction whitepaper / https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_parallel_reduction_whitepaper_05
+  source_id: cuda_parallel_reduction_whitepaper
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: CUDA parallel reduction whitepaper / https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cub_device_reduce_01
+  source_id: cub_device_reduce
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: CUB DeviceReduce docs / https://nvidia.github.io/cccl/cub/api/structcub_1_1DeviceReduce.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id021
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id022
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cub_device_reduce_02
+  source_id: cub_device_reduce
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: CUB DeviceReduce docs / https://nvidia.github.io/cccl/cub/api/structcub_1_1DeviceReduce.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cub_device_reduce_03
+  source_id: cub_device_reduce
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: CUB DeviceReduce docs / https://nvidia.github.io/cccl/cub/api/structcub_1_1DeviceReduce.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cub_device_reduce_04
+  source_id: cub_device_reduce
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: CUB DeviceReduce docs / https://nvidia.github.io/cccl/cub/api/structcub_1_1DeviceReduce.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cub_device_reduce_05
+  source_id: cub_device_reduce
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: CUB DeviceReduce docs / https://nvidia.github.io/cccl/cub/api/structcub_1_1DeviceReduce.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_thrust_reduce_01
+  source_id: thrust_reduce
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Thrust reduce docs / https://nvidia.github.io/cccl/thrust/api/group__reductions.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id023
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id024
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_thrust_reduce_02
+  source_id: thrust_reduce
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Thrust reduce docs / https://nvidia.github.io/cccl/thrust/api/group__reductions.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_thrust_reduce_03
+  source_id: thrust_reduce
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Thrust reduce docs / https://nvidia.github.io/cccl/thrust/api/group__reductions.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_thrust_reduce_04
+  source_id: thrust_reduce
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Thrust reduce docs / https://nvidia.github.io/cccl/thrust/api/group__reductions.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_thrust_reduce_05
+  source_id: thrust_reduce
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Thrust reduce docs / https://nvidia.github.io/cccl/thrust/api/group__reductions.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_reduce_01
+  source_id: tritonbench_reduce
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: TritonBench reduction tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id025
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id026
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_reduce_02
+  source_id: tritonbench_reduce
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: TritonBench reduction tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_reduce_03
+  source_id: tritonbench_reduce
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: TritonBench reduction tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_reduce_04
+  source_id: tritonbench_reduce
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: TritonBench reduction tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_reduce_05
+  source_id: tritonbench_reduce
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: TritonBench reduction tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reduction_source_01
+  source_id: pytorch_reduction_source
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: PyTorch reduction native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id027
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id028
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reduction_source_02
+  source_id: pytorch_reduction_source
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: PyTorch reduction native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reduction_source_03
+  source_id: pytorch_reduction_source
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: PyTorch reduction native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reduction_source_04
+  source_id: pytorch_reduction_source
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: PyTorch reduction native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reduction_source_05
+  source_id: pytorch_reduction_source
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: PyTorch reduction native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_cuda_warp_reductions_01
+  source_id: cuda_warp_reductions
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: CUDA warp reductions / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id029
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id030
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_warp_reductions_02
+  source_id: cuda_warp_reductions
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: CUDA warp reductions / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_warp_reductions_03
+  source_id: cuda_warp_reductions
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: CUDA warp reductions / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_warp_reductions_04
+  source_id: cuda_warp_reductions
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: CUDA warp reductions / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_warp_reductions_05
+  source_id: cuda_warp_reductions
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: CUDA warp reductions / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_memory_reduction_01
+  source_id: ncu_memory_reduction
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for reductions / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id031
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id032
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_memory_reduction_02
+  source_id: ncu_memory_reduction
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for reductions / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_memory_reduction_03
+  source_id: ncu_memory_reduction
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for reductions / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_memory_reduction_04
+  source_id: ncu_memory_reduction
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for reductions / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_memory_reduction_05
+  source_id: ncu_memory_reduction
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for reductions / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_triton_masking_reduction_01
+  source_id: triton_masking_reduction
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Triton masking for reductions / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id033
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id034
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masking_reduction_02
+  source_id: triton_masking_reduction
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Triton masking for reductions / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masking_reduction_03
+  source_id: triton_masking_reduction
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Triton masking for reductions / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masking_reduction_04
+  source_id: triton_masking_reduction
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Triton masking for reductions / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masking_reduction_05
+  source_id: triton_masking_reduction
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Triton masking for reductions / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_benchmark_row_reduce_01
+  source_id: benchmark_row_reduce
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Public row-reduction benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id035
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id036
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_benchmark_row_reduce_02
+  source_id: benchmark_row_reduce
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Public row-reduction benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_benchmark_row_reduce_03
+  source_id: benchmark_row_reduce
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Public row-reduction benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_benchmark_row_reduce_04
+  source_id: benchmark_row_reduce
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Public row-reduction benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_benchmark_row_reduce_05
+  source_id: benchmark_row_reduce
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Public row-reduction benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_reduction_codegen_01
+  source_id: inductor_reduction_codegen
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: TorchInductor reduction codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id037
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id038
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_reduction_codegen_02
+  source_id: inductor_reduction_codegen
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: TorchInductor reduction codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_reduction_codegen_03
+  source_id: inductor_reduction_codegen
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: TorchInductor reduction codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_reduction_codegen_04
+  source_id: inductor_reduction_codegen
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: TorchInductor reduction codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_reduction_codegen_05
+  source_id: inductor_reduction_codegen
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: TorchInductor reduction codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_cuda_effective_bandwidth_01
+  source_id: cuda_effective_bandwidth
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth calculation / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id039
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id040
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_effective_bandwidth_02
+  source_id: cuda_effective_bandwidth
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth calculation / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_effective_bandwidth_03
+  source_id: cuda_effective_bandwidth
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth calculation / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_effective_bandwidth_04
+  source_id: cuda_effective_bandwidth
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth calculation / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_effective_bandwidth_05
+  source_id: cuda_effective_bandwidth
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth calculation / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_row_reduce_forum_failures_01
+  source_id: row_reduce_forum_failures
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Community reduction failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id041
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id042
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_row_reduce_forum_failures_02
+  source_id: row_reduce_forum_failures
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Community reduction failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_row_reduce_forum_failures_03
+  source_id: row_reduce_forum_failures
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Community reduction failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_row_reduce_forum_failures_04
+  source_id: row_reduce_forum_failures
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Community reduction failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_row_reduce_forum_failures_05
+  source_id: row_reduce_forum_failures
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Community reduction failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_triton_language_where_01
+  source_id: triton_language_where
+  statement: Row reduction must reduce the declared axis and use the neutral element for padded lanes.
+  evidence:
+    short_excerpt_or_location: Triton tl.where API / https://triton-lang.org/main/python-api/generated/triton.language.where.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: &id043
+    - row_reduction
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id044
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_language_where_02
+  source_id: triton_language_where
+  statement: fp16/bf16 sum usually needs fp32 accumulation when the OpSpec or PyTorch reference requires it.
+  evidence:
+    short_excerpt_or_location: Triton tl.where API / https://triton-lang.org/main/python-api/generated/triton.language.where.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_language_where_03
+  source_id: triton_language_where
+  statement: Tail masks are mandatory for non-power-of-two row lengths.
+  evidence:
+    short_excerpt_or_location: Triton tl.where API / https://triton-lang.org/main/python-api/generated/triton.language.where.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_language_where_04
+  source_id: triton_language_where
+  statement: Memory bandwidth is often the primary limiter after correctness.
+  evidence:
+    short_excerpt_or_location: Triton tl.where API / https://triton-lang.org/main/python-api/generated/triton.language.where.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_language_where_05
+  source_id: triton_language_where
+  statement: One-program-per-row is a starting skeleton, not a universal H20 optimum.
+  evidence:
+    short_excerpt_or_location: Triton tl.where API / https://triton-lang.org/main/python-api/generated/triton.language.where.html
+    raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official

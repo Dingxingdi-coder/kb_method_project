@@ -1,0 +1,2445 @@
+claim_file: matmul_claims
+derived_from: raw_corpus_v0
+generated_at: '2026-07-06T00:00:00Z'
+claims:
+- claim_id: clm_triton_matmul_tutorial_01
+  source_id: triton_matmul_tutorial
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id001
+    - common
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id002
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_02
+  source_id: triton_matmul_tutorial
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_03
+  source_id: triton_matmul_tutorial
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_04
+  source_id: triton_matmul_tutorial
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_05
+  source_id: triton_matmul_tutorial
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_01
+  source_id: triton_persistent_matmul
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id003
+    - common
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id004
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_02
+  source_id: triton_persistent_matmul
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_03
+  source_id: triton_persistent_matmul
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_04
+  source_id: triton_persistent_matmul
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_05
+  source_id: triton_persistent_matmul
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_api_01
+  source_id: triton_dot_api
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot API / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id005
+    - common
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id006
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_api_02
+  source_id: triton_dot_api
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot API / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_api_03
+  source_id: triton_dot_api
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot API / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_api_04
+  source_id: triton_dot_api
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot API / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_api_05
+  source_id: triton_dot_api
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot API / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_01
+  source_id: pytorch_matmul
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.matmul API / https://docs.pytorch.org/docs/2.12/generated/torch.matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id007
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id008
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_02
+  source_id: pytorch_matmul
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.matmul API / https://docs.pytorch.org/docs/2.12/generated/torch.matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_03
+  source_id: pytorch_matmul
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.matmul API / https://docs.pytorch.org/docs/2.12/generated/torch.matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_04
+  source_id: pytorch_matmul
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.matmul API / https://docs.pytorch.org/docs/2.12/generated/torch.matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_05
+  source_id: pytorch_matmul
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.matmul API / https://docs.pytorch.org/docs/2.12/generated/torch.matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mm_01
+  source_id: pytorch_mm
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mm API / https://docs.pytorch.org/docs/2.12/generated/torch.mm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id009
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id010
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mm_02
+  source_id: pytorch_mm
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mm API / https://docs.pytorch.org/docs/2.12/generated/torch.mm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mm_03
+  source_id: pytorch_mm
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mm API / https://docs.pytorch.org/docs/2.12/generated/torch.mm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mm_04
+  source_id: pytorch_mm
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mm API / https://docs.pytorch.org/docs/2.12/generated/torch.mm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_mm_05
+  source_id: pytorch_mm
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.mm API / https://docs.pytorch.org/docs/2.12/generated/torch.mm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_bmm_01
+  source_id: pytorch_bmm
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.bmm API / https://docs.pytorch.org/docs/2.12/generated/torch.bmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id011
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id012
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_bmm_02
+  source_id: pytorch_bmm
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.bmm API / https://docs.pytorch.org/docs/2.12/generated/torch.bmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_bmm_03
+  source_id: pytorch_bmm
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.bmm API / https://docs.pytorch.org/docs/2.12/generated/torch.bmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_bmm_04
+  source_id: pytorch_bmm
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.bmm API / https://docs.pytorch.org/docs/2.12/generated/torch.bmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_bmm_05
+  source_id: pytorch_bmm
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.bmm API / https://docs.pytorch.org/docs/2.12/generated/torch.bmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_addmm_01
+  source_id: pytorch_addmm
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.addmm API / https://docs.pytorch.org/docs/2.12/generated/torch.addmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id013
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id014
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_addmm_02
+  source_id: pytorch_addmm
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.addmm API / https://docs.pytorch.org/docs/2.12/generated/torch.addmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_addmm_03
+  source_id: pytorch_addmm
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.addmm API / https://docs.pytorch.org/docs/2.12/generated/torch.addmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_addmm_04
+  source_id: pytorch_addmm
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.addmm API / https://docs.pytorch.org/docs/2.12/generated/torch.addmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_addmm_05
+  source_id: pytorch_addmm
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.addmm API / https://docs.pytorch.org/docs/2.12/generated/torch.addmm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_detail_01
+  source_id: triton_matmul_tutorial_detail
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id015
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id016
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_detail_02
+  source_id: triton_matmul_tutorial_detail
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_detail_03
+  source_id: triton_matmul_tutorial_detail
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_detail_04
+  source_id: triton_matmul_tutorial_detail
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_tutorial_detail_05
+  source_id: triton_matmul_tutorial_detail
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_source_01
+  source_id: triton_matmul_source
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton matmul example source / https://github.com/triton-lang/triton/blob/main/python/tutorials/03-matrix-multiplication.py
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id017
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id018
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_source_02
+  source_id: triton_matmul_source
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton matmul example source / https://github.com/triton-lang/triton/blob/main/python/tutorials/03-matrix-multiplication.py
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_source_03
+  source_id: triton_matmul_source
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton matmul example source / https://github.com/triton-lang/triton/blob/main/python/tutorials/03-matrix-multiplication.py
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_source_04
+  source_id: triton_matmul_source
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton matmul example source / https://github.com/triton-lang/triton/blob/main/python/tutorials/03-matrix-multiplication.py
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_matmul_source_05
+  source_id: triton_matmul_source
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton matmul example source / https://github.com/triton-lang/triton/blob/main/python/tutorials/03-matrix-multiplication.py
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_matmul_01
+  source_id: triton_dot_matmul
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot for matmul / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id019
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id020
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_matmul_02
+  source_id: triton_dot_matmul
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot for matmul / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_matmul_03
+  source_id: triton_dot_matmul
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot for matmul / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_matmul_04
+  source_id: triton_dot_matmul
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot for matmul / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_dot_matmul_05
+  source_id: triton_dot_matmul
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton tl.dot for matmul / https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_detail_01
+  source_id: triton_persistent_matmul_detail
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id021
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id022
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_detail_02
+  source_id: triton_persistent_matmul_detail
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_detail_03
+  source_id: triton_persistent_matmul_detail
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_detail_04
+  source_id: triton_persistent_matmul_detail
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_persistent_matmul_detail_05
+  source_id: triton_persistent_matmul_detail
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton persistent matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_group_gemm_01
+  source_id: triton_group_gemm
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton group GEMM tutorial / https://triton-lang.org/main/getting-started/tutorials/08-grouped-gemm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id023
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id024
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_group_gemm_02
+  source_id: triton_group_gemm
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton group GEMM tutorial / https://triton-lang.org/main/getting-started/tutorials/08-grouped-gemm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_group_gemm_03
+  source_id: triton_group_gemm
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton group GEMM tutorial / https://triton-lang.org/main/getting-started/tutorials/08-grouped-gemm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_group_gemm_04
+  source_id: triton_group_gemm
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton group GEMM tutorial / https://triton-lang.org/main/getting-started/tutorials/08-grouped-gemm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_group_gemm_05
+  source_id: triton_group_gemm
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton group GEMM tutorial / https://triton-lang.org/main/getting-started/tutorials/08-grouped-gemm.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_block_scaled_matmul_01
+  source_id: triton_block_scaled_matmul
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Triton block scaled matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/10-block-scaled-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id025
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id026
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_block_scaled_matmul_02
+  source_id: triton_block_scaled_matmul
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Triton block scaled matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/10-block-scaled-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_block_scaled_matmul_03
+  source_id: triton_block_scaled_matmul
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Triton block scaled matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/10-block-scaled-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_block_scaled_matmul_04
+  source_id: triton_block_scaled_matmul
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Triton block scaled matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/10-block-scaled-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_block_scaled_matmul_05
+  source_id: triton_block_scaled_matmul
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Triton block scaled matmul tutorial / https://triton-lang.org/main/getting-started/tutorials/10-block-scaled-matmul.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_docs_01
+  source_id: cutlass_gemm_docs
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM docs / https://github.com/NVIDIA/cutlass/tree/main/media/docs
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id027
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id028
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_docs_02
+  source_id: cutlass_gemm_docs
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM docs / https://github.com/NVIDIA/cutlass/tree/main/media/docs
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_docs_03
+  source_id: cutlass_gemm_docs
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM docs / https://github.com/NVIDIA/cutlass/tree/main/media/docs
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_docs_04
+  source_id: cutlass_gemm_docs
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM docs / https://github.com/NVIDIA/cutlass/tree/main/media/docs
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_docs_05
+  source_id: cutlass_gemm_docs
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM docs / https://github.com/NVIDIA/cutlass/tree/main/media/docs
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_examples_01
+  source_id: cutlass_gemm_examples
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM examples / https://github.com/NVIDIA/cutlass/tree/main/examples
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id029
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id030
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_examples_02
+  source_id: cutlass_gemm_examples
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM examples / https://github.com/NVIDIA/cutlass/tree/main/examples
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_examples_03
+  source_id: cutlass_gemm_examples
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM examples / https://github.com/NVIDIA/cutlass/tree/main/examples
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_examples_04
+  source_id: cutlass_gemm_examples
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM examples / https://github.com/NVIDIA/cutlass/tree/main/examples
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cutlass_gemm_examples_05
+  source_id: cutlass_gemm_examples
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: CUTLASS GEMM examples / https://github.com/NVIDIA/cutlass/tree/main/examples
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cublas_gemm_docs_01
+  source_id: cublas_gemm_docs
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: cuBLAS GEMM docs / https://docs.nvidia.com/cuda/cublas/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id031
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id032
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cublas_gemm_docs_02
+  source_id: cublas_gemm_docs
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: cuBLAS GEMM docs / https://docs.nvidia.com/cuda/cublas/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cublas_gemm_docs_03
+  source_id: cublas_gemm_docs
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: cuBLAS GEMM docs / https://docs.nvidia.com/cuda/cublas/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cublas_gemm_docs_04
+  source_id: cublas_gemm_docs
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: cuBLAS GEMM docs / https://docs.nvidia.com/cuda/cublas/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cublas_gemm_docs_05
+  source_id: cublas_gemm_docs
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: cuBLAS GEMM docs / https://docs.nvidia.com/cuda/cublas/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_tensor_core_01
+  source_id: cuda_tensor_core
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: CUDA tensor core programming / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#wmma
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id033
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id034
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_tensor_core_02
+  source_id: cuda_tensor_core
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: CUDA tensor core programming / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#wmma
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_tensor_core_03
+  source_id: cuda_tensor_core
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: CUDA tensor core programming / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#wmma
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_tensor_core_04
+  source_id: cuda_tensor_core
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: CUDA tensor core programming / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#wmma
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_tensor_core_05
+  source_id: cuda_tensor_core
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: CUDA tensor core programming / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#wmma
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tf32_cuda_01
+  source_id: pytorch_tf32_cuda
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: PyTorch TF32 CUDA note / https://docs.pytorch.org/docs/2.12/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id035
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id036
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tf32_cuda_02
+  source_id: pytorch_tf32_cuda
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: PyTorch TF32 CUDA note / https://docs.pytorch.org/docs/2.12/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tf32_cuda_03
+  source_id: pytorch_tf32_cuda
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: PyTorch TF32 CUDA note / https://docs.pytorch.org/docs/2.12/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tf32_cuda_04
+  source_id: pytorch_tf32_cuda
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: PyTorch TF32 CUDA note / https://docs.pytorch.org/docs/2.12/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tf32_cuda_05
+  source_id: pytorch_tf32_cuda
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: PyTorch TF32 CUDA note / https://docs.pytorch.org/docs/2.12/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_precision_01
+  source_id: pytorch_matmul_precision
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: PyTorch set_float32_matmul_precision API / https://docs.pytorch.org/docs/2.12/generated/torch.set_float32_matmul_precision.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id037
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id038
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_precision_02
+  source_id: pytorch_matmul_precision
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: PyTorch set_float32_matmul_precision API / https://docs.pytorch.org/docs/2.12/generated/torch.set_float32_matmul_precision.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_precision_03
+  source_id: pytorch_matmul_precision
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: PyTorch set_float32_matmul_precision API / https://docs.pytorch.org/docs/2.12/generated/torch.set_float32_matmul_precision.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_precision_04
+  source_id: pytorch_matmul_precision
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: PyTorch set_float32_matmul_precision API / https://docs.pytorch.org/docs/2.12/generated/torch.set_float32_matmul_precision.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_matmul_precision_05
+  source_id: pytorch_matmul_precision
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: PyTorch set_float32_matmul_precision API / https://docs.pytorch.org/docs/2.12/generated/torch.set_float32_matmul_precision.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_matmul_01
+  source_id: cuda_shared_matmul
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: CUDA shared-memory matmul tiling / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c-ab
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id039
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id040
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_matmul_02
+  source_id: cuda_shared_matmul
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: CUDA shared-memory matmul tiling / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c-ab
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_matmul_03
+  source_id: cuda_shared_matmul
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: CUDA shared-memory matmul tiling / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c-ab
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_matmul_04
+  source_id: cuda_shared_matmul
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: CUDA shared-memory matmul tiling / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c-ab
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_matmul_05
+  source_id: cuda_shared_matmul
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: CUDA shared-memory matmul tiling / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c-ab
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_matmul_01
+  source_id: cuda_coalescing_matmul
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: CUDA coalesced access for matmul / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id041
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id042
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_matmul_02
+  source_id: cuda_coalescing_matmul
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: CUDA coalesced access for matmul / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_matmul_03
+  source_id: cuda_coalescing_matmul
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: CUDA coalesced access for matmul / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_matmul_04
+  source_id: cuda_coalescing_matmul
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: CUDA coalesced access for matmul / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_matmul_05
+  source_id: cuda_coalescing_matmul
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: CUDA coalesced access for matmul / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_splitk_gemm_paper_01
+  source_id: splitk_gemm_paper
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Split-K GEMM paper / https://arxiv.org/abs/2402.00025
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id043
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id044
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_splitk_gemm_paper_02
+  source_id: splitk_gemm_paper
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Split-K GEMM paper / https://arxiv.org/abs/2402.00025
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_splitk_gemm_paper_03
+  source_id: splitk_gemm_paper
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Split-K GEMM paper / https://arxiv.org/abs/2402.00025
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_splitk_gemm_paper_04
+  source_id: splitk_gemm_paper
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Split-K GEMM paper / https://arxiv.org/abs/2402.00025
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_splitk_gemm_paper_05
+  source_id: splitk_gemm_paper
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Split-K GEMM paper / https://arxiv.org/abs/2402.00025
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_ncu_matmul_compute_01
+  source_id: ncu_matmul_compute
+  statement: Matmul must respect PyTorch M/N/K, batch, broadcasting, and optional bias boundaries.
+  evidence:
+    short_excerpt_or_location: Nsight compute-bound context for GEMM / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: &id045
+    - matmul
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id046
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_matmul_compute_02
+  source_id: ncu_matmul_compute
+  statement: Triton matmul uses M/N/K tiles and tl.dot-like inner products.
+  evidence:
+    short_excerpt_or_location: Nsight compute-bound context for GEMM / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_matmul_compute_03
+  source_id: ncu_matmul_compute
+  statement: Boundary masks are required for non-multiple tile sizes.
+  evidence:
+    short_excerpt_or_location: Nsight compute-bound context for GEMM / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_matmul_compute_04
+  source_id: ncu_matmul_compute
+  statement: TF32/fp16/bf16 accumulation policy must be explicit and compared consistently.
+  evidence:
+    short_excerpt_or_location: Nsight compute-bound context for GEMM / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_matmul_compute_05
+  source_id: ncu_matmul_compute
+  statement: Tile sizes, num_warps, stages, split-K, and persistent scheduling are backend-instance knobs requiring H20 measurement.
+  evidence:
+    short_excerpt_or_location: Nsight compute-bound context for GEMM / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community

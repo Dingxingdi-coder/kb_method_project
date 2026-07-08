@@ -1,0 +1,2338 @@
+claim_file: softmax_claims
+derived_from: raw_corpus_v0
+generated_at: '2026-07-06T00:00:00Z'
+claims:
+- claim_id: clm_triton_fused_softmax_01
+  source_id: triton_fused_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id001
+    - common
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id002
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_fused_softmax_02
+  source_id: triton_fused_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_fused_softmax_03
+  source_id: triton_fused_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_fused_softmax_04
+  source_id: triton_fused_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_fused_softmax_05
+  source_id: triton_fused_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_api_01
+  source_id: triton_exp_api
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id003
+    - common
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id004
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_api_02
+  source_id: triton_exp_api
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_api_03
+  source_id: triton_exp_api
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_api_04
+  source_id: triton_exp_api
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_api_05
+  source_id: triton_exp_api
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_01
+  source_id: pytorch_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id005
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id006
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_02
+  source_id: pytorch_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_03
+  source_id: pytorch_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_04
+  source_id: pytorch_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_05
+  source_id: pytorch_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_functional_softmax_01
+  source_id: pytorch_functional_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: PyTorch F.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id007
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id008
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_functional_softmax_02
+  source_id: pytorch_functional_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: PyTorch F.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_functional_softmax_03
+  source_id: pytorch_functional_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: PyTorch F.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_functional_softmax_04
+  source_id: pytorch_functional_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: PyTorch F.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_functional_softmax_05
+  source_id: pytorch_functional_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: PyTorch F.softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_log_softmax_01
+  source_id: pytorch_log_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: PyTorch F.log_softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.log_softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id009
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id010
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_log_softmax_02
+  source_id: pytorch_log_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: PyTorch F.log_softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.log_softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_log_softmax_03
+  source_id: pytorch_log_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: PyTorch F.log_softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.log_softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_log_softmax_04
+  source_id: pytorch_log_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: PyTorch F.log_softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.log_softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_log_softmax_05
+  source_id: pytorch_log_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: PyTorch F.log_softmax API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.log_softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_tutorial_01
+  source_id: triton_softmax_tutorial
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id011
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id012
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_tutorial_02
+  source_id: triton_softmax_tutorial
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_tutorial_03
+  source_id: triton_softmax_tutorial
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_tutorial_04
+  source_id: triton_softmax_tutorial
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_tutorial_05
+  source_id: triton_softmax_tutorial
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton fused softmax tutorial / https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_source_01
+  source_id: triton_softmax_source
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton softmax tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/02-fused-softmax.py
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id013
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id014
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_source_02
+  source_id: triton_softmax_source
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton softmax tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/02-fused-softmax.py
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_source_03
+  source_id: triton_softmax_source
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton softmax tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/02-fused-softmax.py
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_source_04
+  source_id: triton_softmax_source
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton softmax tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/02-fused-softmax.py
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_softmax_source_05
+  source_id: triton_softmax_source
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton softmax tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/02-fused-softmax.py
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_flashattention_paper_01
+  source_id: flashattention_paper
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: FlashAttention paper / https://arxiv.org/abs/2205.14135
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id015
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id016
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_flashattention_paper_02
+  source_id: flashattention_paper
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: FlashAttention paper / https://arxiv.org/abs/2205.14135
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_flashattention_paper_03
+  source_id: flashattention_paper
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: FlashAttention paper / https://arxiv.org/abs/2205.14135
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_flashattention_paper_04
+  source_id: flashattention_paper
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: FlashAttention paper / https://arxiv.org/abs/2205.14135
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_flashattention_paper_05
+  source_id: flashattention_paper
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: FlashAttention paper / https://arxiv.org/abs/2205.14135
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_online_softmax_paper_01
+  source_id: online_softmax_paper
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Online normalizer calculation for softmax / https://arxiv.org/abs/1805.02867
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id017
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id018
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_online_softmax_paper_02
+  source_id: online_softmax_paper
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Online normalizer calculation for softmax / https://arxiv.org/abs/1805.02867
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_online_softmax_paper_03
+  source_id: online_softmax_paper
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Online normalizer calculation for softmax / https://arxiv.org/abs/1805.02867
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_online_softmax_paper_04
+  source_id: online_softmax_paper
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Online normalizer calculation for softmax / https://arxiv.org/abs/1805.02867
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_online_softmax_paper_05
+  source_id: online_softmax_paper
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Online normalizer calculation for softmax / https://arxiv.org/abs/1805.02867
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: peer_reviewed
+  confidence: 0.86
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: peer_reviewed
+- claim_id: clm_pytorch_softmax_source_01
+  source_id: pytorch_softmax_source
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: PyTorch softmax native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id019
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id020
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_source_02
+  source_id: pytorch_softmax_source
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: PyTorch softmax native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_source_03
+  source_id: pytorch_softmax_source
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: PyTorch softmax native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_source_04
+  source_id: pytorch_softmax_source
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: PyTorch softmax native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_softmax_source_05
+  source_id: pytorch_softmax_source
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: PyTorch softmax native source / https://github.com/pytorch/pytorch
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_xformers_softmax_context_01
+  source_id: xformers_softmax_context
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: xFormers softmax attention context / https://github.com/facebookresearch/xformers
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id021
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id022
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_xformers_softmax_context_02
+  source_id: xformers_softmax_context
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: xFormers softmax attention context / https://github.com/facebookresearch/xformers
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_xformers_softmax_context_03
+  source_id: xformers_softmax_context
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: xFormers softmax attention context / https://github.com/facebookresearch/xformers
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_xformers_softmax_context_04
+  source_id: xformers_softmax_context
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: xFormers softmax attention context / https://github.com/facebookresearch/xformers
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_xformers_softmax_context_05
+  source_id: xformers_softmax_context
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: xFormers softmax attention context / https://github.com/facebookresearch/xformers
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_triton_exp_softmax_01
+  source_id: triton_exp_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API for softmax / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id023
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id024
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_softmax_02
+  source_id: triton_exp_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API for softmax / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_softmax_03
+  source_id: triton_exp_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API for softmax / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_softmax_04
+  source_id: triton_exp_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API for softmax / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_exp_softmax_05
+  source_id: triton_exp_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton tl.exp API for softmax / https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_cuda_fast_math_context_01
+  source_id: cuda_fast_math_context
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: CUDA fast math context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id025
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id026
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_fast_math_context_02
+  source_id: cuda_fast_math_context
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: CUDA fast math context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_fast_math_context_03
+  source_id: cuda_fast_math_context
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: CUDA fast math context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_fast_math_context_04
+  source_id: cuda_fast_math_context
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: CUDA fast math context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_fast_math_context_05
+  source_id: cuda_fast_math_context
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: CUDA fast math context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_softmax_memory_01
+  source_id: ncu_softmax_memory
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for softmax / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id027
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id028
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_softmax_memory_02
+  source_id: ncu_softmax_memory
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for softmax / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_softmax_memory_03
+  source_id: ncu_softmax_memory
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for softmax / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_softmax_memory_04
+  source_id: ncu_softmax_memory
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for softmax / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_softmax_memory_05
+  source_id: ncu_softmax_memory
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Nsight memory metrics for softmax / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_triton_masked_softmax_01
+  source_id: triton_masked_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton masked load/store for softmax / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id029
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id030
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_softmax_02
+  source_id: triton_masked_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton masked load/store for softmax / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_softmax_03
+  source_id: triton_masked_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton masked load/store for softmax / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_softmax_04
+  source_id: triton_masked_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton masked load/store for softmax / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_softmax_05
+  source_id: triton_masked_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton masked load/store for softmax / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_softmax_benchmark_note_01
+  source_id: softmax_benchmark_note
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Public softmax benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id031
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id032
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_benchmark_note_02
+  source_id: softmax_benchmark_note
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Public softmax benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_benchmark_note_03
+  source_id: softmax_benchmark_note
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Public softmax benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_benchmark_note_04
+  source_id: softmax_benchmark_note
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Public softmax benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_benchmark_note_05
+  source_id: softmax_benchmark_note
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Public softmax benchmark context / https://github.com/triton-lang/triton
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_softmax_codegen_01
+  source_id: inductor_softmax_codegen
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: TorchInductor softmax codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id033
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id034
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_softmax_codegen_02
+  source_id: inductor_softmax_codegen
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: TorchInductor softmax codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_softmax_codegen_03
+  source_id: inductor_softmax_codegen
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: TorchInductor softmax codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_softmax_codegen_04
+  source_id: inductor_softmax_codegen
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: TorchInductor softmax codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_softmax_codegen_05
+  source_id: inductor_softmax_codegen
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: TorchInductor softmax codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_cuda_occupancy_softmax_01
+  source_id: cuda_occupancy_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy context for softmax / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id035
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id036
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_softmax_02
+  source_id: cuda_occupancy_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy context for softmax / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_softmax_03
+  source_id: cuda_occupancy_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy context for softmax / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_softmax_04
+  source_id: cuda_occupancy_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy context for softmax / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_softmax_05
+  source_id: cuda_occupancy_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy context for softmax / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_next_power_of_two_01
+  source_id: triton_next_power_of_two
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Triton next_power_of_2 helper / https://triton-lang.org/main/python-api/generated/triton.next_power_of_2.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id037
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id038
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_next_power_of_two_02
+  source_id: triton_next_power_of_two
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Triton next_power_of_2 helper / https://triton-lang.org/main/python-api/generated/triton.next_power_of_2.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_next_power_of_two_03
+  source_id: triton_next_power_of_two
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Triton next_power_of_2 helper / https://triton-lang.org/main/python-api/generated/triton.next_power_of_2.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_next_power_of_two_04
+  source_id: triton_next_power_of_two
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Triton next_power_of_2 helper / https://triton-lang.org/main/python-api/generated/triton.next_power_of_2.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_next_power_of_two_05
+  source_id: triton_next_power_of_two
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Triton next_power_of_2 helper / https://triton-lang.org/main/python-api/generated/triton.next_power_of_2.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cross_entropy_softmax_01
+  source_id: pytorch_cross_entropy_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: PyTorch cross entropy softmax context / https://docs.pytorch.org/docs/2.12/generated/torch.nn.CrossEntropyLoss.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id039
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id040
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cross_entropy_softmax_02
+  source_id: pytorch_cross_entropy_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: PyTorch cross entropy softmax context / https://docs.pytorch.org/docs/2.12/generated/torch.nn.CrossEntropyLoss.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cross_entropy_softmax_03
+  source_id: pytorch_cross_entropy_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: PyTorch cross entropy softmax context / https://docs.pytorch.org/docs/2.12/generated/torch.nn.CrossEntropyLoss.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cross_entropy_softmax_04
+  source_id: pytorch_cross_entropy_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: PyTorch cross entropy softmax context / https://docs.pytorch.org/docs/2.12/generated/torch.nn.CrossEntropyLoss.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cross_entropy_softmax_05
+  source_id: pytorch_cross_entropy_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: PyTorch cross entropy softmax context / https://docs.pytorch.org/docs/2.12/generated/torch.nn.CrossEntropyLoss.html
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_softmax_numerical_blog_01
+  source_id: softmax_numerical_blog
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: Community softmax numerical pitfalls / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id041
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id042
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_numerical_blog_02
+  source_id: softmax_numerical_blog
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: Community softmax numerical pitfalls / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_numerical_blog_03
+  source_id: softmax_numerical_blog
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: Community softmax numerical pitfalls / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_numerical_blog_04
+  source_id: softmax_numerical_blog
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: Community softmax numerical pitfalls / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_softmax_numerical_blog_05
+  source_id: softmax_numerical_blog
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: Community softmax numerical pitfalls / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_tritonbench_softmax_01
+  source_id: tritonbench_softmax
+  statement: Stable softmax subtracts row max before exp.
+  evidence:
+    short_excerpt_or_location: TritonBench softmax tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: &id043
+    - softmax
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id044
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_softmax_02
+  source_id: tritonbench_softmax
+  statement: Padded lanes must be excluded from max, denominator, and store.
+  evidence:
+    short_excerpt_or_location: TritonBench softmax tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_softmax_03
+  source_id: tritonbench_softmax
+  statement: Approximate exp is acceptable only through dtype-specific tolerance gates.
+  evidence:
+    short_excerpt_or_location: TritonBench softmax tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_softmax_04
+  source_id: tritonbench_softmax
+  statement: Fused row softmax can reduce global-memory traffic when the row fits the working set.
+  evidence:
+    short_excerpt_or_location: TritonBench softmax tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_softmax_05
+  source_id: tritonbench_softmax
+  statement: Benchmarking must follow hidden correctness and extreme-value tests.
+  evidence:
+    short_excerpt_or_location: TritonBench softmax tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official

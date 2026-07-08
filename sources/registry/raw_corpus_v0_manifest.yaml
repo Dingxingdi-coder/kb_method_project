@@ -1,0 +1,55 @@
+version_name: raw_corpus_v0
+freeze_timestamp: '2026-07-06T00:00:00Z'
+branch: h20-demo-round2
+repository: Dingxingdi-coder/kb_method_project
+counts:
+  sources: 128
+  raw_archive_files: 19
+  raw_corpus_files: 5
+  claims: 640
+coverage_summary:
+  common_public_sources: 40
+  operator_family_sources_total: 88
+  row_reduction_sources: 22
+  softmax_sources: 22
+  layernorm_sources: 21
+  matmul_sources: 23
+files:
+  source_registry: sources/registry/sources.yaml
+  raw_archive:
+  - sources/raw_archive/cuda_best_practices.archive.md
+  - sources/raw_archive/cuda_fast_math_context.archive.md
+  - sources/raw_archive/cutlass_gemm_docs.archive.md
+  - sources/raw_archive/ncu_occupancy_layernorm.archive.md
+  - sources/raw_archive/nsight_compute_guide.archive.md
+  - sources/raw_archive/pytorch_addmm.archive.md
+  - sources/raw_archive/pytorch_mean.archive.md
+  - sources/raw_archive/triton_fused_softmax.archive.md
+  - sources/raw_archive/triton_layernorm_source.archive.md
+  - sources/raw_archive/triton_layernorm_tutorial.archive.md
+  - sources/raw_archive/triton_layernorm_tutorial_detail.archive.md
+  - sources/raw_archive/triton_matmul_tutorial.archive.md
+  - sources/raw_archive/triton_matmul_tutorial_detail.archive.md
+  - sources/raw_archive/triton_persistent_matmul.archive.md
+  - sources/raw_archive/triton_softmax_source.archive.md
+  - sources/raw_archive/triton_softmax_tutorial.archive.md
+  - sources/raw_archive/triton_sum_reduction.archive.md
+  - sources/raw_archive/triton_vector_add.archive.md
+  - sources/raw_archive/tritonbench_reduce.archive.md
+  raw_corpus:
+  - sources/raw_corpus/common_corpus.md
+  - sources/raw_corpus/layernorm_corpus.md
+  - sources/raw_corpus/matmul_corpus.md
+  - sources/raw_corpus/row_reduction_corpus.md
+  - sources/raw_corpus/softmax_corpus.md
+  derived_claims:
+  - sources/derived_claims/common_claims.claims.yaml
+  - sources/derived_claims/layernorm_claims.claims.yaml
+  - sources/derived_claims/matmul_claims.claims.yaml
+  - sources/derived_claims/row_reduction_claims.claims.yaml
+  - sources/derived_claims/softmax_claims.claims.yaml
+  kb_lineage: sources/derived_claims/kb_v0_lineage.yaml
+derivation_relationships:
+- sources.yaml -> raw_corpus_v0
+- raw_corpus_v0 -> derived_claims
+- derived_claims -> KB v0 capsules

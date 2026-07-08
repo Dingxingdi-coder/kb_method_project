@@ -1,0 +1,1775 @@
+lineage_file: kb_v0_lineage
+derived_from: raw_corpus_v0
+generated_at: '2026-07-06T00:00:00Z'
+capsules:
+- capsule_id: sem_softmax_stability_v1
+  source_ids:
+  - pytorch_softmax
+  - triton_fused_softmax
+  claim_ids:
+  - clm_pytorch_softmax_01
+  - clm_triton_fused_softmax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_softmax_dtype_output_v1
+  source_ids:
+  - pytorch_softmax
+  claim_ids:
+  - clm_pytorch_softmax_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_softmax_log_boundary_v1
+  source_ids:
+  - pytorch_log_softmax
+  - pytorch_softmax
+  claim_ids:
+  - clm_pytorch_log_softmax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_reduction_sum_dtype_v1
+  source_ids:
+  - pytorch_sum
+  claim_ids:
+  - clm_pytorch_sum_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_reduction_max_axis_v1
+  source_ids:
+  - pytorch_amax
+  - pytorch_max
+  claim_ids:
+  - clm_pytorch_amax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_reduction_mean_boundary_v1
+  source_ids:
+  - pytorch_mean
+  claim_ids:
+  - clm_pytorch_mean_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_layernorm_formula_v1
+  source_ids:
+  - pytorch_layernorm_module
+  claim_ids:
+  - clm_pytorch_layernorm_module_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_layernorm_eps_v1
+  source_ids:
+  - pytorch_eps_layernorm
+  claim_ids:
+  - clm_pytorch_eps_layernorm_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_layernorm_affine_v1
+  source_ids:
+  - pytorch_affine_layernorm
+  claim_ids:
+  - clm_pytorch_affine_layernorm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_matmul_contract_v1
+  source_ids:
+  - pytorch_matmul
+  - pytorch_mm
+  claim_ids:
+  - clm_pytorch_matmul_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_matmul_broadcast_v1
+  source_ids:
+  - pytorch_matmul
+  - pytorch_bmm
+  claim_ids:
+  - clm_pytorch_matmul_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: sem_matmul_bias_boundary_v1
+  source_ids:
+  - pytorch_addmm
+  - pytorch_matmul
+  claim_ids:
+  - clm_pytorch_addmm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: op_contract / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_triton_constexpr_meta_v1
+  source_ids:
+  - triton_jit_api
+  claim_ids:
+  - clm_triton_jit_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_triton_load_mask_v1
+  source_ids:
+  - triton_load_api
+  claim_ids:
+  - clm_triton_load_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_triton_store_mask_v1
+  source_ids:
+  - triton_store_api
+  claim_ids:
+  - clm_triton_store_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_triton_arange_v1
+  source_ids:
+  - triton_arange_api
+  claim_ids:
+  - clm_triton_arange_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_triton_program_id_v1
+  source_ids:
+  - triton_program_id_api
+  claim_ids:
+  - clm_triton_program_id_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_triton_dot_v1
+  source_ids:
+  - triton_dot_api
+  claim_ids:
+  - clm_triton_dot_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_cuda_event_timing_v1
+  source_ids:
+  - cuda_runtime_events
+  - pytorch_cuda_event
+  claim_ids:
+  - clm_cuda_runtime_events_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: leg_torch_compile_baseline_v1
+  source_ids:
+  - pytorch_compile
+  claim_ids:
+  - clm_pytorch_compile_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: legality_constraint / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_allclose_tolerance_v1
+  source_ids:
+  - pytorch_allclose
+  - pytorch_isclose
+  claim_ids:
+  - clm_pytorch_allclose_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_benchmark_after_correctness_v1
+  source_ids:
+  - pytorch_benchmark_utils
+  - cuda_best_practices
+  claim_ids:
+  - clm_pytorch_benchmark_utils_05
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_numerical_accuracy_v1
+  source_ids:
+  - pytorch_numerical_accuracy
+  claim_ids:
+  - clm_pytorch_numerical_accuracy_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_profile_attribution_v1
+  source_ids:
+  - nsight_compute_guide
+  - cuda_best_practices
+  claim_ids:
+  - clm_nsight_compute_guide_05
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / stable / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_one_program_per_row_skeleton_v1
+  source_ids:
+  - triton_max_api
+  claim_ids:
+  - clm_triton_max_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_one_program_per_row_skeleton_v1
+  source_ids:
+  - pytorch_sum
+  claim_ids:
+  - clm_pytorch_sum_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1
+  source_ids:
+  - pytorch_sum
+  claim_ids:
+  - clm_pytorch_sum_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1
+  source_ids:
+  - pytorch_amax
+  claim_ids:
+  - clm_pytorch_amax_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_neutral_value_for_masked_lanes_v1
+  source_ids:
+  - pytorch_amax
+  claim_ids:
+  - clm_pytorch_amax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_neutral_value_for_masked_lanes_v1
+  source_ids:
+  - pytorch_max
+  claim_ids:
+  - clm_pytorch_max_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_power_of_two_block_with_mask_v1
+  source_ids:
+  - pytorch_max
+  claim_ids:
+  - clm_pytorch_max_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_power_of_two_block_with_mask_v1
+  source_ids:
+  - pytorch_mean
+  claim_ids:
+  - clm_pytorch_mean_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_bandwidth_based_stop_check_v1
+  source_ids:
+  - pytorch_mean
+  claim_ids:
+  - clm_pytorch_mean_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_bandwidth_based_stop_check_v1
+  source_ids:
+  - triton_sum_reduction
+  claim_ids:
+  - clm_triton_sum_reduction_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_non_contiguous_stride_guard_v1
+  source_ids:
+  - triton_sum_reduction
+  claim_ids:
+  - clm_triton_sum_reduction_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_non_contiguous_stride_guard_v1
+  source_ids:
+  - triton_max_reduction
+  claim_ids:
+  - clm_triton_max_reduction_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_two_stage_split_for_very_wide_rows_v1
+  source_ids:
+  - triton_max_reduction
+  claim_ids:
+  - clm_triton_max_reduction_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_two_stage_split_for_very_wide_rows_v1
+  source_ids:
+  - cuda_reduction_sample
+  claim_ids:
+  - clm_cuda_reduction_sample_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_compare_eager_and_compile_baselines_v1
+  source_ids:
+  - cuda_reduction_sample
+  claim_ids:
+  - clm_cuda_reduction_sample_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_compare_eager_and_compile_baselines_v1
+  source_ids:
+  - cuda_parallel_reduction_whitepaper
+  claim_ids:
+  - clm_cuda_parallel_reduction_whitepaper_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_avoid_warp_only_assumption_v1
+  source_ids:
+  - cuda_parallel_reduction_whitepaper
+  claim_ids:
+  - clm_cuda_parallel_reduction_whitepaper_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_avoid_warp_only_assumption_v1
+  source_ids:
+  - cub_device_reduce
+  claim_ids:
+  - clm_cub_device_reduce_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_row_reduction_profile_bytes_read_write_v1
+  source_ids:
+  - cub_device_reduce
+  claim_ids:
+  - clm_cub_device_reduce_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_row_reduction_profile_bytes_read_write_v1
+  source_ids:
+  - thrust_reduce
+  claim_ids:
+  - clm_thrust_reduce_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_row_reduction_one_program_per_row_skeleton_v1
+  source_ids:
+  - triton_max_api
+  claim_ids:
+  - clm_triton_max_api_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1
+  source_ids:
+  - pytorch_sum
+  claim_ids:
+  - clm_pytorch_sum_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_row_reduction_neutral_value_for_masked_lanes_v1
+  source_ids:
+  - pytorch_amax
+  claim_ids:
+  - clm_pytorch_amax_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: stop_row_reduction_unverified_tuning_v1
+  source_ids:
+  - triton_language_where
+  claim_ids:
+  - clm_triton_language_where_05
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: stop_capsule / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_one_program_per_row_skeleton_v1
+  source_ids:
+  - pytorch_amax
+  claim_ids:
+  - clm_pytorch_amax_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_fp32_accumulation_for_fp16_bf16_sum_v1
+  source_ids:
+  - pytorch_max
+  claim_ids:
+  - clm_pytorch_max_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_neutral_value_for_masked_lanes_v1
+  source_ids:
+  - pytorch_mean
+  claim_ids:
+  - clm_pytorch_mean_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_power_of_two_block_with_mask_v1
+  source_ids:
+  - triton_sum_reduction
+  claim_ids:
+  - clm_triton_sum_reduction_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_bandwidth_based_stop_check_v1
+  source_ids:
+  - triton_max_reduction
+  claim_ids:
+  - clm_triton_max_reduction_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_non_contiguous_stride_guard_v1
+  source_ids:
+  - cuda_reduction_sample
+  claim_ids:
+  - clm_cuda_reduction_sample_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_two_stage_split_for_very_wide_rows_v1
+  source_ids:
+  - cuda_parallel_reduction_whitepaper
+  claim_ids:
+  - clm_cuda_parallel_reduction_whitepaper_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_row_reduction_compare_eager_and_compile_baselines_v1
+  source_ids:
+  - cub_device_reduce
+  claim_ids:
+  - clm_cub_device_reduce_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_row_wise_fused_skeleton_v1
+  source_ids:
+  - triton_max_api
+  claim_ids:
+  - clm_triton_max_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_row_wise_fused_skeleton_v1
+  source_ids:
+  - triton_exp_api
+  claim_ids:
+  - clm_triton_exp_api_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_max_subtract_exp_sum_divide_sequence_v1
+  source_ids:
+  - triton_exp_api
+  claim_ids:
+  - clm_triton_exp_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_max_subtract_exp_sum_divide_sequence_v1
+  source_ids:
+  - pytorch_softmax
+  claim_ids:
+  - clm_pytorch_softmax_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_mask_padded_denominator_lanes_v1
+  source_ids:
+  - pytorch_softmax
+  claim_ids:
+  - clm_pytorch_softmax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_mask_padded_denominator_lanes_v1
+  source_ids:
+  - pytorch_functional_softmax
+  claim_ids:
+  - clm_pytorch_functional_softmax_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_tune_block_n_next_power_of_two_v1
+  source_ids:
+  - pytorch_functional_softmax
+  claim_ids:
+  - clm_pytorch_functional_softmax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_tune_block_n_next_power_of_two_v1
+  source_ids:
+  - pytorch_log_softmax
+  claim_ids:
+  - clm_pytorch_log_softmax_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_dtype_tolerance_for_approximate_exp_v1
+  source_ids:
+  - pytorch_log_softmax
+  claim_ids:
+  - clm_pytorch_log_softmax_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_dtype_tolerance_for_approximate_exp_v1
+  source_ids:
+  - triton_softmax_tutorial
+  claim_ids:
+  - clm_triton_softmax_tutorial_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_large_value_stress_test_v1
+  source_ids:
+  - triton_softmax_tutorial
+  claim_ids:
+  - clm_triton_softmax_tutorial_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_large_value_stress_test_v1
+  source_ids:
+  - triton_softmax_source
+  claim_ids:
+  - clm_triton_softmax_source_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_avoid_public_n_hardcode_v1
+  source_ids:
+  - triton_softmax_source
+  claim_ids:
+  - clm_triton_softmax_source_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_avoid_public_n_hardcode_v1
+  source_ids:
+  - flashattention_paper
+  claim_ids:
+  - clm_flashattention_paper_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_profile_memory_pass_reduction_v1
+  source_ids:
+  - flashattention_paper
+  claim_ids:
+  - clm_flashattention_paper_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_profile_memory_pass_reduction_v1
+  source_ids:
+  - online_softmax_paper
+  claim_ids:
+  - clm_online_softmax_paper_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_stop_low_yield_local_tuning_v1
+  source_ids:
+  - online_softmax_paper
+  claim_ids:
+  - clm_online_softmax_paper_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_stop_low_yield_local_tuning_v1
+  source_ids:
+  - pytorch_softmax_source
+  claim_ids:
+  - clm_pytorch_softmax_source_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_softmax_fallback_free_reference_path_v1
+  source_ids:
+  - pytorch_softmax_source
+  claim_ids:
+  - clm_pytorch_softmax_source_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_softmax_fallback_free_reference_path_v1
+  source_ids:
+  - xformers_softmax_context
+  claim_ids:
+  - clm_xformers_softmax_context_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_softmax_row_wise_fused_skeleton_v1
+  source_ids:
+  - triton_max_api
+  claim_ids:
+  - clm_triton_max_api_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_softmax_max_subtract_exp_sum_divide_sequence_v1
+  source_ids:
+  - triton_exp_api
+  claim_ids:
+  - clm_triton_exp_api_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_softmax_mask_padded_denominator_lanes_v1
+  source_ids:
+  - pytorch_softmax
+  claim_ids:
+  - clm_pytorch_softmax_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: stop_softmax_unverified_tuning_v1
+  source_ids:
+  - tritonbench_softmax
+  claim_ids:
+  - clm_tritonbench_softmax_05
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: stop_capsule / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_row_wise_fused_skeleton_v1
+  source_ids:
+  - pytorch_softmax
+  claim_ids:
+  - clm_pytorch_softmax_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_max_subtract_exp_sum_divide_sequence_v1
+  source_ids:
+  - pytorch_functional_softmax
+  claim_ids:
+  - clm_pytorch_functional_softmax_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_mask_padded_denominator_lanes_v1
+  source_ids:
+  - pytorch_log_softmax
+  claim_ids:
+  - clm_pytorch_log_softmax_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_tune_block_n_next_power_of_two_v1
+  source_ids:
+  - triton_softmax_tutorial
+  claim_ids:
+  - clm_triton_softmax_tutorial_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_dtype_tolerance_for_approximate_exp_v1
+  source_ids:
+  - triton_softmax_source
+  claim_ids:
+  - clm_triton_softmax_source_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_large_value_stress_test_v1
+  source_ids:
+  - flashattention_paper
+  claim_ids:
+  - clm_flashattention_paper_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_avoid_public_n_hardcode_v1
+  source_ids:
+  - online_softmax_paper
+  claim_ids:
+  - clm_online_softmax_paper_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_softmax_profile_memory_pass_reduction_v1
+  source_ids:
+  - pytorch_softmax_source
+  claim_ids:
+  - clm_pytorch_softmax_source_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_row_wise_mean_variance_skeleton_v1
+  source_ids:
+  - pytorch_layernorm_module
+  claim_ids:
+  - clm_pytorch_layernorm_module_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_row_wise_mean_variance_skeleton_v1
+  source_ids:
+  - pytorch_layer_norm_functional
+  claim_ids:
+  - clm_pytorch_layer_norm_functional_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_fp32_accumulation_v1
+  source_ids:
+  - pytorch_layer_norm_functional
+  claim_ids:
+  - clm_pytorch_layer_norm_functional_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_fp32_accumulation_v1
+  source_ids:
+  - pytorch_native_layer_norm
+  claim_ids:
+  - clm_pytorch_native_layer_norm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_eps_inside_sqrt_v1
+  source_ids:
+  - pytorch_native_layer_norm
+  claim_ids:
+  - clm_pytorch_native_layer_norm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_eps_inside_sqrt_v1
+  source_ids:
+  - triton_layernorm_tutorial_detail
+  claim_ids:
+  - clm_triton_layernorm_tutorial_detail_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_gamma_beta_hidden_index_broadcast_v1
+  source_ids:
+  - triton_layernorm_tutorial_detail
+  claim_ids:
+  - clm_triton_layernorm_tutorial_detail_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_gamma_beta_hidden_index_broadcast_v1
+  source_ids:
+  - triton_layernorm_source
+  claim_ids:
+  - clm_triton_layernorm_source_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_register_pressure_guard_v1
+  source_ids:
+  - triton_layernorm_source
+  claim_ids:
+  - clm_triton_layernorm_source_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_register_pressure_guard_v1
+  source_ids:
+  - apex_layernorm
+  claim_ids:
+  - clm_apex_layernorm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_hidden_size_knob_sweep_v1
+  source_ids:
+  - apex_layernorm
+  claim_ids:
+  - clm_apex_layernorm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_hidden_size_knob_sweep_v1
+  source_ids:
+  - cuda_welford
+  claim_ids:
+  - clm_cuda_welford_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_non_contiguous_stride_guard_v1
+  source_ids:
+  - cuda_welford
+  claim_ids:
+  - clm_cuda_welford_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_non_contiguous_stride_guard_v1
+  source_ids:
+  - pytorch_layernorm_source
+  claim_ids:
+  - clm_pytorch_layernorm_source_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_variance_formula_reference_check_v1
+  source_ids:
+  - pytorch_layernorm_source
+  claim_ids:
+  - clm_pytorch_layernorm_source_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_variance_formula_reference_check_v1
+  source_ids:
+  - oneflow_layernorm
+  claim_ids:
+  - clm_oneflow_layernorm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_profile_occupancy_summary_v1
+  source_ids:
+  - oneflow_layernorm
+  claim_ids:
+  - clm_oneflow_layernorm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_profile_occupancy_summary_v1
+  source_ids:
+  - cuda_register_pressure
+  claim_ids:
+  - clm_cuda_register_pressure_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_layernorm_stop_before_random_knobs_v1
+  source_ids:
+  - cuda_register_pressure
+  claim_ids:
+  - clm_cuda_register_pressure_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_layernorm_stop_before_random_knobs_v1
+  source_ids:
+  - ncu_occupancy_layernorm
+  claim_ids:
+  - clm_ncu_occupancy_layernorm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_layernorm_row_wise_mean_variance_skeleton_v1
+  source_ids:
+  - pytorch_layernorm_module
+  claim_ids:
+  - clm_pytorch_layernorm_module_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_layernorm_fp32_accumulation_v1
+  source_ids:
+  - pytorch_layer_norm_functional
+  claim_ids:
+  - clm_pytorch_layer_norm_functional_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_layernorm_eps_inside_sqrt_v1
+  source_ids:
+  - pytorch_native_layer_norm
+  claim_ids:
+  - clm_pytorch_native_layer_norm_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: stop_layernorm_unverified_tuning_v1
+  source_ids:
+  - torch_compile_layernorm
+  claim_ids:
+  - clm_torch_compile_layernorm_05
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: stop_capsule / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_row_wise_mean_variance_skeleton_v1
+  source_ids:
+  - pytorch_native_layer_norm
+  claim_ids:
+  - clm_pytorch_native_layer_norm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_fp32_accumulation_v1
+  source_ids:
+  - triton_layernorm_tutorial_detail
+  claim_ids:
+  - clm_triton_layernorm_tutorial_detail_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_eps_inside_sqrt_v1
+  source_ids:
+  - triton_layernorm_source
+  claim_ids:
+  - clm_triton_layernorm_source_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_gamma_beta_hidden_index_broadcast_v1
+  source_ids:
+  - apex_layernorm
+  claim_ids:
+  - clm_apex_layernorm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_register_pressure_guard_v1
+  source_ids:
+  - cuda_welford
+  claim_ids:
+  - clm_cuda_welford_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_hidden_size_knob_sweep_v1
+  source_ids:
+  - pytorch_layernorm_source
+  claim_ids:
+  - clm_pytorch_layernorm_source_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_non_contiguous_stride_guard_v1
+  source_ids:
+  - oneflow_layernorm
+  claim_ids:
+  - clm_oneflow_layernorm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_layernorm_variance_formula_reference_check_v1
+  source_ids:
+  - cuda_register_pressure
+  claim_ids:
+  - clm_cuda_register_pressure_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_m_n_k_tiled_skeleton_v1
+  source_ids:
+  - triton_persistent_matmul
+  claim_ids:
+  - clm_triton_persistent_matmul_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_m_n_k_tiled_skeleton_v1
+  source_ids:
+  - triton_dot_api
+  claim_ids:
+  - clm_triton_dot_api_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_boundary_masks_for_tail_tiles_v1
+  source_ids:
+  - triton_dot_api
+  claim_ids:
+  - clm_triton_dot_api_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_boundary_masks_for_tail_tiles_v1
+  source_ids:
+  - pytorch_matmul
+  claim_ids:
+  - clm_pytorch_matmul_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_tl_dot_legality_guard_v1
+  source_ids:
+  - pytorch_matmul
+  claim_ids:
+  - clm_pytorch_matmul_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_tl_dot_legality_guard_v1
+  source_ids:
+  - pytorch_mm
+  claim_ids:
+  - clm_pytorch_mm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_num_warps_and_stages_sweep_v1
+  source_ids:
+  - pytorch_mm
+  claim_ids:
+  - clm_pytorch_mm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_num_warps_and_stages_sweep_v1
+  source_ids:
+  - pytorch_bmm
+  claim_ids:
+  - clm_pytorch_bmm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_tf32_policy_declaration_v1
+  source_ids:
+  - pytorch_bmm
+  claim_ids:
+  - clm_pytorch_bmm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_tf32_policy_declaration_v1
+  source_ids:
+  - pytorch_addmm
+  claim_ids:
+  - clm_pytorch_addmm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_split_k_requires_reduction_correctness_v1
+  source_ids:
+  - pytorch_addmm
+  claim_ids:
+  - clm_pytorch_addmm_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_split_k_requires_reduction_correctness_v1
+  source_ids:
+  - triton_matmul_tutorial_detail
+  claim_ids:
+  - clm_triton_matmul_tutorial_detail_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_shared_memory_coalescing_motif_v1
+  source_ids:
+  - triton_matmul_tutorial_detail
+  claim_ids:
+  - clm_triton_matmul_tutorial_detail_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_shared_memory_coalescing_motif_v1
+  source_ids:
+  - triton_matmul_source
+  claim_ids:
+  - clm_triton_matmul_source_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_persistent_matmul_requires_revalidation_v1
+  source_ids:
+  - triton_matmul_source
+  claim_ids:
+  - clm_triton_matmul_source_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_persistent_matmul_requires_revalidation_v1
+  source_ids:
+  - triton_dot_matmul
+  claim_ids:
+  - clm_triton_dot_matmul_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_baseline_strength_stop_check_v1
+  source_ids:
+  - triton_dot_matmul
+  claim_ids:
+  - clm_triton_dot_matmul_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_baseline_strength_stop_check_v1
+  source_ids:
+  - triton_persistent_matmul_detail
+  claim_ids:
+  - clm_triton_persistent_matmul_detail_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: skel_matmul_avoid_cublas_fallback_v1
+  source_ids:
+  - triton_persistent_matmul_detail
+  claim_ids:
+  - clm_triton_persistent_matmul_detail_01
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: implementation_skeleton / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: opt_matmul_avoid_cublas_fallback_v1
+  source_ids:
+  - triton_group_gemm
+  claim_ids:
+  - clm_triton_group_gemm_04
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: optimization_motif / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_matmul_m_n_k_tiled_skeleton_v1
+  source_ids:
+  - triton_persistent_matmul
+  claim_ids:
+  - clm_triton_persistent_matmul_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_matmul_boundary_masks_for_tail_tiles_v1
+  source_ids:
+  - triton_dot_api
+  claim_ids:
+  - clm_triton_dot_api_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: val_matmul_tl_dot_legality_guard_v1
+  source_ids:
+  - pytorch_matmul
+  claim_ids:
+  - clm_pytorch_matmul_02
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: validation_policy / quarantine / portable chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: stop_matmul_unverified_tuning_v1
+  source_ids:
+  - ncu_matmul_compute
+  claim_ids:
+  - clm_ncu_matmul_compute_05
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: stop_capsule / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_m_n_k_tiled_skeleton_v1
+  source_ids:
+  - pytorch_matmul
+  claim_ids:
+  - clm_pytorch_matmul_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_boundary_masks_for_tail_tiles_v1
+  source_ids:
+  - pytorch_mm
+  claim_ids:
+  - clm_pytorch_mm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_tl_dot_legality_guard_v1
+  source_ids:
+  - pytorch_bmm
+  claim_ids:
+  - clm_pytorch_bmm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_num_warps_and_stages_sweep_v1
+  source_ids:
+  - pytorch_addmm
+  claim_ids:
+  - clm_pytorch_addmm_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_tf32_policy_declaration_v1
+  source_ids:
+  - triton_matmul_tutorial_detail
+  claim_ids:
+  - clm_triton_matmul_tutorial_detail_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_split_k_requires_reduction_correctness_v1
+  source_ids:
+  - triton_matmul_source
+  claim_ids:
+  - clm_triton_matmul_source_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_shared_memory_coalescing_motif_v1
+  source_ids:
+  - triton_dot_matmul
+  claim_ids:
+  - clm_triton_dot_matmul_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_matmul_persistent_matmul_requires_revalidation_v1
+  source_ids:
+  - triton_persistent_matmul_detail
+  claim_ids:
+  - clm_triton_persistent_matmul_detail_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_instance chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_152_v1
+  source_ids:
+  - pytorch_no_grad
+  claim_ids:
+  - clm_pytorch_no_grad_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_153_v1
+  source_ids:
+  - pytorch_inference_mode
+  claim_ids:
+  - clm_pytorch_inference_mode_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_154_v1
+  source_ids:
+  - pytorch_contiguous
+  claim_ids:
+  - clm_pytorch_contiguous_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_155_v1
+  source_ids:
+  - pytorch_stride_api
+  claim_ids:
+  - clm_pytorch_stride_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_156_v1
+  source_ids:
+  - triton_block_pointer_api
+  claim_ids:
+  - clm_triton_block_pointer_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_157_v1
+  source_ids:
+  - triton_compile_api
+  claim_ids:
+  - clm_triton_compile_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_158_v1
+  source_ids:
+  - cuda_memory_hierarchy
+  claim_ids:
+  - clm_cuda_memory_hierarchy_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_159_v1
+  source_ids:
+  - ncu_metrics_reference
+  claim_ids:
+  - clm_ncu_metrics_reference_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_160_v1
+  source_ids:
+  - triton_docs
+  claim_ids:
+  - clm_triton_docs_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_161_v1
+  source_ids:
+  - triton_vector_add
+  claim_ids:
+  - clm_triton_vector_add_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_162_v1
+  source_ids:
+  - triton_jit_api
+  claim_ids:
+  - clm_triton_jit_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_163_v1
+  source_ids:
+  - triton_autotune_api
+  claim_ids:
+  - clm_triton_autotune_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_164_v1
+  source_ids:
+  - triton_heuristics_api
+  claim_ids:
+  - clm_triton_heuristics_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_165_v1
+  source_ids:
+  - triton_arange_api
+  claim_ids:
+  - clm_triton_arange_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_166_v1
+  source_ids:
+  - triton_load_api
+  claim_ids:
+  - clm_triton_load_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_167_v1
+  source_ids:
+  - triton_store_api
+  claim_ids:
+  - clm_triton_store_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_168_v1
+  source_ids:
+  - triton_program_id_api
+  claim_ids:
+  - clm_triton_program_id_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_169_v1
+  source_ids:
+  - triton_do_bench
+  claim_ids:
+  - clm_triton_do_bench_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_170_v1
+  source_ids:
+  - triton_perf_report
+  claim_ids:
+  - clm_triton_perf_report_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_171_v1
+  source_ids:
+  - triton_debugging
+  claim_ids:
+  - clm_triton_debugging_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_172_v1
+  source_ids:
+  - pytorch_cuda_semantics
+  claim_ids:
+  - clm_pytorch_cuda_semantics_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_173_v1
+  source_ids:
+  - pytorch_numerical_accuracy
+  claim_ids:
+  - clm_pytorch_numerical_accuracy_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_174_v1
+  source_ids:
+  - pytorch_reproducibility
+  claim_ids:
+  - clm_pytorch_reproducibility_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_175_v1
+  source_ids:
+  - pytorch_compile
+  claim_ids:
+  - clm_pytorch_compile_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_176_v1
+  source_ids:
+  - pytorch_allclose
+  claim_ids:
+  - clm_pytorch_allclose_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_177_v1
+  source_ids:
+  - pytorch_isclose
+  claim_ids:
+  - clm_pytorch_isclose_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_178_v1
+  source_ids:
+  - pytorch_broadcasting
+  claim_ids:
+  - clm_pytorch_broadcasting_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_179_v1
+  source_ids:
+  - pytorch_tensor_views
+  claim_ids:
+  - clm_pytorch_tensor_views_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_180_v1
+  source_ids:
+  - pytorch_benchmark_utils
+  claim_ids:
+  - clm_pytorch_benchmark_utils_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_181_v1
+  source_ids:
+  - pytorch_cuda_event
+  claim_ids:
+  - clm_pytorch_cuda_event_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_182_v1
+  source_ids:
+  - cuda_programming_guide
+  claim_ids:
+  - clm_cuda_programming_guide_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_183_v1
+  source_ids:
+  - cuda_best_practices
+  claim_ids:
+  - clm_cuda_best_practices_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_184_v1
+  source_ids:
+  - cuda_runtime_events
+  claim_ids:
+  - clm_cuda_runtime_events_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_185_v1
+  source_ids:
+  - cuda_occupancy
+  claim_ids:
+  - clm_cuda_occupancy_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_186_v1
+  source_ids:
+  - cuda_coalescing
+  claim_ids:
+  - clm_cuda_coalescing_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_187_v1
+  source_ids:
+  - cuda_shared_memory
+  claim_ids:
+  - clm_cuda_shared_memory_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_188_v1
+  source_ids:
+  - nsight_compute_guide
+  claim_ids:
+  - clm_nsight_compute_guide_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_189_v1
+  source_ids:
+  - nsight_systems_guide
+  claim_ids:
+  - clm_nsight_systems_guide_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_190_v1
+  source_ids:
+  - nvidia_h20_export_context
+  claim_ids:
+  - clm_nvidia_h20_export_context_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_191_v1
+  source_ids:
+  - nvidia_h20_security_context
+  claim_ids:
+  - clm_nvidia_h20_security_context_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_192_v1
+  source_ids:
+  - pytorch_no_grad
+  claim_ids:
+  - clm_pytorch_no_grad_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_193_v1
+  source_ids:
+  - pytorch_inference_mode
+  claim_ids:
+  - clm_pytorch_inference_mode_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_194_v1
+  source_ids:
+  - pytorch_contiguous
+  claim_ids:
+  - clm_pytorch_contiguous_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_195_v1
+  source_ids:
+  - pytorch_stride_api
+  claim_ids:
+  - clm_pytorch_stride_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_196_v1
+  source_ids:
+  - triton_block_pointer_api
+  claim_ids:
+  - clm_triton_block_pointer_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_197_v1
+  source_ids:
+  - triton_compile_api
+  claim_ids:
+  - clm_triton_compile_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_198_v1
+  source_ids:
+  - cuda_memory_hierarchy
+  claim_ids:
+  - clm_cuda_memory_hierarchy_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_199_v1
+  source_ids:
+  - ncu_metrics_reference
+  claim_ids:
+  - clm_ncu_metrics_reference_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_200_v1
+  source_ids:
+  - triton_docs
+  claim_ids:
+  - clm_triton_docs_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_201_v1
+  source_ids:
+  - triton_vector_add
+  claim_ids:
+  - clm_triton_vector_add_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_202_v1
+  source_ids:
+  - triton_jit_api
+  claim_ids:
+  - clm_triton_jit_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_203_v1
+  source_ids:
+  - triton_autotune_api
+  claim_ids:
+  - clm_triton_autotune_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_204_v1
+  source_ids:
+  - triton_heuristics_api
+  claim_ids:
+  - clm_triton_heuristics_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_205_v1
+  source_ids:
+  - triton_arange_api
+  claim_ids:
+  - clm_triton_arange_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_206_v1
+  source_ids:
+  - triton_load_api
+  claim_ids:
+  - clm_triton_load_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_207_v1
+  source_ids:
+  - triton_store_api
+  claim_ids:
+  - clm_triton_store_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_208_v1
+  source_ids:
+  - triton_program_id_api
+  claim_ids:
+  - clm_triton_program_id_api_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_209_v1
+  source_ids:
+  - triton_do_bench
+  claim_ids:
+  - clm_triton_do_bench_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_210_v1
+  source_ids:
+  - triton_perf_report
+  claim_ids:
+  - clm_triton_perf_report_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_211_v1
+  source_ids:
+  - triton_debugging
+  claim_ids:
+  - clm_triton_debugging_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_212_v1
+  source_ids:
+  - pytorch_cuda_semantics
+  claim_ids:
+  - clm_pytorch_cuda_semantics_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_213_v1
+  source_ids:
+  - pytorch_numerical_accuracy
+  claim_ids:
+  - clm_pytorch_numerical_accuracy_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_214_v1
+  source_ids:
+  - pytorch_reproducibility
+  claim_ids:
+  - clm_pytorch_reproducibility_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_215_v1
+  source_ids:
+  - pytorch_compile
+  claim_ids:
+  - clm_pytorch_compile_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_216_v1
+  source_ids:
+  - pytorch_allclose
+  claim_ids:
+  - clm_pytorch_allclose_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_217_v1
+  source_ids:
+  - pytorch_isclose
+  claim_ids:
+  - clm_pytorch_isclose_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_218_v1
+  source_ids:
+  - pytorch_broadcasting
+  claim_ids:
+  - clm_pytorch_broadcasting_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.
+- capsule_id: fail_common_219_v1
+  source_ids:
+  - pytorch_tensor_views
+  claim_ids:
+  - clm_pytorch_tensor_views_03
+  support_rationale: Referenced claims support the encoded action, gate, and boundary.
+  type_status_abstraction_rationale: failure_signature / quarantine / backend_abstract chosen from evidence strength; non-stable items lack in-repo H20 measurements.
+  conflict_resolution: Conflicted or performance-transfer evidence remains quarantine/requires_revalidation.

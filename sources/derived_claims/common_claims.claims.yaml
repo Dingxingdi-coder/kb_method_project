@@ -1,0 +1,4230 @@
+claim_file: common_claims
+derived_from: raw_corpus_v0
+generated_at: '2026-07-06T00:00:00Z'
+claims:
+- claim_id: clm_triton_docs_01
+  source_id: triton_docs
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton documentation index / https://triton-lang.org/main/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id001
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id002
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_docs_02
+  source_id: triton_docs
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton documentation index / https://triton-lang.org/main/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_docs_03
+  source_id: triton_docs
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton documentation index / https://triton-lang.org/main/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_docs_04
+  source_id: triton_docs
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton documentation index / https://triton-lang.org/main/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_docs_05
+  source_id: triton_docs
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton documentation index / https://triton-lang.org/main/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_vector_add_01
+  source_id: triton_vector_add
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton vector add tutorial / https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id003
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id004
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_vector_add_02
+  source_id: triton_vector_add
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton vector add tutorial / https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_vector_add_03
+  source_id: triton_vector_add
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton vector add tutorial / https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_vector_add_04
+  source_id: triton_vector_add
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton vector add tutorial / https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_vector_add_05
+  source_id: triton_vector_add
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton vector add tutorial / https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_jit_api_01
+  source_id: triton_jit_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton jit API / https://triton-lang.org/main/python-api/generated/triton.jit.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id005
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id006
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_jit_api_02
+  source_id: triton_jit_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton jit API / https://triton-lang.org/main/python-api/generated/triton.jit.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_jit_api_03
+  source_id: triton_jit_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton jit API / https://triton-lang.org/main/python-api/generated/triton.jit.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_jit_api_04
+  source_id: triton_jit_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton jit API / https://triton-lang.org/main/python-api/generated/triton.jit.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_jit_api_05
+  source_id: triton_jit_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton jit API / https://triton-lang.org/main/python-api/generated/triton.jit.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_autotune_api_01
+  source_id: triton_autotune_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton autotune API / https://triton-lang.org/main/python-api/generated/triton.autotune.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id007
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id008
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_autotune_api_02
+  source_id: triton_autotune_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton autotune API / https://triton-lang.org/main/python-api/generated/triton.autotune.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_autotune_api_03
+  source_id: triton_autotune_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton autotune API / https://triton-lang.org/main/python-api/generated/triton.autotune.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_autotune_api_04
+  source_id: triton_autotune_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton autotune API / https://triton-lang.org/main/python-api/generated/triton.autotune.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_autotune_api_05
+  source_id: triton_autotune_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton autotune API / https://triton-lang.org/main/python-api/generated/triton.autotune.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_heuristics_api_01
+  source_id: triton_heuristics_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton heuristics API / https://triton-lang.org/main/python-api/generated/triton.heuristics.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id009
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id010
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_heuristics_api_02
+  source_id: triton_heuristics_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton heuristics API / https://triton-lang.org/main/python-api/generated/triton.heuristics.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_heuristics_api_03
+  source_id: triton_heuristics_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton heuristics API / https://triton-lang.org/main/python-api/generated/triton.heuristics.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_heuristics_api_04
+  source_id: triton_heuristics_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton heuristics API / https://triton-lang.org/main/python-api/generated/triton.heuristics.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_heuristics_api_05
+  source_id: triton_heuristics_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton heuristics API / https://triton-lang.org/main/python-api/generated/triton.heuristics.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_arange_api_01
+  source_id: triton_arange_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton tl.arange API / https://triton-lang.org/main/python-api/generated/triton.language.arange.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id011
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id012
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_arange_api_02
+  source_id: triton_arange_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton tl.arange API / https://triton-lang.org/main/python-api/generated/triton.language.arange.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_arange_api_03
+  source_id: triton_arange_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton tl.arange API / https://triton-lang.org/main/python-api/generated/triton.language.arange.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_arange_api_04
+  source_id: triton_arange_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton tl.arange API / https://triton-lang.org/main/python-api/generated/triton.language.arange.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_arange_api_05
+  source_id: triton_arange_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton tl.arange API / https://triton-lang.org/main/python-api/generated/triton.language.arange.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_load_api_01
+  source_id: triton_load_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton tl.load API / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id013
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id014
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_load_api_02
+  source_id: triton_load_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton tl.load API / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_load_api_03
+  source_id: triton_load_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton tl.load API / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_load_api_04
+  source_id: triton_load_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton tl.load API / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_load_api_05
+  source_id: triton_load_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton tl.load API / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_store_api_01
+  source_id: triton_store_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton tl.store API / https://triton-lang.org/main/python-api/generated/triton.language.store.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id015
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id016
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_store_api_02
+  source_id: triton_store_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton tl.store API / https://triton-lang.org/main/python-api/generated/triton.language.store.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_store_api_03
+  source_id: triton_store_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton tl.store API / https://triton-lang.org/main/python-api/generated/triton.language.store.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_store_api_04
+  source_id: triton_store_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton tl.store API / https://triton-lang.org/main/python-api/generated/triton.language.store.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_store_api_05
+  source_id: triton_store_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton tl.store API / https://triton-lang.org/main/python-api/generated/triton.language.store.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_program_id_api_01
+  source_id: triton_program_id_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton tl.program_id API / https://triton-lang.org/main/python-api/generated/triton.language.program_id.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id017
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id018
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_program_id_api_02
+  source_id: triton_program_id_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton tl.program_id API / https://triton-lang.org/main/python-api/generated/triton.language.program_id.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_program_id_api_03
+  source_id: triton_program_id_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton tl.program_id API / https://triton-lang.org/main/python-api/generated/triton.language.program_id.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_program_id_api_04
+  source_id: triton_program_id_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton tl.program_id API / https://triton-lang.org/main/python-api/generated/triton.language.program_id.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_program_id_api_05
+  source_id: triton_program_id_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton tl.program_id API / https://triton-lang.org/main/python-api/generated/triton.language.program_id.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_do_bench_01
+  source_id: triton_do_bench
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton do_bench API / https://triton-lang.org/main/python-api/generated/triton.testing.do_bench.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id019
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id020
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_do_bench_02
+  source_id: triton_do_bench
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton do_bench API / https://triton-lang.org/main/python-api/generated/triton.testing.do_bench.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_do_bench_03
+  source_id: triton_do_bench
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton do_bench API / https://triton-lang.org/main/python-api/generated/triton.testing.do_bench.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_do_bench_04
+  source_id: triton_do_bench
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton do_bench API / https://triton-lang.org/main/python-api/generated/triton.testing.do_bench.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_do_bench_05
+  source_id: triton_do_bench
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton do_bench API / https://triton-lang.org/main/python-api/generated/triton.testing.do_bench.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_perf_report_01
+  source_id: triton_perf_report
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton perf_report API / https://triton-lang.org/main/python-api/generated/triton.testing.perf_report.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id021
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id022
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_perf_report_02
+  source_id: triton_perf_report
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton perf_report API / https://triton-lang.org/main/python-api/generated/triton.testing.perf_report.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_perf_report_03
+  source_id: triton_perf_report
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton perf_report API / https://triton-lang.org/main/python-api/generated/triton.testing.perf_report.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_perf_report_04
+  source_id: triton_perf_report
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton perf_report API / https://triton-lang.org/main/python-api/generated/triton.testing.perf_report.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_perf_report_05
+  source_id: triton_perf_report
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton perf_report API / https://triton-lang.org/main/python-api/generated/triton.testing.perf_report.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_debugging_01
+  source_id: triton_debugging
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton debugging guide / https://triton-lang.org/main/programming-guide/chapter-3/debugging.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id023
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id024
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_debugging_02
+  source_id: triton_debugging
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton debugging guide / https://triton-lang.org/main/programming-guide/chapter-3/debugging.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_debugging_03
+  source_id: triton_debugging
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton debugging guide / https://triton-lang.org/main/programming-guide/chapter-3/debugging.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_debugging_04
+  source_id: triton_debugging
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton debugging guide / https://triton-lang.org/main/programming-guide/chapter-3/debugging.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_debugging_05
+  source_id: triton_debugging
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton debugging guide / https://triton-lang.org/main/programming-guide/chapter-3/debugging.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_semantics_01
+  source_id: pytorch_cuda_semantics
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA semantics / https://docs.pytorch.org/docs/2.12/notes/cuda.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id025
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id026
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_semantics_02
+  source_id: pytorch_cuda_semantics
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA semantics / https://docs.pytorch.org/docs/2.12/notes/cuda.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_semantics_03
+  source_id: pytorch_cuda_semantics
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA semantics / https://docs.pytorch.org/docs/2.12/notes/cuda.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_semantics_04
+  source_id: pytorch_cuda_semantics
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA semantics / https://docs.pytorch.org/docs/2.12/notes/cuda.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_semantics_05
+  source_id: pytorch_cuda_semantics
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA semantics / https://docs.pytorch.org/docs/2.12/notes/cuda.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_numerical_accuracy_01
+  source_id: pytorch_numerical_accuracy
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch numerical accuracy note / https://docs.pytorch.org/docs/2.12/notes/numerical_accuracy.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id027
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id028
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_numerical_accuracy_02
+  source_id: pytorch_numerical_accuracy
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch numerical accuracy note / https://docs.pytorch.org/docs/2.12/notes/numerical_accuracy.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_numerical_accuracy_03
+  source_id: pytorch_numerical_accuracy
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch numerical accuracy note / https://docs.pytorch.org/docs/2.12/notes/numerical_accuracy.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_numerical_accuracy_04
+  source_id: pytorch_numerical_accuracy
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch numerical accuracy note / https://docs.pytorch.org/docs/2.12/notes/numerical_accuracy.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_numerical_accuracy_05
+  source_id: pytorch_numerical_accuracy
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch numerical accuracy note / https://docs.pytorch.org/docs/2.12/notes/numerical_accuracy.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reproducibility_01
+  source_id: pytorch_reproducibility
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch reproducibility note / https://docs.pytorch.org/docs/2.12/notes/randomness.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id029
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id030
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reproducibility_02
+  source_id: pytorch_reproducibility
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch reproducibility note / https://docs.pytorch.org/docs/2.12/notes/randomness.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reproducibility_03
+  source_id: pytorch_reproducibility
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch reproducibility note / https://docs.pytorch.org/docs/2.12/notes/randomness.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reproducibility_04
+  source_id: pytorch_reproducibility
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch reproducibility note / https://docs.pytorch.org/docs/2.12/notes/randomness.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_reproducibility_05
+  source_id: pytorch_reproducibility
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch reproducibility note / https://docs.pytorch.org/docs/2.12/notes/randomness.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_compile_01
+  source_id: pytorch_compile
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.compile API / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id031
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id032
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_compile_02
+  source_id: pytorch_compile
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.compile API / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_compile_03
+  source_id: pytorch_compile
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.compile API / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_compile_04
+  source_id: pytorch_compile
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.compile API / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_compile_05
+  source_id: pytorch_compile
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.compile API / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_allclose_01
+  source_id: pytorch_allclose
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.allclose API / https://docs.pytorch.org/docs/2.12/generated/torch.allclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id033
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id034
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_allclose_02
+  source_id: pytorch_allclose
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.allclose API / https://docs.pytorch.org/docs/2.12/generated/torch.allclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_allclose_03
+  source_id: pytorch_allclose
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.allclose API / https://docs.pytorch.org/docs/2.12/generated/torch.allclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_allclose_04
+  source_id: pytorch_allclose
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.allclose API / https://docs.pytorch.org/docs/2.12/generated/torch.allclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_allclose_05
+  source_id: pytorch_allclose
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.allclose API / https://docs.pytorch.org/docs/2.12/generated/torch.allclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_isclose_01
+  source_id: pytorch_isclose
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.isclose API / https://docs.pytorch.org/docs/2.12/generated/torch.isclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id035
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id036
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_isclose_02
+  source_id: pytorch_isclose
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.isclose API / https://docs.pytorch.org/docs/2.12/generated/torch.isclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_isclose_03
+  source_id: pytorch_isclose
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.isclose API / https://docs.pytorch.org/docs/2.12/generated/torch.isclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_isclose_04
+  source_id: pytorch_isclose
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.isclose API / https://docs.pytorch.org/docs/2.12/generated/torch.isclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_isclose_05
+  source_id: pytorch_isclose
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch torch.isclose API / https://docs.pytorch.org/docs/2.12/generated/torch.isclose.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_broadcasting_01
+  source_id: pytorch_broadcasting
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch broadcasting semantics / https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id037
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id038
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_broadcasting_02
+  source_id: pytorch_broadcasting
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch broadcasting semantics / https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_broadcasting_03
+  source_id: pytorch_broadcasting
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch broadcasting semantics / https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_broadcasting_04
+  source_id: pytorch_broadcasting
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch broadcasting semantics / https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_broadcasting_05
+  source_id: pytorch_broadcasting
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch broadcasting semantics / https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tensor_views_01
+  source_id: pytorch_tensor_views
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch tensor views and strides / https://docs.pytorch.org/docs/2.12/tensor_view.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id039
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id040
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tensor_views_02
+  source_id: pytorch_tensor_views
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch tensor views and strides / https://docs.pytorch.org/docs/2.12/tensor_view.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tensor_views_03
+  source_id: pytorch_tensor_views
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch tensor views and strides / https://docs.pytorch.org/docs/2.12/tensor_view.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tensor_views_04
+  source_id: pytorch_tensor_views
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch tensor views and strides / https://docs.pytorch.org/docs/2.12/tensor_view.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_tensor_views_05
+  source_id: pytorch_tensor_views
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch tensor views and strides / https://docs.pytorch.org/docs/2.12/tensor_view.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_benchmark_utils_01
+  source_id: pytorch_benchmark_utils
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch benchmark utilities / https://docs.pytorch.org/docs/2.12/benchmark_utils.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id041
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id042
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_benchmark_utils_02
+  source_id: pytorch_benchmark_utils
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch benchmark utilities / https://docs.pytorch.org/docs/2.12/benchmark_utils.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_benchmark_utils_03
+  source_id: pytorch_benchmark_utils
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch benchmark utilities / https://docs.pytorch.org/docs/2.12/benchmark_utils.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_benchmark_utils_04
+  source_id: pytorch_benchmark_utils
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch benchmark utilities / https://docs.pytorch.org/docs/2.12/benchmark_utils.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_benchmark_utils_05
+  source_id: pytorch_benchmark_utils
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch benchmark utilities / https://docs.pytorch.org/docs/2.12/benchmark_utils.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_event_01
+  source_id: pytorch_cuda_event
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA Event API / https://docs.pytorch.org/docs/2.12/generated/torch.cuda.Event.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id043
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id044
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_event_02
+  source_id: pytorch_cuda_event
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA Event API / https://docs.pytorch.org/docs/2.12/generated/torch.cuda.Event.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_event_03
+  source_id: pytorch_cuda_event
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA Event API / https://docs.pytorch.org/docs/2.12/generated/torch.cuda.Event.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_event_04
+  source_id: pytorch_cuda_event
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA Event API / https://docs.pytorch.org/docs/2.12/generated/torch.cuda.Event.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_cuda_event_05
+  source_id: pytorch_cuda_event
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch CUDA Event API / https://docs.pytorch.org/docs/2.12/generated/torch.cuda.Event.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id043
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id044
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_cuda_programming_guide_01
+  source_id: cuda_programming_guide
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA C++ programming guide / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id045
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id046
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_programming_guide_02
+  source_id: cuda_programming_guide
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA C++ programming guide / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_programming_guide_03
+  source_id: cuda_programming_guide
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA C++ programming guide / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_programming_guide_04
+  source_id: cuda_programming_guide
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA C++ programming guide / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_programming_guide_05
+  source_id: cuda_programming_guide
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA C++ programming guide / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id045
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id046
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_best_practices_01
+  source_id: cuda_best_practices
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA C++ best practices guide / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id047
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id048
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_best_practices_02
+  source_id: cuda_best_practices
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA C++ best practices guide / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id047
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id048
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_best_practices_03
+  source_id: cuda_best_practices
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA C++ best practices guide / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id047
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id048
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_best_practices_04
+  source_id: cuda_best_practices
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA C++ best practices guide / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id047
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id048
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_best_practices_05
+  source_id: cuda_best_practices
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA C++ best practices guide / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id047
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id048
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_runtime_events_01
+  source_id: cuda_runtime_events
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA Runtime API events / https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id049
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id050
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_runtime_events_02
+  source_id: cuda_runtime_events
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA Runtime API events / https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id049
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id050
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_runtime_events_03
+  source_id: cuda_runtime_events
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA Runtime API events / https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id049
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id050
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_runtime_events_04
+  source_id: cuda_runtime_events
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA Runtime API events / https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id049
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id050
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_runtime_events_05
+  source_id: cuda_runtime_events
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA Runtime API events / https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id049
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id050
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_01
+  source_id: cuda_occupancy
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy concepts / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id051
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id052
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_02
+  source_id: cuda_occupancy
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy concepts / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id051
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id052
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_03
+  source_id: cuda_occupancy
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy concepts / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id051
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id052
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_04
+  source_id: cuda_occupancy
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy concepts / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id051
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id052
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_occupancy_05
+  source_id: cuda_occupancy
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA occupancy concepts / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id051
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id052
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_01
+  source_id: cuda_coalescing
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA global memory coalescing / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id053
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id054
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_02
+  source_id: cuda_coalescing
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA global memory coalescing / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id053
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id054
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_03
+  source_id: cuda_coalescing
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA global memory coalescing / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id053
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id054
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_04
+  source_id: cuda_coalescing
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA global memory coalescing / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id053
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id054
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_coalescing_05
+  source_id: cuda_coalescing
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA global memory coalescing / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id053
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id054
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_memory_01
+  source_id: cuda_shared_memory
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA shared memory guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id055
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id056
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_memory_02
+  source_id: cuda_shared_memory
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA shared memory guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id055
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id056
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_memory_03
+  source_id: cuda_shared_memory
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA shared memory guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id055
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id056
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_memory_04
+  source_id: cuda_shared_memory
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA shared memory guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id055
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id056
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_shared_memory_05
+  source_id: cuda_shared_memory
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA shared memory guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id055
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id056
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_compute_guide_01
+  source_id: nsight_compute_guide
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Nsight Compute profiling guide / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id057
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id058
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_compute_guide_02
+  source_id: nsight_compute_guide
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Nsight Compute profiling guide / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id057
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id058
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_compute_guide_03
+  source_id: nsight_compute_guide
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Nsight Compute profiling guide / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id057
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id058
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_compute_guide_04
+  source_id: nsight_compute_guide
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Nsight Compute profiling guide / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id057
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id058
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_compute_guide_05
+  source_id: nsight_compute_guide
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Nsight Compute profiling guide / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id057
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id058
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_systems_guide_01
+  source_id: nsight_systems_guide
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Nsight Systems user guide / https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id059
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id060
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_systems_guide_02
+  source_id: nsight_systems_guide
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Nsight Systems user guide / https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id059
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id060
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_systems_guide_03
+  source_id: nsight_systems_guide
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Nsight Systems user guide / https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id059
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id060
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_systems_guide_04
+  source_id: nsight_systems_guide
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Nsight Systems user guide / https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id059
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id060
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nsight_systems_guide_05
+  source_id: nsight_systems_guide
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Nsight Systems user guide / https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id059
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id060
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_nvidia_h20_export_context_01
+  source_id: nvidia_h20_export_context
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: NVIDIA H20 export/backend context / https://www.reuters.com/technology/nvidia-resume-h20-gpu-sales-china-ceo-says-2025-07-15/
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id061
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id062
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_export_context_02
+  source_id: nvidia_h20_export_context
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: NVIDIA H20 export/backend context / https://www.reuters.com/technology/nvidia-resume-h20-gpu-sales-china-ceo-says-2025-07-15/
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id061
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id062
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_export_context_03
+  source_id: nvidia_h20_export_context
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: NVIDIA H20 export/backend context / https://www.reuters.com/technology/nvidia-resume-h20-gpu-sales-china-ceo-says-2025-07-15/
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id061
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id062
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_export_context_04
+  source_id: nvidia_h20_export_context
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: NVIDIA H20 export/backend context / https://www.reuters.com/technology/nvidia-resume-h20-gpu-sales-china-ceo-says-2025-07-15/
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id061
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id062
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_export_context_05
+  source_id: nvidia_h20_export_context
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: NVIDIA H20 export/backend context / https://www.reuters.com/technology/nvidia-resume-h20-gpu-sales-china-ceo-says-2025-07-15/
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id061
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id062
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_security_context_01
+  source_id: nvidia_h20_security_context
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: H20 security/backdoor public context / https://apnews.com/article/china-nvidia-ai-chip-backdoor-security-2025
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id063
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id064
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_security_context_02
+  source_id: nvidia_h20_security_context
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: H20 security/backdoor public context / https://apnews.com/article/china-nvidia-ai-chip-backdoor-security-2025
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id063
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id064
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_security_context_03
+  source_id: nvidia_h20_security_context
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: H20 security/backdoor public context / https://apnews.com/article/china-nvidia-ai-chip-backdoor-security-2025
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id063
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id064
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_security_context_04
+  source_id: nvidia_h20_security_context
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: H20 security/backdoor public context / https://apnews.com/article/china-nvidia-ai-chip-backdoor-security-2025
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id063
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id064
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_nvidia_h20_security_context_05
+  source_id: nvidia_h20_security_context
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: H20 security/backdoor public context / https://apnews.com/article/china-nvidia-ai-chip-backdoor-security-2025
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id063
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id064
+    dtype_shape_layout: as declared by OpSpec
+  trust: project_report
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: project_report
+- claim_id: clm_pytorch_no_grad_01
+  source_id: pytorch_no_grad
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch no_grad API / https://docs.pytorch.org/docs/2.12/generated/torch.no_grad.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id065
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id066
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_no_grad_02
+  source_id: pytorch_no_grad
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch no_grad API / https://docs.pytorch.org/docs/2.12/generated/torch.no_grad.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id065
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id066
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_no_grad_03
+  source_id: pytorch_no_grad
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch no_grad API / https://docs.pytorch.org/docs/2.12/generated/torch.no_grad.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id065
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id066
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_no_grad_04
+  source_id: pytorch_no_grad
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch no_grad API / https://docs.pytorch.org/docs/2.12/generated/torch.no_grad.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id065
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id066
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_no_grad_05
+  source_id: pytorch_no_grad
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch no_grad API / https://docs.pytorch.org/docs/2.12/generated/torch.no_grad.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id065
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id066
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_inference_mode_01
+  source_id: pytorch_inference_mode
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch inference_mode API / https://docs.pytorch.org/docs/2.12/generated/torch.inference_mode.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id067
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id068
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_inference_mode_02
+  source_id: pytorch_inference_mode
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch inference_mode API / https://docs.pytorch.org/docs/2.12/generated/torch.inference_mode.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id067
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id068
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_inference_mode_03
+  source_id: pytorch_inference_mode
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch inference_mode API / https://docs.pytorch.org/docs/2.12/generated/torch.inference_mode.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id067
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id068
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_inference_mode_04
+  source_id: pytorch_inference_mode
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch inference_mode API / https://docs.pytorch.org/docs/2.12/generated/torch.inference_mode.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id067
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id068
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_inference_mode_05
+  source_id: pytorch_inference_mode
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch inference_mode API / https://docs.pytorch.org/docs/2.12/generated/torch.inference_mode.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id067
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id068
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_contiguous_01
+  source_id: pytorch_contiguous
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.contiguous API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id069
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id070
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_contiguous_02
+  source_id: pytorch_contiguous
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.contiguous API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id069
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id070
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_contiguous_03
+  source_id: pytorch_contiguous
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.contiguous API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id069
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id070
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_contiguous_04
+  source_id: pytorch_contiguous
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.contiguous API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id069
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id070
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_contiguous_05
+  source_id: pytorch_contiguous
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.contiguous API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id069
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id070
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_stride_api_01
+  source_id: pytorch_stride_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.stride API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id071
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id072
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_stride_api_02
+  source_id: pytorch_stride_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.stride API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id071
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id072
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_stride_api_03
+  source_id: pytorch_stride_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.stride API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id071
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id072
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_stride_api_04
+  source_id: pytorch_stride_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.stride API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id071
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id072
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_stride_api_05
+  source_id: pytorch_stride_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: PyTorch Tensor.stride API / https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id071
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id072
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_triton_block_pointer_api_01
+  source_id: triton_block_pointer_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton block pointer APIs / https://triton-lang.org/main/python-api/triton.language.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id073
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id074
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_block_pointer_api_02
+  source_id: triton_block_pointer_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton block pointer APIs / https://triton-lang.org/main/python-api/triton.language.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id073
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id074
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_block_pointer_api_03
+  source_id: triton_block_pointer_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton block pointer APIs / https://triton-lang.org/main/python-api/triton.language.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id073
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id074
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_block_pointer_api_04
+  source_id: triton_block_pointer_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton block pointer APIs / https://triton-lang.org/main/python-api/triton.language.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id073
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id074
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_block_pointer_api_05
+  source_id: triton_block_pointer_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton block pointer APIs / https://triton-lang.org/main/python-api/triton.language.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id073
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id074
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_compile_api_01
+  source_id: triton_compile_api
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Triton compilation API context / https://triton-lang.org/main/python-api/triton.compiler.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id075
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id076
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_compile_api_02
+  source_id: triton_compile_api
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Triton compilation API context / https://triton-lang.org/main/python-api/triton.compiler.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id075
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id076
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_compile_api_03
+  source_id: triton_compile_api
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Triton compilation API context / https://triton-lang.org/main/python-api/triton.compiler.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id075
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id076
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_compile_api_04
+  source_id: triton_compile_api
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Triton compilation API context / https://triton-lang.org/main/python-api/triton.compiler.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id075
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id076
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_compile_api_05
+  source_id: triton_compile_api
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Triton compilation API context / https://triton-lang.org/main/python-api/triton.compiler.html
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id075
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id076
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_memory_hierarchy_01
+  source_id: cuda_memory_hierarchy
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: CUDA memory hierarchy context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id077
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id078
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_memory_hierarchy_02
+  source_id: cuda_memory_hierarchy
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: CUDA memory hierarchy context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id077
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id078
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_memory_hierarchy_03
+  source_id: cuda_memory_hierarchy
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: CUDA memory hierarchy context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id077
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id078
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_memory_hierarchy_04
+  source_id: cuda_memory_hierarchy
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: CUDA memory hierarchy context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id077
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id078
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_memory_hierarchy_05
+  source_id: cuda_memory_hierarchy
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: CUDA memory hierarchy context / https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id077
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id078
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_metrics_reference_01
+  source_id: ncu_metrics_reference
+  statement: Separate PyTorch reference semantics from backend-instance optimization.
+  evidence:
+    short_excerpt_or_location: Nsight Compute metrics reference / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: &id079
+    - common
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id080
+    - nvidia_cuda
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_metrics_reference_02
+  source_id: ncu_metrics_reference
+  statement: Record H20 as a runtime-detected backend instance; do not hardcode unpublished device constants.
+  evidence:
+    short_excerpt_or_location: Nsight Compute metrics reference / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id079
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id080
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_metrics_reference_03
+  source_id: ncu_metrics_reference
+  statement: Triton legality constraints such as constexpr meta-parameters, block pointers, masks, and tl.dot contracts are version scoped.
+  evidence:
+    short_excerpt_or_location: Nsight Compute metrics reference / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id079
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id080
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_metrics_reference_04
+  source_id: ncu_metrics_reference
+  statement: CUDA/Nsight profiling should be summarized after correctness and interpreted with benchmark context.
+  evidence:
+    short_excerpt_or_location: Nsight Compute metrics reference / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id079
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id080
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_metrics_reference_05
+  source_id: ncu_metrics_reference
+  statement: Performance claims require baseline type, repeated timing, p50/p95, and hidden correctness first.
+  evidence:
+    short_excerpt_or_location: Nsight Compute metrics reference / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference
+    raw_corpus_path: sources/raw_corpus/common_corpus.md
+  applicability:
+    operators: *id079
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id080
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official

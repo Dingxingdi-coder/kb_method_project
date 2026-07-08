@@ -1,0 +1,3095 @@
+version: sources_registry_v0
+branch: h20-demo-round2
+generated_at: '2026-07-06T00:00:00Z'
+policy: raw_corpus_v0 is frozen and is the only source set for A1, derived claims, and KB v0.
+sources:
+- source_id: triton_docs
+  title: Triton documentation index
+  kind: official_doc
+  uri: https://triton-lang.org/main/index.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - dsl
+  - programming_model
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton main docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton documentation index; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_vector_add
+  title: Triton vector add tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_vector_add.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - masking
+  - program_id
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton main docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton vector add tutorial; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_fused_softmax
+  title: Triton fused softmax tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_fused_softmax.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - softmax
+  - fusion
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - softmax
+  version_or_date: Triton main docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton fused softmax tutorial; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_matmul_tutorial
+  title: Triton matmul tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_matmul_tutorial.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - matmul
+  - tiling
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - matmul
+  version_or_date: Triton main docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton matmul tutorial; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_layernorm_tutorial
+  title: Triton layernorm tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_layernorm_tutorial.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - layernorm
+  - reductions
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - layernorm
+  version_or_date: Triton main docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton layernorm tutorial; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: triton_persistent_matmul
+  title: Triton persistent matmul tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_persistent_matmul.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - persistent_matmul
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - matmul
+  version_or_date: Triton main docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton persistent matmul tutorial; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_jit_api
+  title: Triton jit API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.jit.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - jit
+  - constexpr
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton jit API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_autotune_api
+  title: Triton autotune API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.autotune.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - autotune
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton autotune API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_heuristics_api
+  title: Triton heuristics API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.heuristics.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - heuristics
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton heuristics API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_arange_api
+  title: Triton tl.arange API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.arange.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - indexing
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.arange API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_load_api
+  title: Triton tl.load API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.load.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - load
+  - mask
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.load API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_store_api
+  title: Triton tl.store API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.store.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - store
+  - mask
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.store API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_program_id_api
+  title: Triton tl.program_id API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.program_id.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - grid
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.program_id API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_dot_api
+  title: Triton tl.dot API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - dot
+  - matmul
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - matmul
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.dot API; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_sum_api
+  title: Triton tl.sum API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - reduction
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - row_reduction
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.sum API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: triton_max_api
+  title: Triton tl.max API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.max.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - reduction
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - row_reduction
+  - softmax
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.max API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: triton_exp_api
+  title: Triton tl.exp API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - exp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  - softmax
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.exp API; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_do_bench
+  title: Triton do_bench API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.testing.do_bench.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - benchmark
+  - triton
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton do_bench API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_perf_report
+  title: Triton perf_report API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.testing.perf_report.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - benchmark
+  - triton
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton perf_report API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_debugging
+  title: Triton debugging guide
+  kind: official_doc
+  uri: https://triton-lang.org/main/programming-guide/chapter-3/debugging.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - debugging
+  - compile_repair
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton guide
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton debugging guide; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_cuda_semantics
+  title: PyTorch CUDA semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/notes/cuda.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - cuda
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch CUDA semantics; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_numerical_accuracy
+  title: PyTorch numerical accuracy note
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/notes/numerical_accuracy.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - numerics
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch numerical accuracy note; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_reproducibility
+  title: PyTorch reproducibility note
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/notes/randomness.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - reproducibility
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch reproducibility note; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_compile
+  title: PyTorch torch.compile API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - inductor
+  - baseline
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.compile API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_allclose
+  title: PyTorch torch.allclose API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.allclose.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - tolerance
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.allclose API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_isclose
+  title: PyTorch torch.isclose API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.isclose.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - tolerance
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.isclose API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_broadcasting
+  title: PyTorch broadcasting semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/notes/broadcasting.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - broadcast
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch broadcasting semantics; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_tensor_views
+  title: PyTorch tensor views and strides
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/tensor_view.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - strides
+  - layout
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch tensor views and strides; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_benchmark_utils
+  title: PyTorch benchmark utilities
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/benchmark_utils.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - benchmark
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch benchmark utilities; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_cuda_event
+  title: PyTorch CUDA Event API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.cuda.Event.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - cuda_event
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch CUDA Event API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_programming_guide
+  title: CUDA C++ programming guide
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - programming_model
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA 13.3 docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA C++ programming guide; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_best_practices
+  title: CUDA C++ best practices guide
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: sources/raw_archive/cuda_best_practices.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - benchmark
+  - memory
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA 13.3 docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA C++ best practices guide; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_runtime_events
+  title: CUDA Runtime API events
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - event_timing
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA Runtime API events; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_occupancy
+  title: CUDA occupancy concepts
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - occupancy
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA occupancy concepts; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_coalescing
+  title: CUDA global memory coalescing
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - coalescing
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA global memory coalescing; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_shared_memory
+  title: CUDA shared memory guidance
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - shared_memory
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA shared memory guidance; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: nsight_compute_guide
+  title: Nsight Compute profiling guide
+  kind: tool_doc
+  uri: https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: sources/raw_archive/nsight_compute_guide.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - ncu
+  - profiling
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: Nsight Compute 13.3
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight Compute profiling guide; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: nsight_systems_guide
+  title: Nsight Systems user guide
+  kind: tool_doc
+  uri: https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - nsys
+  - timeline
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: Nsight Systems docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight Systems user guide; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: nvidia_h20_export_context
+  title: NVIDIA H20 export/backend context
+  kind: report
+  uri: https://www.reuters.com/technology/nvidia-resume-h20-gpu-sales-china-ceo-says-2025-07-15/
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: project_report
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - h20
+  - export_context
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: 2025-07 reporting
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for NVIDIA H20 export/backend context; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: nvidia_h20_security_context
+  title: H20 security/backdoor public context
+  kind: report
+  uri: https://apnews.com/article/china-nvidia-ai-chip-backdoor-security-2025
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: project_report
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - h20
+  - policy
+  - security
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: 2025-07 reporting
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for H20 security/backdoor public context; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_no_grad
+  title: PyTorch no_grad API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.no_grad.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - validation
+  - no_grad
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch no_grad API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_inference_mode
+  title: PyTorch inference_mode API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.inference_mode.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - benchmark
+  - inference
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch inference_mode API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_contiguous
+  title: PyTorch Tensor.contiguous API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.contiguous.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - layout
+  - contiguous
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch Tensor.contiguous API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_stride_api
+  title: PyTorch Tensor.stride API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.Tensor.stride.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - pytorch
+  - layout
+  - stride
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - common
+  version_or_date: PyTorch 2.12
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch Tensor.stride API; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_block_pointer_api
+  title: Triton block pointer APIs
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/triton.language.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - block_pointer
+  - legality
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton block pointer APIs; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: triton_compile_api
+  title: Triton compilation API context
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/triton.compiler.html
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - triton
+  - compiler
+  - legality
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - common
+  version_or_date: Triton API
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton compilation API context; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: cuda_memory_hierarchy
+  title: CUDA memory hierarchy context
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-hierarchy
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - cuda
+  - memory_hierarchy
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: CUDA docs
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA memory hierarchy context; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: ncu_metrics_reference
+  title: Nsight Compute metrics reference
+  kind: tool_doc
+  uri: https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference
+  local_raw_corpus_path: sources/raw_corpus/common_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - ncu
+  - metrics
+  - profile_attribution
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  version_or_date: Nsight Compute 13.3
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight Compute metrics reference; raw notes are in sources/raw_corpus/common_corpus.md.
+- source_id: pytorch_sum
+  title: PyTorch torch.sum API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.sum.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.sum API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: pytorch_amax
+  title: PyTorch torch.amax API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.amax.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.amax API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: pytorch_max
+  title: PyTorch torch.max API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.max.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.max API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: pytorch_mean
+  title: PyTorch torch.mean API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.mean.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: sources/raw_archive/pytorch_mean.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.mean API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: triton_sum_reduction
+  title: Triton tl.sum reduction API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_sum_reduction.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.sum reduction API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: triton_max_reduction
+  title: Triton tl.max reduction API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.max.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.max reduction API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: cuda_reduction_sample
+  title: CUDA reduction sample
+  kind: official_doc
+  uri: https://github.com/NVIDIA/cuda-samples
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA reduction sample; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: cuda_parallel_reduction_whitepaper
+  title: CUDA parallel reduction whitepaper
+  kind: official_doc
+  uri: https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA parallel reduction whitepaper; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: cub_device_reduce
+  title: CUB DeviceReduce docs
+  kind: official_doc
+  uri: https://nvidia.github.io/cccl/cub/api/structcub_1_1DeviceReduce.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUB DeviceReduce docs; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: thrust_reduce
+  title: Thrust reduce docs
+  kind: official_doc
+  uri: https://nvidia.github.io/cccl/thrust/api/group__reductions.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Thrust reduce docs; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: tritonbench_reduce
+  title: TritonBench reduction tasks
+  kind: official_doc
+  uri: https://arxiv.org/abs/2502.14752
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: sources/raw_archive/tritonbench_reduce.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for TritonBench reduction tasks; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: pytorch_reduction_source
+  title: PyTorch reduction native source
+  kind: official_doc
+  uri: https://github.com/pytorch/pytorch
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch reduction native source; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: cuda_warp_reductions
+  title: CUDA warp reductions
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA warp reductions; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: ncu_memory_reduction
+  title: Nsight memory metrics for reductions
+  kind: community
+  uri: https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight memory metrics for reductions; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: triton_masking_reduction
+  title: Triton masking for reductions
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.load.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton masking for reductions; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: benchmark_row_reduce
+  title: Public row-reduction benchmark context
+  kind: community
+  uri: https://github.com/triton-lang/triton
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Public row-reduction benchmark context; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: inductor_reduction_codegen
+  title: TorchInductor reduction codegen context
+  kind: community
+  uri: https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for TorchInductor reduction codegen context; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: cuda_effective_bandwidth
+  title: CUDA effective bandwidth calculation
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA effective bandwidth calculation; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: row_reduce_forum_failures
+  title: Community reduction failure modes
+  kind: community
+  uri: https://github.com/triton-lang/triton/issues
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Community reduction failure modes; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: triton_language_where
+  title: Triton tl.where API
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.where.html
+  local_raw_corpus_path: sources/raw_corpus/row_reduction_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - row_reduction
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - row_reduction
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.where API; raw notes are in sources/raw_corpus/row_reduction_corpus.md.
+- source_id: pytorch_softmax
+  title: PyTorch torch.softmax API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.softmax.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.softmax API; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: pytorch_functional_softmax
+  title: PyTorch F.softmax API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.softmax.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch F.softmax API; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: pytorch_log_softmax
+  title: PyTorch F.log_softmax API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.log_softmax.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch F.log_softmax API; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_softmax_tutorial
+  title: Triton fused softmax tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_softmax_tutorial.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton fused softmax tutorial; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_softmax_source
+  title: Triton softmax tutorial source
+  kind: official_doc
+  uri: https://github.com/triton-lang/triton/blob/main/python/tutorials/02-fused-softmax.py
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_softmax_source.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton softmax tutorial source; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: flashattention_paper
+  title: FlashAttention paper
+  kind: paper
+  uri: https://arxiv.org/abs/2205.14135
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: peer_reviewed
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for FlashAttention paper; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: online_softmax_paper
+  title: Online normalizer calculation for softmax
+  kind: paper
+  uri: https://arxiv.org/abs/1805.02867
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: peer_reviewed
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Online normalizer calculation for softmax; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: pytorch_softmax_source
+  title: PyTorch softmax native source
+  kind: official_doc
+  uri: https://github.com/pytorch/pytorch
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch softmax native source; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: xformers_softmax_context
+  title: xFormers softmax attention context
+  kind: community
+  uri: https://github.com/facebookresearch/xformers
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for xFormers softmax attention context; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_exp_softmax
+  title: Triton tl.exp API for softmax
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.exp.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.exp API for softmax; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: cuda_fast_math_context
+  title: CUDA fast math context
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: sources/raw_archive/cuda_fast_math_context.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA fast math context; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: ncu_softmax_memory
+  title: Nsight memory metrics for softmax
+  kind: community
+  uri: https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight memory metrics for softmax; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_masked_softmax
+  title: Triton masked load/store for softmax
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.load.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton masked load/store for softmax; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: softmax_benchmark_note
+  title: Public softmax benchmark context
+  kind: community
+  uri: https://github.com/triton-lang/triton
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Public softmax benchmark context; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: inductor_softmax_codegen
+  title: TorchInductor softmax codegen context
+  kind: community
+  uri: https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for TorchInductor softmax codegen context; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: cuda_occupancy_softmax
+  title: CUDA occupancy context for softmax
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#occupancy-calculator
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA occupancy context for softmax; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: triton_next_power_of_two
+  title: Triton next_power_of_2 helper
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.next_power_of_2.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton next_power_of_2 helper; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: pytorch_cross_entropy_softmax
+  title: PyTorch cross entropy softmax context
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.CrossEntropyLoss.html
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch cross entropy softmax context; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: softmax_numerical_blog
+  title: Community softmax numerical pitfalls
+  kind: community
+  uri: https://github.com/triton-lang/triton/issues
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Community softmax numerical pitfalls; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: tritonbench_softmax
+  title: TritonBench softmax tasks
+  kind: official_doc
+  uri: https://arxiv.org/abs/2502.14752
+  local_raw_corpus_path: sources/raw_corpus/softmax_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - softmax
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for TritonBench softmax tasks; raw notes are in sources/raw_corpus/softmax_corpus.md.
+- source_id: pytorch_layernorm_module
+  title: PyTorch LayerNorm module
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch LayerNorm module; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: pytorch_layer_norm_functional
+  title: PyTorch F.layer_norm API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.layer_norm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch F.layer_norm API; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: pytorch_native_layer_norm
+  title: PyTorch native_layer_norm API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.native_layer_norm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch native_layer_norm API; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: triton_layernorm_tutorial_detail
+  title: Triton layernorm tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_layernorm_tutorial_detail.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton layernorm tutorial; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: triton_layernorm_source
+  title: Triton layernorm tutorial source
+  kind: official_doc
+  uri: https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_layernorm_source.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton layernorm tutorial source; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: apex_layernorm
+  title: NVIDIA Apex fused layernorm
+  kind: community
+  uri: https://github.com/NVIDIA/apex/tree/master/apex/normalization
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for NVIDIA Apex fused layernorm; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: cuda_welford
+  title: Welford variance algorithm
+  kind: official_doc
+  uri: https://dl.acm.org/doi/10.1145/359146.359153
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Welford variance algorithm; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: pytorch_layernorm_source
+  title: PyTorch LayerNorm native source
+  kind: official_doc
+  uri: https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/layer_norm.cpp
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch LayerNorm native source; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: oneflow_layernorm
+  title: OneFlow LayerNorm CUDA source
+  kind: community
+  uri: https://github.com/Oneflow-Inc/oneflow/blob/master/oneflow/user/kernels/layer_norm_kernel.cu
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: apache_2
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for OneFlow LayerNorm CUDA source; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: cuda_register_pressure
+  title: CUDA register pressure guidance
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#register-pressure
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA register pressure guidance; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: ncu_occupancy_layernorm
+  title: Nsight occupancy metrics for layernorm
+  kind: community
+  uri: https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#occupancy
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: sources/raw_archive/ncu_occupancy_layernorm.archive.md
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight occupancy metrics for layernorm; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: triton_masked_load_layernorm
+  title: Triton masked load pattern for layernorm
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.load.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton masked load pattern for layernorm; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: pytorch_eps_layernorm
+  title: PyTorch LayerNorm eps semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch LayerNorm eps semantics; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: pytorch_affine_layernorm
+  title: PyTorch LayerNorm affine semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch LayerNorm affine semantics; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: cuda_bandwidth_layernorm
+  title: CUDA effective bandwidth for layernorm
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA effective bandwidth for layernorm; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: transformers_layernorm
+  title: Transformers LayerNorm usage context
+  kind: community
+  uri: https://github.com/huggingface/transformers
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: apache_2
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Transformers LayerNorm usage context; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: tritonbench_layernorm
+  title: TritonBench layernorm tasks
+  kind: official_doc
+  uri: https://arxiv.org/abs/2502.14752
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for TritonBench layernorm tasks; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: inductor_layernorm_codegen
+  title: TorchInductor layernorm codegen context
+  kind: community
+  uri: https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for TorchInductor layernorm codegen context; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: layernorm_forum_failures
+  title: Community layernorm failure modes
+  kind: community
+  uri: https://github.com/triton-lang/triton/issues
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Community layernorm failure modes; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: torch_compile_layernorm
+  title: torch.compile layernorm baseline
+  kind: community
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+  local_raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - layernorm
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - layernorm
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for torch.compile layernorm baseline; raw notes are in sources/raw_corpus/layernorm_corpus.md.
+- source_id: pytorch_matmul
+  title: PyTorch torch.matmul API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.matmul.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.matmul API; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: pytorch_mm
+  title: PyTorch torch.mm API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.mm.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.mm API; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: pytorch_bmm
+  title: PyTorch torch.bmm API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.bmm.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.bmm API; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: pytorch_addmm
+  title: PyTorch torch.addmm API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.addmm.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: sources/raw_archive/pytorch_addmm.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch torch.addmm API; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_matmul_tutorial_detail
+  title: Triton matmul tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: sources/raw_archive/triton_matmul_tutorial_detail.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton matmul tutorial; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_matmul_source
+  title: Triton matmul example source
+  kind: official_doc
+  uri: https://github.com/triton-lang/triton/blob/main/python/tutorials/03-matrix-multiplication.py
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton matmul example source; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_dot_matmul
+  title: Triton tl.dot for matmul
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.dot.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton tl.dot for matmul; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_persistent_matmul_detail
+  title: Triton persistent matmul tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/09-persistent-matmul.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton persistent matmul tutorial; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_group_gemm
+  title: Triton group GEMM tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/08-grouped-gemm.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton group GEMM tutorial; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: triton_block_scaled_matmul
+  title: Triton block scaled matmul tutorial
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/10-block-scaled-matmul.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Triton block scaled matmul tutorial; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: cutlass_gemm_docs
+  title: CUTLASS GEMM docs
+  kind: official_doc
+  uri: https://github.com/NVIDIA/cutlass/tree/main/media/docs
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: sources/raw_archive/cutlass_gemm_docs.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUTLASS GEMM docs; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: cutlass_gemm_examples
+  title: CUTLASS GEMM examples
+  kind: official_doc
+  uri: https://github.com/NVIDIA/cutlass/tree/main/examples
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUTLASS GEMM examples; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: cublas_gemm_docs
+  title: cuBLAS GEMM docs
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cublas/index.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for cuBLAS GEMM docs; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: cuda_tensor_core
+  title: CUDA tensor core programming
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#wmma
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA tensor core programming; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: pytorch_tf32_cuda
+  title: PyTorch TF32 CUDA note
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch TF32 CUDA note; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: pytorch_matmul_precision
+  title: PyTorch set_float32_matmul_precision API
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.12/generated/torch.set_float32_matmul_precision.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for PyTorch set_float32_matmul_precision API; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: cuda_shared_matmul
+  title: CUDA shared-memory matmul tiling
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c-ab
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA shared-memory matmul tiling; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: cuda_coalescing_matmul
+  title: CUDA coalesced access for matmul
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#coalesced-access-to-global-memory
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for CUDA coalesced access for matmul; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: splitk_gemm_paper
+  title: Split-K GEMM paper
+  kind: paper
+  uri: https://arxiv.org/abs/2402.00025
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: peer_reviewed
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Split-K GEMM paper; raw notes are in sources/raw_corpus/matmul_corpus.md.
+- source_id: ncu_matmul_compute
+  title: Nsight compute-bound context for GEMM
+  kind: community
+  uri: https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html
+  local_raw_corpus_path: sources/raw_corpus/matmul_corpus.md
+  local_raw_archive_path: null
+  license: unknown
+  trust_level: community
+  retrieved_at: '2026-07-06'
+  ingested_at: '2026-07-06'
+  topics:
+  - matmul
+  - h20_mvp
+  backends:
+  - nvidia_cuda
+  - cpu
+  operators:
+  - matmul
+  version_or_date: current or publication date as noted by source
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20 MVP compact corpus entry for Nsight compute-bound context for GEMM; raw notes are in sources/raw_corpus/matmul_corpus.md.
+excluded_categories_note:
+- Unsourced H20 specification tables, SEO summaries, scraped reposts, and rumor-only forum posts were excluded.
+- Full copyrighted documents and full external repos were not archived; only limited audit snapshots and cleaned notes were kept.

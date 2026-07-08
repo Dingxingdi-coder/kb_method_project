@@ -1,0 +1,2231 @@
+claim_file: layernorm_claims
+derived_from: raw_corpus_v0
+generated_at: '2026-07-06T00:00:00Z'
+claims:
+- claim_id: clm_triton_layernorm_tutorial_01
+  source_id: triton_layernorm_tutorial
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id001
+    - common
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id002
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_02
+  source_id: triton_layernorm_tutorial
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_03
+  source_id: triton_layernorm_tutorial
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_04
+  source_id: triton_layernorm_tutorial
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_05
+  source_id: triton_layernorm_tutorial
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id001
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id002
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_module_01
+  source_id: pytorch_layernorm_module
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm module / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id003
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id004
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_module_02
+  source_id: pytorch_layernorm_module
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm module / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_module_03
+  source_id: pytorch_layernorm_module
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm module / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_module_04
+  source_id: pytorch_layernorm_module
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm module / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_module_05
+  source_id: pytorch_layernorm_module
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm module / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id003
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id004
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layer_norm_functional_01
+  source_id: pytorch_layer_norm_functional
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: PyTorch F.layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id005
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id006
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layer_norm_functional_02
+  source_id: pytorch_layer_norm_functional
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: PyTorch F.layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layer_norm_functional_03
+  source_id: pytorch_layer_norm_functional
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: PyTorch F.layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layer_norm_functional_04
+  source_id: pytorch_layer_norm_functional
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: PyTorch F.layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layer_norm_functional_05
+  source_id: pytorch_layer_norm_functional
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: PyTorch F.layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.nn.functional.layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id005
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id006
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_native_layer_norm_01
+  source_id: pytorch_native_layer_norm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: PyTorch native_layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.native_layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id007
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id008
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_native_layer_norm_02
+  source_id: pytorch_native_layer_norm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: PyTorch native_layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.native_layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_native_layer_norm_03
+  source_id: pytorch_native_layer_norm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: PyTorch native_layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.native_layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_native_layer_norm_04
+  source_id: pytorch_native_layer_norm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: PyTorch native_layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.native_layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_native_layer_norm_05
+  source_id: pytorch_native_layer_norm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: PyTorch native_layer_norm API / https://docs.pytorch.org/docs/2.12/generated/torch.native_layer_norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id007
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id008
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_detail_01
+  source_id: triton_layernorm_tutorial_detail
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id009
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id010
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_detail_02
+  source_id: triton_layernorm_tutorial_detail
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_detail_03
+  source_id: triton_layernorm_tutorial_detail
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_detail_04
+  source_id: triton_layernorm_tutorial_detail
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_tutorial_detail_05
+  source_id: triton_layernorm_tutorial_detail
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial / https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id009
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id010
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_source_01
+  source_id: triton_layernorm_source
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id011
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id012
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_source_02
+  source_id: triton_layernorm_source
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_source_03
+  source_id: triton_layernorm_source
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_source_04
+  source_id: triton_layernorm_source
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_layernorm_source_05
+  source_id: triton_layernorm_source
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Triton layernorm tutorial source / https://github.com/triton-lang/triton/blob/main/python/tutorials/05-layer-norm.py
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id011
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id012
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_apex_layernorm_01
+  source_id: apex_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: NVIDIA Apex fused layernorm / https://github.com/NVIDIA/apex/tree/master/apex/normalization
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id013
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id014
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_apex_layernorm_02
+  source_id: apex_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: NVIDIA Apex fused layernorm / https://github.com/NVIDIA/apex/tree/master/apex/normalization
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_apex_layernorm_03
+  source_id: apex_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: NVIDIA Apex fused layernorm / https://github.com/NVIDIA/apex/tree/master/apex/normalization
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_apex_layernorm_04
+  source_id: apex_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: NVIDIA Apex fused layernorm / https://github.com/NVIDIA/apex/tree/master/apex/normalization
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_apex_layernorm_05
+  source_id: apex_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: NVIDIA Apex fused layernorm / https://github.com/NVIDIA/apex/tree/master/apex/normalization
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id013
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id014
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_cuda_welford_01
+  source_id: cuda_welford
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Welford variance algorithm / https://dl.acm.org/doi/10.1145/359146.359153
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id015
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id016
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_welford_02
+  source_id: cuda_welford
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Welford variance algorithm / https://dl.acm.org/doi/10.1145/359146.359153
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_welford_03
+  source_id: cuda_welford
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Welford variance algorithm / https://dl.acm.org/doi/10.1145/359146.359153
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_welford_04
+  source_id: cuda_welford
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Welford variance algorithm / https://dl.acm.org/doi/10.1145/359146.359153
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_welford_05
+  source_id: cuda_welford
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Welford variance algorithm / https://dl.acm.org/doi/10.1145/359146.359153
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id015
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id016
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_source_01
+  source_id: pytorch_layernorm_source
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm native source / https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/layer_norm.cpp
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id017
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id018
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_source_02
+  source_id: pytorch_layernorm_source
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm native source / https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/layer_norm.cpp
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_source_03
+  source_id: pytorch_layernorm_source
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm native source / https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/layer_norm.cpp
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_source_04
+  source_id: pytorch_layernorm_source
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm native source / https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/layer_norm.cpp
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_layernorm_source_05
+  source_id: pytorch_layernorm_source
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm native source / https://github.com/pytorch/pytorch/blob/main/aten/src/ATen/native/layer_norm.cpp
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id017
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id018
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_oneflow_layernorm_01
+  source_id: oneflow_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: OneFlow LayerNorm CUDA source / https://github.com/Oneflow-Inc/oneflow/blob/master/oneflow/user/kernels/layer_norm_kernel.cu
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id019
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id020
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_oneflow_layernorm_02
+  source_id: oneflow_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: OneFlow LayerNorm CUDA source / https://github.com/Oneflow-Inc/oneflow/blob/master/oneflow/user/kernels/layer_norm_kernel.cu
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_oneflow_layernorm_03
+  source_id: oneflow_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: OneFlow LayerNorm CUDA source / https://github.com/Oneflow-Inc/oneflow/blob/master/oneflow/user/kernels/layer_norm_kernel.cu
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_oneflow_layernorm_04
+  source_id: oneflow_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: OneFlow LayerNorm CUDA source / https://github.com/Oneflow-Inc/oneflow/blob/master/oneflow/user/kernels/layer_norm_kernel.cu
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_oneflow_layernorm_05
+  source_id: oneflow_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: OneFlow LayerNorm CUDA source / https://github.com/Oneflow-Inc/oneflow/blob/master/oneflow/user/kernels/layer_norm_kernel.cu
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id019
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id020
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_cuda_register_pressure_01
+  source_id: cuda_register_pressure
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: CUDA register pressure guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#register-pressure
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id021
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id022
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_register_pressure_02
+  source_id: cuda_register_pressure
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: CUDA register pressure guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#register-pressure
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_register_pressure_03
+  source_id: cuda_register_pressure
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: CUDA register pressure guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#register-pressure
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_register_pressure_04
+  source_id: cuda_register_pressure
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: CUDA register pressure guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#register-pressure
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_register_pressure_05
+  source_id: cuda_register_pressure
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: CUDA register pressure guidance / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#register-pressure
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id021
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id022
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_ncu_occupancy_layernorm_01
+  source_id: ncu_occupancy_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Nsight occupancy metrics for layernorm / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#occupancy
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id023
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id024
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_occupancy_layernorm_02
+  source_id: ncu_occupancy_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Nsight occupancy metrics for layernorm / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#occupancy
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_occupancy_layernorm_03
+  source_id: ncu_occupancy_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Nsight occupancy metrics for layernorm / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#occupancy
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_occupancy_layernorm_04
+  source_id: ncu_occupancy_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Nsight occupancy metrics for layernorm / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#occupancy
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_ncu_occupancy_layernorm_05
+  source_id: ncu_occupancy_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Nsight occupancy metrics for layernorm / https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#occupancy
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id023
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id024
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_triton_masked_load_layernorm_01
+  source_id: triton_masked_load_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Triton masked load pattern for layernorm / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id025
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id026
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_load_layernorm_02
+  source_id: triton_masked_load_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Triton masked load pattern for layernorm / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_load_layernorm_03
+  source_id: triton_masked_load_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Triton masked load pattern for layernorm / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_load_layernorm_04
+  source_id: triton_masked_load_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Triton masked load pattern for layernorm / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_triton_masked_load_layernorm_05
+  source_id: triton_masked_load_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Triton masked load pattern for layernorm / https://triton-lang.org/main/python-api/generated/triton.language.load.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id025
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id026
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_pytorch_eps_layernorm_01
+  source_id: pytorch_eps_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm eps semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id027
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id028
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_eps_layernorm_02
+  source_id: pytorch_eps_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm eps semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_eps_layernorm_03
+  source_id: pytorch_eps_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm eps semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_eps_layernorm_04
+  source_id: pytorch_eps_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm eps semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_eps_layernorm_05
+  source_id: pytorch_eps_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm eps semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id027
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id028
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_affine_layernorm_01
+  source_id: pytorch_affine_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm affine semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id029
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id030
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_affine_layernorm_02
+  source_id: pytorch_affine_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm affine semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_affine_layernorm_03
+  source_id: pytorch_affine_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm affine semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_affine_layernorm_04
+  source_id: pytorch_affine_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm affine semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_pytorch_affine_layernorm_05
+  source_id: pytorch_affine_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: PyTorch LayerNorm affine semantics / https://docs.pytorch.org/docs/2.12/generated/torch.nn.LayerNorm.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id029
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id030
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: bsd_3_clause
+  inherited_trust_level: official
+- claim_id: clm_cuda_bandwidth_layernorm_01
+  source_id: cuda_bandwidth_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth for layernorm / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id031
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id032
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_bandwidth_layernorm_02
+  source_id: cuda_bandwidth_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth for layernorm / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_bandwidth_layernorm_03
+  source_id: cuda_bandwidth_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth for layernorm / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_bandwidth_layernorm_04
+  source_id: cuda_bandwidth_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth for layernorm / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_cuda_bandwidth_layernorm_05
+  source_id: cuda_bandwidth_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: CUDA effective bandwidth for layernorm / https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#effective-bandwidth-calculation
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id031
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id032
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: official
+- claim_id: clm_transformers_layernorm_01
+  source_id: transformers_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Transformers LayerNorm usage context / https://github.com/huggingface/transformers
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id033
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id034
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_transformers_layernorm_02
+  source_id: transformers_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Transformers LayerNorm usage context / https://github.com/huggingface/transformers
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_transformers_layernorm_03
+  source_id: transformers_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Transformers LayerNorm usage context / https://github.com/huggingface/transformers
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_transformers_layernorm_04
+  source_id: transformers_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Transformers LayerNorm usage context / https://github.com/huggingface/transformers
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_transformers_layernorm_05
+  source_id: transformers_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Transformers LayerNorm usage context / https://github.com/huggingface/transformers
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id033
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id034
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: apache_2
+  inherited_trust_level: community
+- claim_id: clm_tritonbench_layernorm_01
+  source_id: tritonbench_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: TritonBench layernorm tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id035
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id036
+    - nvidia_cuda
+    - amd_rocm
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_layernorm_02
+  source_id: tritonbench_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: TritonBench layernorm tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_layernorm_03
+  source_id: tritonbench_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: TritonBench layernorm tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_layernorm_04
+  source_id: tritonbench_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: TritonBench layernorm tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_tritonbench_layernorm_05
+  source_id: tritonbench_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: TritonBench layernorm tasks / https://arxiv.org/abs/2502.14752
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id035
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id036
+    dtype_shape_layout: as declared by OpSpec
+  trust: official
+  confidence: 0.92
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: mit
+  inherited_trust_level: official
+- claim_id: clm_inductor_layernorm_codegen_01
+  source_id: inductor_layernorm_codegen
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: TorchInductor layernorm codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id037
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id038
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_layernorm_codegen_02
+  source_id: inductor_layernorm_codegen
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: TorchInductor layernorm codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_layernorm_codegen_03
+  source_id: inductor_layernorm_codegen
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: TorchInductor layernorm codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_layernorm_codegen_04
+  source_id: inductor_layernorm_codegen
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: TorchInductor layernorm codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_inductor_layernorm_codegen_05
+  source_id: inductor_layernorm_codegen
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: TorchInductor layernorm codegen context / https://github.com/pytorch/pytorch/tree/main/torch/_inductor
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id037
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id038
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_layernorm_forum_failures_01
+  source_id: layernorm_forum_failures
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: Community layernorm failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id039
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id040
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_layernorm_forum_failures_02
+  source_id: layernorm_forum_failures
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: Community layernorm failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_layernorm_forum_failures_03
+  source_id: layernorm_forum_failures
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: Community layernorm failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_layernorm_forum_failures_04
+  source_id: layernorm_forum_failures
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: Community layernorm failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_layernorm_forum_failures_05
+  source_id: layernorm_forum_failures
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: Community layernorm failure modes / https://github.com/triton-lang/triton/issues
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id039
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id040
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_torch_compile_layernorm_01
+  source_id: torch_compile_layernorm
+  statement: LayerNorm forward computes mean and variance over the normalized last dimension.
+  evidence:
+    short_excerpt_or_location: torch.compile layernorm baseline / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: &id041
+    - layernorm
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: &id042
+    - nvidia_cuda
+    - cpu
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_torch_compile_layernorm_02
+  source_id: torch_compile_layernorm
+  statement: eps is inside the square-root denominator for the PyTorch-style contract.
+  evidence:
+    short_excerpt_or_location: torch.compile layernorm baseline / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_torch_compile_layernorm_03
+  source_id: torch_compile_layernorm
+  statement: gamma and beta index the normalized dimension and must broadcast correctly.
+  evidence:
+    short_excerpt_or_location: torch.compile layernorm baseline / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - plan
+    - generate
+    - correctness_repair
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_torch_compile_layernorm_04
+  source_id: torch_compile_layernorm
+  statement: fp32 accumulation protects fp16/bf16 variance accuracy.
+  evidence:
+    short_excerpt_or_location: torch.compile layernorm baseline / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
+- claim_id: clm_torch_compile_layernorm_05
+  source_id: torch_compile_layernorm
+  statement: Large hidden sizes can create register-pressure and occupancy tradeoffs.
+  evidence:
+    short_excerpt_or_location: torch.compile layernorm baseline / https://docs.pytorch.org/docs/2.12/generated/torch.compile.html
+    raw_corpus_path: sources/raw_corpus/layernorm_corpus.md
+  applicability:
+    operators: *id041
+    phases:
+    - performance_optimize
+    - autotune
+    backend_toolchain: *id042
+    dtype_shape_layout: as declared by OpSpec
+  trust: community
+  confidence: 0.65
+  limitations_boundaries:
+  - No unmeasured public performance claim is promoted to stable.
+  - Apply only within source/operator/backend scope.
+  inherited_license: unknown
+  inherited_trust_level: community
