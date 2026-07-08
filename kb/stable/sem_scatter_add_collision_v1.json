@@ -1,0 +1,172 @@
+{
+  "id": "sem_scatter_add_collision_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": [
+    "plan",
+    "generate",
+    "correctness_repair"
+  ],
+  "operator_scope": {
+    "families": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular_memory"
+    ],
+    "op_names": [
+      "scatter_add"
+    ],
+    "semantic_signature": "scatter-add with indexed accumulation and possible duplicate target indices",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "*",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "register"
+    ],
+    "synchronization": [
+      "atomic_or_conflict_resolution"
+    ],
+    "profile_symptoms": [
+      "atomic_contention",
+      "memory_bound",
+      "nondeterministic_order"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "Task semantics are scatter-add or embedding/backward-like accumulation where multiple source elements may update the same destination element."
+    ],
+    "invalid_when": [
+      "Task semantics are plain scatter overwrite with unique indices, or the OpSpec states duplicate indices cannot occur."
+    ],
+    "preconditions": [
+      "Read index tensor dtype, dimension, bounds, and duplicate-index policy from OpSpec."
+    ]
+  },
+  "mechanism": "Scatter-add is an accumulation, not a plain store. Duplicate indices must contribute all source values, so a low-level implementation needs atomics, a segmented reduction, or another conflict-resolution strategy consistent with task determinism requirements.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "Validate that index tensors have the declared integer dtype and dimensionality, and guard index values so every read/write target is in bounds.",
+      "When duplicate destination indices may appear, use atomic add or an equivalent staged reduction; never replace scatter-add with an unordered plain store.",
+      "Do not assume PyTorch-style broadcasting between index and src for scatter_add; implement the shape constraints declared by the task.",
+      "If deterministic output is required, use a deterministic accumulation plan or mark the atomic plan invalid for that OpSpec.",
+      "Test empty index, duplicate index, boundary index 0, and maximum valid index cases."
+    ],
+    "patch_hint": "Separate source iteration from destination address calculation; use atomic add only at the final destination update or pre-aggregate duplicates within a block when the task permits."
+  },
+  "expected_effect": {
+    "correctness": "Preserves additive semantics under duplicate scatter targets and avoids out-of-bounds index bugs.",
+    "performance": "No stable H20 performance claim; atomics may be correct but slow under high collision rates.",
+    "search_efficiency": "Prevents repeated incorrect attempts that use plain stores for scatter-add.",
+    "risk": "Floating-point atomic accumulation order can be nondeterministic and tolerance-sensitive."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:pytorch_scatter_add_semantics",
+      "claim:clm_scatter_add_collision_01"
+    ],
+    "evidence_level": "claim",
+    "confidence": 0.87
+  },
+  "validation": {
+    "gates": [
+      "schema",
+      "static_legality",
+      "compile",
+      "smoke_correctness",
+      "quick_correctness",
+      "hidden_correctness",
+      "anti_cheating"
+    ],
+    "correctness_matrix": [
+      "duplicate indices",
+      "empty index tensor",
+      "minimum and maximum valid index",
+      "high collision and low collision patterns",
+      "fp32 reference tolerance for floating accumulation"
+    ],
+    "promotion_policy": "Stable semantic/correctness rule; promote performance policy only after H20 collision-distribution benchmarks."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Plain scatter store loses contributions when indices collide.",
+      "Out-of-range index handling can produce undefined memory access in custom kernels.",
+      "Atomic floating-point order can differ from a deterministic CPU/reference order."
+    ],
+    "boundary_tests": [
+      "two or more src elements target same output",
+      "random duplicate indices",
+      "edge index equals dimension-1",
+      "empty index returns unchanged or empty output as declared"
+    ],
+    "do_not_apply": [
+      "unique-index gather",
+      "transpose/permute copy",
+      "plain scatter overwrite tasks"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "requires_revalidation",
+    "portable_part": [
+      "additive collision semantics",
+      "bounds checks",
+      "index dtype validation"
+    ],
+    "replace_on_new_backend": [
+      "available atomic add dtypes and deterministic reduction strategy"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "layout_indexing",
+      "irregular",
+      "scatter_add",
+      "scatter",
+      "atomic",
+      "atomics",
+      "collision",
+      "duplicate_indices",
+      "index_dtype",
+      "bounds",
+      "correctness_repair"
+    ],
+    "negative_keys": [
+      "unique_indices_only",
+      "plain_scatter"
+    ],
+    "priority": 90,
+    "max_context_tokens": 560
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
