@@ -70,7 +70,9 @@ def query_terms(task: dict[str, Any], phase: str) -> set[str]:
     ]
     terms = set(tokenize(" ".join(parts)))
     op_family = str(task.get("op_family", "")).lower()
-    if op_family == "softmax":
+    if op_family == "pointwise":
+        terms.update({"pointwise", "elementwise", "fusion", "broadcast", "tail", "mask", "coalesced", "activation", "gelu", "silu", "clamp"})
+    elif op_family == "softmax":
         terms.update({"softmax", "exp", "max", "mask", "padded", "denominator", "stable"})
     elif op_family == "reduction":
         terms.update({"reduction", "reduce", str(task.get("op_name", "")).lower(), "mask", "sum", "max"})
@@ -78,6 +80,8 @@ def query_terms(task: dict[str, Any], phase: str) -> set[str]:
         terms.update({"layernorm", "mean", "variance", "eps", "gamma", "beta"})
     elif op_family == "matmul":
         terms.update({"matmul", "gemm", "dot", "tile", "block"})
+    elif op_family == "layout":
+        terms.update({"layout", "indexing", "stride", "non_contiguous", "transpose", "gather", "scatter", "embedding", "atomic", "coalescing"})
     return {safe_id(t) for t in terms if t}
 
 
@@ -103,7 +107,9 @@ def query_text(task: dict[str, Any], phase: str) -> str:
         f"op_spec: {json.dumps(task.get('op_spec', {}), ensure_ascii=False, sort_keys=True)}",
     ]
     op_family = str(task.get("op_family", "")).lower()
-    if op_family == "softmax":
+    if op_family == "pointwise":
+        parts.append("pointwise elementwise fused kernel broadcast affine activation gelu silu clamp tail mask vectorized coalesced load store")
+    elif op_family == "softmax":
         parts.append("softmax stable exp row max mask padded denominator fp32 accumulation triton")
     elif op_family == "reduction":
         parts.append("row reduction sum max mask neutral value fp32 accumulation triton")
@@ -111,6 +117,8 @@ def query_text(task: dict[str, Any], phase: str) -> str:
         parts.append("layernorm mean variance eps affine fp32 accumulation triton")
     elif op_family == "matmul":
         parts.append("matmul gemm dot tile boundary mask num warps num stages triton")
+    elif op_family == "layout":
+        parts.append("layout indexing irregular memory transpose copy gather rows embedding lookup scatter add atomics strided non contiguous bounds coalescing triton")
     return "\n".join(str(p) for p in parts if p)
 
 
@@ -425,10 +433,11 @@ def capsule_op_match(unit: dict[str, Any], task: dict[str, Any]) -> bool:
     if layout_scope and "*" not in layout_scope and "as_declared_by_task" not in layout_scope and layout and layout not in layout_scope:
         return False
 
-    patterns = {safe_id(x) for x in scope.get("shape_patterns", [])}
+    raw_patterns = {str(x) for x in scope.get("shape_patterns", [])}
+    patterns = {safe_id(x) for x in raw_patterns}
     shape = task.get("shape") or task.get("shapes")
     task_shape_terms = {safe_id(normalize_shape(shape)), safe_id(shape_bucket(shape))}
-    if patterns and "*" not in patterns and not (patterns & task_shape_terms):
+    if raw_patterns and "*" not in raw_patterns and not (patterns & task_shape_terms):
         return False
 
     return True
