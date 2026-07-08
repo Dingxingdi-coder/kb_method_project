@@ -1,0 +1,205 @@
+{
+  "id": "perf_layout_transpose_tile_copy_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "optimization_motif",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": [
+    "performance_optimize",
+    "autotune"
+  ],
+  "operator_scope": {
+    "families": [
+      "layout_indexing",
+      "layout",
+      "indexing",
+      "irregular_memory"
+    ],
+    "op_names": [
+      "transpose_copy",
+      "permute_copy",
+      "strided_copy",
+      "layout_transform"
+    ],
+    "semantic_signature": "materialized layout transform or transpose/permute copy after correctness passes",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "*",
+      "non_contiguous",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "tile"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "shared_or_scratchpad",
+      "register"
+    ],
+    "synchronization": [
+      "block_local_sync_if_shared_tile_used"
+    ],
+    "profile_symptoms": [
+      "memory_bound",
+      "divergence",
+      "atomic_contention",
+      "uncoalesced_memory"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "The task is a materialized transpose, permute copy, strided copy, or layout transform and a stride-correct candidate already passes hidden correctness.",
+      "Profile summary indicates memory-bound or uncoalesced global-memory access."
+    ],
+    "invalid_when": [
+      "Task is view-only metadata transform, not a materialized copy.",
+      "Shared-memory use would exceed resource limits or correctness requires no reordering beyond the declared copy.",
+      "The dominant operation is gather/scatter with arbitrary indices rather than a regular layout transform."
+    ],
+    "preconditions": [
+      "Correctness must be established with non-contiguous and edge-size cases before trying tiling."
+    ]
+  },
+  "mechanism": "Regular layout transforms can trade one uncoalesced side for a tiled schedule that makes at least one global memory direction coalesced; shared-memory tiles may help but can introduce bank conflicts or occupancy limits.",
+  "action": {
+    "kind": "recommend",
+    "instructions": [
+      "Use a 2D or ND tile schedule that explicitly maps logical source and destination coordinates; keep edge masks for partial tiles.",
+      "Prefer coalesced reads or coalesced writes according to the larger contiguous dimension and benchmark both when cheap.",
+      "Consider a shared-memory tile only after the direct stride-aware copy is correct, and pad or adjust tile layout if bank conflicts appear in profile.",
+      "Tune a small tile set rather than hardcoding visible shapes; keep tile sizes independent of hidden benchmark shapes.",
+      "Do not call torch.transpose, torch.permute, contiguous(), or reshape() to perform the target copy in the submitted path."
+    ],
+    "knob_space": {
+      "tile_m": [
+        "16",
+        "32"
+      ],
+      "tile_n": [
+        "16",
+        "32",
+        "64"
+      ],
+      "num_warps": [
+        "4",
+        "8"
+      ],
+      "use_shared_tile": [
+        "false_first",
+        "true_candidate_if_profile_uncoalesced"
+      ]
+    }
+  },
+  "expected_effect": {
+    "correctness": "Should preserve layout semantics if stride-index capsule is followed.",
+    "performance": "Candidate-only: may improve regular layout-copy coalescing; no H20 speedup is asserted.",
+    "search_efficiency": "Provides a bounded schedule search for transpose/permute copy tasks.",
+    "risk": "Shared-memory bank conflicts, extra synchronization, or integer address overhead can erase gains."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:cuda_best_practices_memory_coalescing",
+      "source:pytorch_stride_contiguous_tensor_views",
+      "claim:clm_layout_transpose_tile_copy_01"
+    ],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.62
+  },
+  "validation": {
+    "gates": [
+      "hidden_correctness",
+      "benchmark_repeat",
+      "profile_attribution",
+      "reproducibility"
+    ],
+    "correctness_matrix": [
+      "rectangular dimensions",
+      "non-power-of-two edges",
+      "non-contiguous source",
+      "declared output layout"
+    ],
+    "performance_requirements": [
+      "Compare direct stride-aware copy, coalesced-read tile, and coalesced-write tile under identical benchmark protocol before promotion."
+    ],
+    "promotion_policy": "Requires H20 benchmark/profile evidence and ideally an ablation against direct copy."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Tiling can produce wrong transposed coordinates when source and destination strides are conflated.",
+      "Partial tiles without masks can read/write out of bounds.",
+      "Shared-memory tiles can introduce bank conflicts or reduce occupancy."
+    ],
+    "boundary_tests": [
+      "asymmetric transpose",
+      "permute with more than two dimensions",
+      "small dimension less than tile size",
+      "strided source base offset"
+    ],
+    "do_not_apply": [
+      "gather_rows",
+      "embedding_lookup",
+      "scatter_add",
+      "view-only metadata operation"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "requires_revalidation",
+    "portable_part": [
+      "regular tile copy motif",
+      "edge masking",
+      "view-vs-copy legality"
+    ],
+    "replace_on_new_backend": [
+      "tile sizes, shared-memory layout, bank-conflict model"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "layout_indexing",
+      "transpose_copy",
+      "permute_copy",
+      "strided_copy",
+      "layout_transform",
+      "tile",
+      "tiling",
+      "coalesced",
+      "uncoalesced",
+      "shared_memory",
+      "bank_conflict",
+      "performance_optimize"
+    ],
+    "negative_keys": [
+      "gather",
+      "scatter_add",
+      "view_only",
+      "unverified_speedup"
+    ],
+    "priority": 73,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
