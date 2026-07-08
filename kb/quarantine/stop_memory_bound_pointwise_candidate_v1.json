@@ -1,0 +1,169 @@
+{
+  "id": "stop_memory_bound_pointwise_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "stop_capsule",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": [
+    "performance_optimize",
+    "autotune"
+  ],
+  "operator_scope": {
+    "families": [
+      "pointwise",
+      "elementwise"
+    ],
+    "op_names": [
+      "bias_gelu",
+      "bias_silu",
+      "residual_activation",
+      "broadcast_affine",
+      "gated_multiply",
+      "clamp_mul_add"
+    ],
+    "semantic_signature": "stop condition for legal hidden-correct pointwise kernels",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "contiguous",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "vector"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "register"
+    ],
+    "synchronization": [],
+    "profile_symptoms": [
+      "memory_bound",
+      "launch_bound"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "Candidate is legal and hidden-correct.",
+      "Repeated benchmark and profile summary consistently indicate memory_bound behavior.",
+      "Several low-risk schedule attempts have not produced a reproducible p50/p95 improvement beyond benchmark noise."
+    ],
+    "invalid_when": [
+      "Correctness is not yet stable.",
+      "Profile indicates uncoalesced memory, register pressure, occupancy limit, atomics, or arithmetic bottleneck that has a targeted repair action."
+    ],
+    "preconditions": [
+      "Do not use this stop capsule without benchmark_repeat and profile_attribution gates."
+    ]
+  },
+  "mechanism": "For bandwidth-limited pointwise kernels, further arithmetic rewrites or large knob sweeps can waste budget once memory traffic is already close to the task lower bound; ECC-KB should preserve search budget for higher-value fixes.",
+  "action": {
+    "kind": "stop",
+    "instructions": [
+      "Stop broad block-size or arithmetic-expression tuning when hidden correctness, repeated benchmark, and profile attribution all indicate a stable memory-bound plateau.",
+      "Before stopping, check only for obvious wasted bandwidth: unmasked over-read, non-coalesced contiguous operands, temporary tensor materialization, or accidental high-level fallback.",
+      "Do not convert this stop decision into a stable H20 claim unless benchmark distributions and profile refs are attached."
+    ],
+    "patch_hint": "Record the stop reason in the run trace with candidate hash, p50/p95 distribution, profile summary, and attempted knob list."
+  },
+  "expected_effect": {
+    "correctness": "No effect on kernel semantics.",
+    "performance": "Avoids low-value tuning after a memory-bound plateau; does not assert the current kernel is optimal.",
+    "search_efficiency": "Reduces token, time, and benchmark calls spent on unlikely improvements.",
+    "risk": "Stopping too early can miss layout-specific coalescing fixes; profile attribution must be checked first."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:cuda_best_practices_memory_coalescing",
+      "source:h20_mvp_benchmark_profile_protocol",
+      "claim:clm_pointwise_memory_bound_stop_01"
+    ],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.55
+  },
+  "validation": {
+    "gates": [
+      "hidden_correctness",
+      "benchmark_repeat",
+      "profile_attribution",
+      "reproducibility"
+    ],
+    "performance_requirements": [
+      "Require fixed warmup/repeat settings and p50/p95 report.",
+      "Require profile summary to distinguish memory_bound from uncoalesced memory or occupancy-limited."
+    ],
+    "promotion_policy": "Remain quarantine until multiple H20 traces show this stop rule reduces budget without losing best legal p50."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Prematurely stopping before fixing non-coalesced accesses can lock in a poor layout kernel.",
+      "Using only a single benchmark sample can mistake noise for a plateau."
+    ],
+    "boundary_tests": [
+      "profile summary changes after coalescing fix",
+      "benchmark variance high enough to mask small differences"
+    ],
+    "do_not_apply": [
+      "correctness_repair",
+      "compile_repair",
+      "scatter_add atomics",
+      "uncoalesced memory symptom with available coalescing action"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "requires_revalidation",
+    "portable_part": [
+      "stop after validated plateau",
+      "separate memory-bound from correctness"
+    ],
+    "replace_on_new_backend": [
+      "profile counters and plateau thresholds"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "pointwise",
+      "memory_bound",
+      "stop",
+      "stop_condition",
+      "bandwidth",
+      "benchmark_repeat",
+      "profile_attribution",
+      "p50",
+      "p95",
+      "token_budget",
+      "time_budget"
+    ],
+    "negative_keys": [
+      "correctness_failed",
+      "compile_failed",
+      "uncoalesced",
+      "atomic_contention"
+    ],
+    "priority": 62,
+    "max_context_tokens": 500
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
