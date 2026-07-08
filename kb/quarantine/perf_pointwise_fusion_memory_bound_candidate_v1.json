@@ -1,0 +1,200 @@
+{
+  "id": "perf_pointwise_fusion_memory_bound_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "optimization_motif",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": [
+    "performance_optimize",
+    "autotune"
+  ],
+  "operator_scope": {
+    "families": [
+      "pointwise",
+      "elementwise"
+    ],
+    "op_names": [
+      "bias_gelu",
+      "bias_silu",
+      "residual_activation",
+      "broadcast_affine",
+      "gated_multiply",
+      "clamp_mul_add"
+    ],
+    "semantic_signature": "fused memory-bound pointwise kernel after correctness passes",
+    "shape_patterns": [
+      "*"
+    ],
+    "dtype_scope": [
+      "fp16",
+      "bf16",
+      "fp32"
+    ],
+    "layout_scope": [
+      "contiguous",
+      "as_declared_by_task"
+    ]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": [
+      "program",
+      "warp-or-wave",
+      "lane",
+      "vector"
+    ],
+    "memory_hierarchy": [
+      "global",
+      "cache",
+      "register"
+    ],
+    "synchronization": [],
+    "profile_symptoms": [
+      "memory_bound",
+      "launch_bound"
+    ]
+  },
+  "conditions": {
+    "valid_when": [
+      "A legal candidate is hidden-correct and profile summary indicates memory_bound or launch_bound behavior.",
+      "The expression is a chain of elementwise operations such as bias+GELU, bias+SiLU, residual+activation, broadcast affine, gated multiply, or clamp+mul+add."
+    ],
+    "invalid_when": [
+      "Correctness gates have not passed.",
+      "The task includes reductions, atomics, irregular gather/scatter, or tensor-core contraction as the dominant cost.",
+      "The candidate already performs a single low-level fused pass and profile indicates arithmetic or occupancy bottleneck rather than memory/launch bottleneck."
+    ],
+    "preconditions": [
+      "Run hidden correctness before benchmarking; use repeated benchmark and profile attribution before applying this motif."
+    ]
+  },
+  "mechanism": "For memory-bound elementwise chains, separate high-level operations often imply multiple global-memory passes and launches. A single custom kernel can compute the expression while reading each input and writing each output once, but the actual benefit is backend- and shape-dependent.",
+  "action": {
+    "kind": "recommend",
+    "instructions": [
+      "Try a single fused Triton/CUDA kernel that performs the whole pointwise expression in one pass, with masked loads/stores for tail elements.",
+      "Choose a block size that keeps memory access contiguous for the output and main contiguous inputs; tune only a small set of power-of-two block sizes after correctness.",
+      "Keep activation intermediates in registers; avoid writing temporary tensors for GELU, SiLU, clamp, or gated multiply subexpressions.",
+      "For broadcast operands, load the broadcasted value using stride-aware indexing and avoid materializing expanded tensors.",
+      "Compare only legal fused kernels against repeated p50/p95 benchmark results; do not record unverified speedup as stable evidence."
+    ],
+    "knob_space": {
+      "BLOCK_SIZE": [
+        "256",
+        "512",
+        "1024",
+        "2048"
+      ],
+      "num_warps": [
+        "4",
+        "8"
+      ],
+      "intermediate_dtype": [
+        "fp32_for_activation",
+        "input_dtype_only_if_tolerance_allows"
+      ]
+    }
+  },
+  "expected_effect": {
+    "correctness": "Should preserve semantics if the stable pointwise broadcast capsule is followed.",
+    "performance": "Candidate-only: may reduce launch count and global-memory traffic; H20 speedup must be measured and may be absent for small or non-contiguous workloads.",
+    "search_efficiency": "Narrows initial optimization search for pointwise memory-bound tasks.",
+    "risk": "Can regress if integer indexing, register pressure, or non-contiguous memory dominates."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:triton_vector_add_pointwise_tail_mask",
+      "source:cuda_best_practices_memory_coalescing",
+      "claim:clm_pointwise_fusion_memory_bound_01"
+    ],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.64
+  },
+  "validation": {
+    "gates": [
+      "hidden_correctness",
+      "benchmark_repeat",
+      "profile_attribution",
+      "reproducibility"
+    ],
+    "performance_requirements": [
+      "Report p50 and p95 under the repository benchmark protocol.",
+      "Attach profile summary before promoting to stable.",
+      "Do not promote from quarantine without H20 run_ids and workload-independent evidence."
+    ],
+    "promotion_policy": "Requires repeated H20 measurements showing the motif helps across more than one visible shape family or an ablation demonstrating reduced memory passes."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Fusion cannot fix uncoalesced gather/scatter access.",
+      "Overly large blocks can increase register pressure or reduce occupancy.",
+      "High-level PyTorch fallback may appear faster but is illegal for kernel-authoring mode."
+    ],
+    "boundary_tests": [
+      "small launch-bound case",
+      "large memory-bound case",
+      "non-power-of-two tail",
+      "broadcast operand",
+      "fp16/bf16 activation tolerance"
+    ],
+    "do_not_apply": [
+      "scatter_add",
+      "matmul",
+      "reduction",
+      "softmax",
+      "layernorm",
+      "hidden correctness failed"
+    ]
+  },
+  "migration": {
+    "transfer_policy": "requires_revalidation",
+    "portable_part": [
+      "single-pass fusion idea",
+      "tail masking",
+      "avoid temporary tensors"
+    ],
+    "replace_on_new_backend": [
+      "block size, vector width, occupancy/resource limits, profiler counter interpretation"
+    ]
+  },
+  "retrieval": {
+    "keys": [
+      "pointwise",
+      "fused",
+      "fusion",
+      "memory_bound",
+      "launch_bound",
+      "bias_gelu",
+      "bias_silu",
+      "residual_activation",
+      "broadcast_affine",
+      "gated_multiply",
+      "clamp_mul_add",
+      "tail_mask",
+      "coalesced",
+      "performance_optimize",
+      "autotune"
+    ],
+    "negative_keys": [
+      "scatter_add",
+      "reduction",
+      "softmax",
+      "matmul",
+      "layernorm",
+      "unverified_speedup"
+    ],
+    "priority": 74,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-08T00:00:00Z",
+    "updated_at": "2026-07-08T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": [
+      "sources/derived_claims/h20_expanded_pilot_claims.yaml"
+    ]
+  }
+}
