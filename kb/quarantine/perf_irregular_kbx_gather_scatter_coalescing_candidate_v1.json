@@ -1,0 +1,71 @@
+{
+  "id": "perf_irregular_kbx_gather_scatter_coalescing_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "optimization_motif",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": ["performance_optimize", "autotune"],
+  "operator_scope": {
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate irregular-memory schedule for KBX index_select, scatter, masked_select, expand_where, or fused_gather_masked_fill after correctness passes",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*", "as_declared_by_task"]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": ["program", "warp-or-wave", "lane", "vector"],
+    "memory_hierarchy": ["global", "cache", "register"],
+    "synchronization": ["atomic_or_conflict_resolution_if_task_requires"],
+    "profile_symptoms": ["uncoalesced_memory", "atomic_contention", "memory_bound", "divergence"]
+  },
+  "conditions": {
+    "valid_when": ["Task uses explicit indices, masks, scatter writes, Boolean compaction, or broadcasted where, and a semantic candidate is hidden-correct.", "Profile summary indicates irregular/uncoalesced memory, mask-density sensitivity, or scatter duplicate-index contention."],
+    "invalid_when": ["Access pattern is a regular affine permute_copy or contiguous pointwise operation.", "Correctness for bounds, mask shape, index dtype, and duplicate-index policy has not passed."],
+    "preconditions": ["Apply semantic capsules for stride/index/mask/scatter first."]
+  },
+  "mechanism": "Irregular KBX layout tasks have different memory legs: index loads, mask loads, source reads, destination writes, compaction positions, and optional duplicate-index writes. Optimizing the wrong leg often wastes time.",
+  "action": {
+    "kind": "recommend",
+    "instructions": ["Separate index/mask loads, source payload reads, destination writes, and compaction/scatter conflict logic before tuning.", "For index_select/fused_gather_masked_fill, coalesce contiguous payload columns when row payload is contiguous; do not assume adjacent indices are adjacent in memory.", "For scatter, preserve overwrite vs additive semantics and benchmark duplicate-index distributions separately from unique-index distributions.", "For masked_select, treat mask density as a performance variable and avoid dense output assumptions.", "For expand_where, use pointwise broadcast coalescing rather than gather/scatter tiling."],
+    "knob_space": {"cols_per_program": ["32", "64", "128", "256"], "rows_per_program": ["1", "2", "4"], "num_warps": ["4", "8"], "scatter_strategy": ["overwrite_general", "unique_index_fastpath_only_if_spec_guarantees"], "masked_select_strategy": ["two_pass_count_then_write", "task_specific_precomputed_positions_only_if_available"]}
+  },
+  "expected_effect": {
+    "correctness": "No effect unless semantic capsules are followed; tuning may reveal missing bounds/mask/collision checks.",
+    "performance": "Candidate-only: may improve coalescing or reduce wasted tuning; no H20 speedup is asserted.",
+    "search_efficiency": "Prevents applying regular transpose tiling or pointwise fusion blindly to irregular memory tasks.",
+    "risk": "Index distribution and mask density can dominate; visible distribution tuning may not transfer to held-out cases."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_gather_index_select_semantics", "source:pytorch_scatter_overwrite_semantics", "source:pytorch_masked_select_where_semantics", "source:cuda_best_practices_memory_coalescing", "claim:clm_kbx_irregular_gather_scatter_coalescing_01"],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.57
+  },
+  "validation": {
+    "gates": ["hidden_correctness", "benchmark_repeat", "profile_attribution", "reproducibility"],
+    "correctness_matrix": ["random index order", "repeated indices", "boundary indices", "empty index", "mask all false/all true", "row payload tail", "broadcasted where"],
+    "performance_requirements": ["Report index distribution and mask density assumptions with benchmark results.", "Do not promote from a single collision or mask-density pattern."],
+    "promotion_policy": "Requires H20 measurements across multiple index/mask distributions plus profile attribution."
+  },
+  "failure_boundary": {
+    "known_failures": ["Assuming gather indices are sorted or contiguous can overfit public inputs.", "Treating scatter overwrite as scatter-add changes semantics.", "Removing bounds or mask checks for speed can create illegal memory accesses or wrong output shapes."],
+    "boundary_tests": ["random unsorted index_select", "duplicate scatter indices", "all indices target one row", "all-false mask", "row length tail"],
+    "do_not_apply": ["regular permute_copy", "contiguous pointwise", "matmul"]
+  },
+  "retrieval": {
+    "keys": ["layout_indexing", "kbx", "irregular", "index_select", "scatter", "masked_select", "expand_where", "fused_gather_masked_fill", "gather", "atomic", "collision", "index_distribution", "mask_density", "coalescing", "uncoalesced", "bounds", "performance_optimize"],
+    "negative_keys": ["regular_transpose", "view_only", "unique_indices_only", "unverified_speedup"],
+    "priority": 77,
+    "max_context_tokens": 660
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["perf_irregular_gather_scatter_coalescing_candidate_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
