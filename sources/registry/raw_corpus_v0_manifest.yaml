@@ -1,12 +1,19 @@
 version_name: raw_corpus_v0
 freeze_timestamp: '2026-07-06T00:00:00Z'
+expanded_pilot_supplement_timestamp: '2026-07-09T00:00:00Z'
 branch: h20-demo-round2
 repository: Dingxingdi-coder/kb_method_project
 counts:
-  sources: 128
+  sources: 143
+  base_sources: 128
+  expanded_pilot_supplemental_sources: 15
   raw_archive_files: 19
-  raw_corpus_files: 5
-  claims: 640
+  raw_corpus_files: 8
+  base_raw_corpus_files: 5
+  expanded_pilot_raw_corpus_files: 3
+  claims: 664
+  base_claims: 640
+  expanded_pilot_claims: 24
 coverage_summary:
   common_public_sources: 40
   operator_family_sources_total: 88
@@ -14,8 +21,13 @@ coverage_summary:
   softmax_sources: 22
   layernorm_sources: 21
   matmul_sources: 23
+  pointwise_expanded_sources: 5
+  layout_indexing_expanded_sources: 6
+  kbx_gap_check_sources: 5
 files:
-  source_registry: sources/registry/sources.yaml
+  source_registry:
+  - sources/registry/sources.yaml
+  - sources/registry/h20_expanded_pilot_sources.yaml
   raw_archive:
   - sources/raw_archive/cuda_best_practices.archive.md
   - sources/raw_archive/cuda_fast_math_context.archive.md
@@ -42,14 +54,24 @@ files:
   - sources/raw_corpus/matmul_corpus.md
   - sources/raw_corpus/row_reduction_corpus.md
   - sources/raw_corpus/softmax_corpus.md
+  - sources/raw_corpus/pointwise_fusion_corpus.md
+  - sources/raw_corpus/layout_indexing_corpus.md
+  - sources/raw_corpus/kbx_expanded_gap_corpus.md
   derived_claims:
   - sources/derived_claims/common_claims.claims.yaml
   - sources/derived_claims/layernorm_claims.claims.yaml
   - sources/derived_claims/matmul_claims.claims.yaml
   - sources/derived_claims/row_reduction_claims.claims.yaml
   - sources/derived_claims/softmax_claims.claims.yaml
+  - sources/derived_claims/h20_expanded_pilot_claims.yaml
   kb_lineage: sources/derived_claims/kb_v0_lineage.yaml
+  expanded_pilot_kb_manifest: kb/kb_expanded_pilot_manifest.yaml
 derivation_relationships:
-- sources.yaml -> raw_corpus_v0
-- raw_corpus_v0 -> derived_claims
-- derived_claims -> KB v0 capsules
+- sources.yaml -> raw_corpus_v0 base corpus
+- h20_expanded_pilot_sources.yaml -> expanded-pilot supplemental raw corpus
+- raw_corpus_v0 plus expanded-pilot supplemental raw corpus -> derived_claims
+- derived_claims -> KB v0 and expanded-pilot capsules
+notes:
+- The original MVP raw corpus remains intact; pointwise/layout/gap files are supplemental source-visible material for the expanded pilot.
+- Supplemental entries contain public documentation and project task-manifest bridges only. They contain no hidden tests, benchmark shapes, or unverified H20 performance numbers.
+- Rebuild raw_corpus_vector_v0 and kb_vector_v0 after this manifest change before running A1/A2/A3 expanded-pilot sessions.
