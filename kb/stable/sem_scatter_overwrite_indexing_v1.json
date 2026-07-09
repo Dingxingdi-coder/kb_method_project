@@ -1,0 +1,74 @@
+{
+  "id": "sem_scatter_overwrite_indexing_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory"],
+    "op_names": ["*"],
+    "semantic_signature": "scatter overwrite with indexed destination writes, bounds checks, and duplicate-index policy",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*", "as_declared_by_task"]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": ["program", "warp-or-wave", "lane"],
+    "memory_hierarchy": ["global", "cache", "register"],
+    "synchronization": ["duplicate_index_policy_or_atomic_if_required_by_task"],
+    "profile_symptoms": ["memory_bound", "uncoalesced_memory", "nondeterministic_order"]
+  },
+  "conditions": {
+    "valid_when": ["The task is KBX scatter or another indexed write-side operation with overwrite semantics."],
+    "invalid_when": ["The task explicitly asks for scatter_add/index_add additive accumulation."],
+    "preconditions": ["Read dim, index dtype, source shape, duplicate-index policy, and bounds behavior from OpSpec."
+    ]
+  },
+  "mechanism": "Scatter overwrite writes source values to indexed destination positions. It is not scatter-add: duplicate indices must follow the task/PyTorch boundary policy rather than accumulating all contributions.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["Validate index dtype and bounds for every destination write.", "Implement overwrite semantics for KBX scatter; do not replace it with scatter-add or index_add unless OpSpec says additive accumulation is required.", "When duplicate indices may occur, follow the task's nondeterminism/tolerance policy; do not assume unique indices unless OpSpec guarantees them.", "Keep source/index/src dimensional constraints explicit and test broadcast prohibition or allowance according to the task."],
+    "patch_hint": "Compute dst_offset from the logical output coordinates with the indexed dimension replaced by index_value; then write src_value under the task's duplicate-index policy."
+  },
+  "expected_effect": {
+    "correctness": "Prevents using additive collision semantics or unique-index assumptions for scatter overwrite tasks.",
+    "performance": "No stable H20 performance claim; duplicate-index behavior and memory coalescing are workload-dependent.",
+    "search_efficiency": "Separates scatter overwrite repair from scatter-add atomic repair.",
+    "risk": "Floating overwrite order may be nondeterministic under duplicate indices; validation must match task policy."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_scatter_overwrite_semantics", "claim:clm_scatter_overwrite_duplicate_01"],
+    "evidence_level": "claim",
+    "confidence": 0.86
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["unique indices", "duplicate indices when allowed", "boundary index 0", "boundary index dim-1", "empty index", "non-contiguous destination/source"],
+    "promotion_policy": "Stable semantic rule; performance and determinism policies require run-specific validation."
+  },
+  "failure_boundary": {
+    "known_failures": ["Using scatter-add loses overwrite semantics.", "Assuming unique indices can hide nondeterministic duplicate-index behavior.", "Removing bounds checks can produce illegal memory writes."],
+    "boundary_tests": ["two writes to same destination", "random unsorted scatter indices", "edge destination index", "zero-size indexed dimension if task allows"],
+    "do_not_apply": ["scatter_add", "index_add", "gather/index_select", "permute_copy"]
+  },
+  "migration": {
+    "transfer_policy": "requires_revalidation",
+    "portable_part": ["overwrite vs additive distinction", "bounds checks", "index dtype validation"],
+    "replace_on_new_backend": ["atomic/write-order behavior", "determinism policy"]
+  },
+  "retrieval": {
+    "keys": ["layout_indexing", "scatter", "scatter_overwrite", "indexed_write", "duplicate_indices", "index_dtype", "bounds", "nondeterminism", "correctness_repair"],
+    "negative_keys": ["scatter_add", "index_add", "gather", "unique_indices_only"],
+    "priority": 94,
+    "max_context_tokens": 520
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
