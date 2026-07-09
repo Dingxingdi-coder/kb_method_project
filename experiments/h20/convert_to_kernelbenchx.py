@@ -20,6 +20,9 @@ from ecc_utils import read_json, sha256_file, write_json  # noqa: E402
 
 
 def kbx_mapping(task: dict[str, Any]) -> tuple[str, str] | None:
+    kbx = task.get("kernelbenchx")
+    if isinstance(kbx, dict) and kbx.get("task_file") and kbx.get("entrypoint"):
+        return Path(str(kbx["task_file"])).name, str(kbx["entrypoint"])
     op_family = task.get("op_family")
     op_name = task.get("op_name")
     dtype = str(task.get("dtype") or "")

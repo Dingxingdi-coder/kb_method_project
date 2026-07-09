@@ -46,43 +46,69 @@ ROUND2 = [
     ("matmul", "matmul", {"M": 2048, "N": 512, "K": 1536}, "bf16"),
 ]
 
+def kbx_task(
+    category: str,
+    op_name: str,
+    task_file: str,
+    signature: str,
+    shape: Any,
+    dtype: str,
+    semantics: str,
+) -> dict[str, Any]:
+    category_prefix = "norm" if category == "layernorm" else category
+    return {
+        "task_id": f"expanded_pilot_{category_prefix}_{op_name}",
+        "op_family": category,
+        "op_name": op_name,
+        "variant": op_name,
+        "shape": shape,
+        "dtype": dtype,
+        "kernelbenchx": {
+            "task_file": task_file,
+            "entrypoint": op_name,
+            "signature": signature,
+        },
+        "semantics": semantics,
+    }
+
+
 EXPANDED_PILOT = [
-    ("pointwise", "bias_gelu", [4096, 1024], "bf16"),
-    ("pointwise", "bias_silu", [4096, 1024], "fp16"),
-    ("pointwise", "residual_relu", [8192, 512], "fp16"),
-    ("pointwise", "broadcast_affine", [2048, 1536], "bf16"),
-    ("pointwise", "gated_silu_multiply", [4096, 768], "fp16"),
-    ("pointwise", "clamp_mul_add", [8192, 257], "fp32"),
-    ("reduction", "sum", [2048, 513], "fp16"),
-    ("reduction", "max", [4096, 1024], "bf16"),
-    ("reduction", "sum", [8192, 257], "fp32"),
-    ("reduction", "max", [1024, 4096], "fp16"),
-    ("reduction", "sum", [128, 8192], "bf16"),
-    ("reduction", "max", [16384, 255], "fp32"),
-    ("softmax", "row_softmax", [1024, 129], "fp16"),
-    ("softmax", "row_softmax", [2048, 513], "bf16"),
-    ("softmax", "row_softmax", [4096, 1024], "fp16"),
-    ("softmax", "row_softmax", [8192, 2048], "bf16"),
-    ("softmax", "row_softmax", [512, 4096], "fp32"),
-    ("softmax", "row_softmax", [16384, 255], "fp16"),
-    ("layernorm", "layernorm_forward", [1024, 768], "fp16"),
-    ("layernorm", "layernorm_forward", [2048, 1024], "bf16"),
-    ("layernorm", "layernorm_forward", [4096, 1536], "fp16"),
-    ("layernorm", "layernorm_forward", [4096, 3072], "bf16"),
-    ("layernorm", "layernorm_forward", [2048, 6144], "fp16"),
-    ("layernorm", "layernorm_forward", [1024, 8192], "bf16"),
-    ("matmul", "matmul", {"M": 128, "N": 128, "K": 128}, "fp16"),
-    ("matmul", "matmul", {"M": 512, "N": 512, "K": 512}, "bf16"),
-    ("matmul", "matmul", {"M": 1024, "N": 1024, "K": 1024}, "fp16"),
-    ("matmul", "matmul", {"M": 4096, "N": 256, "K": 1024}, "fp16"),
-    ("matmul", "matmul", {"M": 256, "N": 4096, "K": 1024}, "bf16"),
-    ("matmul", "matmul", {"M": 768, "N": 768, "K": 768}, "fp16"),
-    ("layout", "transpose_copy", {"M": 2048, "N": 1024}, "bf16"),
-    ("layout", "gather_rows", {"rows": 4096, "width": 256, "out_rows": 2048}, "fp16"),
-    ("layout", "embedding_lookup", {"vocab": 8192, "dim": 128, "batch": 256, "seq": 16}, "bf16"),
-    ("layout", "scatter_add", {"nnz": 4096, "width": 128, "out_rows": 1024}, "fp32"),
-    ("layout", "slice_concat", {"B": 2048, "N": 1024, "cut": 384}, "fp16"),
-    ("layout", "strided_copy", {"M": 2048, "N": 768, "row_stride": 2}, "bf16"),
+    kbx_task("pointwise", "add", "Math/add.py", "add(input, other, alpha=1, out=None)", [1024, 1024], "fp32", "Elementwise add with tensor/scalar other, broadcasting, alpha, and optional out semantics."),
+    kbx_task("pointwise", "mul", "Math/mul.py", "mul(input, other, out=None)", [1024, 1024], "fp32", "Elementwise multiply with tensor/scalar other and broadcasting semantics."),
+    kbx_task("pointwise", "gelu_fp16", "Activation/gelu_fp16.py", "gelu_fp16(input, approximate='none')", [1024, 1024], "fp16", "FP16 GELU activation with exact and tanh approximation modes."),
+    kbx_task("pointwise", "gelu_bf16", "Activation/gelu_bf16.py", "gelu_bf16(input, approximate='none')", [2048, 512], "bf16", "BF16 GELU activation with exact and tanh approximation modes."),
+    kbx_task("pointwise", "fused_add_gelu", "Fusion/fused_add_gelu.py", "fused_add_gelu(input, other, alpha=1, approximate='none', out=None)", [512, 512], "fp32", "Fused add followed by GELU, including scalar/tensor other and approximation mode."),
+    kbx_task("pointwise", "fused_mul_sub", "Fusion/fused_mul_sub.py", "fused_mul_sub(input, other_mul, other_sub, alpha=1, out=None)", [512, 512], "fp32", "Fused elementwise multiply and scaled subtract with tensor/scalar operands."),
+    kbx_task("reduction", "sum", "Reduce/sum.py", "sum(input, dim, keepdim=False, dtype=None)", [128, 256], "fp32", "Sum over scalar or tuple dims with keepdim and optional dtype."),
+    kbx_task("reduction", "mean", "Reduce/mean.py", "mean(input_tensor, dim, keepdim=False, dtype=None, out=None)", [128, 256], "fp32", "Mean over scalar or tuple dims with keepdim and optional dtype."),
+    kbx_task("reduction", "std", "Reduce/std.py", "std(input, dim=None, correction=1, keepdim=False, out=None)", [128, 256], "fp32", "Standard deviation over optional dims with correction and keepdim."),
+    kbx_task("reduction", "min", "Reduce/min.py", "min(input_tensor, dim, keepdim=False)", [128, 256], "fp32", "Value and index minimum reduction along a requested dimension."),
+    kbx_task("reduction", "argmax", "Reduce/argmax.py", "argmax(input_tensor, dim, keepdim=False)", [128, 256], "fp32", "Argmax index reduction along a requested dimension."),
+    kbx_task("reduction", "fused_sum_std", "Fusion/fused_sum_std.py", "fused_sum_std(input, dim=None, keepdim=False, dtype=None, correction=1, out=None)", [128, 256], "fp32", "Sum along optional dims followed by standard deviation of the summed values."),
+    kbx_task("softmax", "softmax", "Math/softmax.py", "softmax(input, dim, dtype=None)", [128, 256], "fp32", "Softmax along dim with optional dtype."),
+    kbx_task("softmax", "fused_softmax_log", "Fusion/fused_softmax_log.py", "fused_softmax_log(input, dim=-1, dtype=None)", [128, 256], "fp32", "Log transform of positive inputs followed by softmax."),
+    kbx_task("softmax", "fused_log_softmax_linear", "Fusion/fused_log_softmax_linear.py", "fused_log_softmax_linear(input, weight, bias=None, dim=-1, dtype=None)", {"B": 64, "IN": 128, "OUT": 256}, "fp16", "Linear projection followed by log_softmax."),
+    kbx_task("softmax", "fused_repeat_interleave_log_softmax", "Fusion/fused_repeat_interleave_log_softmax.py", "fused_repeat_interleave_log_softmax(input, repeats, dim=None, *, output_size=None, dtype=None, out=None)", [64, 128], "fp32", "repeat_interleave followed by log_softmax."),
+    kbx_task("softmax", "fused_cross_entropy_log_softmax", "Fusion/fused_cross_entropy_log_softmax.py", "fused_cross_entropy_log_softmax(input, target, dim=1, weight=None, ignore_index=-100, reduction='mean', label_smoothing=0.0)", {"B": 64, "C": 100}, "fp32", "Cross entropy over logits after log_softmax transform."),
+    kbx_task("softmax", "attention", "Fusion/attention.py", "attention(q, k, v, causal=False, softmax_scale=None, *, out=None)", {"B": 2, "H": 4, "S": 64, "D": 32}, "fp16", "Scaled dot-product attention with optional causal mask and explicit scale."),
+    kbx_task("layernorm", "layernorm_w8a8", "Quantization/layernorm_w8a8.py", "layernorm_w8a8(input, normalized_shape, weight=None, bias=None, eps=1e-5)", {"B": 32, "D": 256}, "fp32", "LayerNorm-like dynamic W8A8 pipeline semantics with fp32 input/output."),
+    kbx_task("layernorm", "fused_layer_norm_relu_linear", "Fusion/fused_layer_norm_relu_linear.py", "fused_layer_norm_relu_linear(input, weight, bias=None, normalized_shape=None, eps=1e-5, elementwise_affine=True)", {"B": 64, "IN": 128, "OUT": 256}, "fp32", "Linear projection, ReLU, then layer_norm over the output feature dimension."),
+    kbx_task("layernorm", "fused_cross_entropy_softmax_layernorm", "Fusion/fused_cross_entropy_softmax_layernorm.py", "fused_cross_entropy_softmax_layernorm(logits, targets, normalized_shape, weight=None, ignore_index=-100, reduction='mean', label_smoothing=0.0, eps=1e-5, *, out=None)", {"B": 32, "C": 128}, "fp32", "Cross entropy plus softmax and layer_norm output tuple."),
+    kbx_task("layernorm", "fused_silu_layer_norm_conv2d", "Fusion/fused_silu_layer_norm_conv2d.py", "fused_silu_layer_norm_conv2d(x, weight, conv_weight, conv_bias=None, conv_stride=1, conv_padding=0, conv_dilation=1, conv_groups=1, ln_eps=1e-5)", {"B": 2, "C": 3, "H": 32, "W": 32, "OC": 8, "K": 3}, "fp32", "conv2d, layer_norm over output channels/spatial dimensions, then SiLU."),
+    kbx_task("layernorm", "fused_bmm_rmsnorm_gelu_dropout", "Fusion/fused_bmm_rmsnorm_gelu_dropout.py", "fused_bmm_rmsnorm_gelu_dropout(input1, input2, normalized_shape, dropout_p=0.5, eps=1e-5, training=True, approximate='none')", {"B": 4, "M": 16, "K": 32, "N": 64}, "fp32", "BMM, RMSNorm, GELU, and dropout semantics."),
+    kbx_task("layernorm", "fused_bmm_rmsnorm_gelu_dropout_sub", "Fusion/fused_bmm_rmsnorm_gelu_dropout_sub.py", "fused_bmm_rmsnorm_gelu_dropout_sub(input1, input2, other, normalized_shape, dropout_p=0.5, training=True, approximate='none', eps=1e-5)", {"B": 4, "M": 16, "K": 32, "N": 64}, "fp32", "BMM, RMSNorm, GELU, dropout, and subtraction-task entrypoint semantics."),
+    kbx_task("matmul", "matmul", "MatrixMultiply/matmul.py", "matmul(tensor1, tensor2)", {"M": 64, "N": 32, "K": 128}, "fp32", "General torch.matmul cases including matrix and batched inputs."),
+    kbx_task("matmul", "matmul_fp16", "MatrixMultiply/matmul_fp16.py", "matmul_fp16(input, other)", {"M": 64, "N": 64, "K": 128}, "fp16", "FP16 matmul with matrix and batched inputs."),
+    kbx_task("matmul", "matmul_bf16", "MatrixMultiply/matmul_bf16.py", "matmul_bf16(input, other)", {"M": 64, "N": 64, "K": 128}, "bf16", "BF16 matmul with matrix and batched inputs."),
+    kbx_task("matmul", "addmm", "MatrixMultiply/addmm.py", "addmm(input, mat1, mat2, beta=1, alpha=1, out=None)", {"M": 64, "N": 32, "K": 128}, "fp32", "Matrix multiplication plus scaled input add."),
+    kbx_task("matmul", "matrix_vector_dot", "MatrixMultiply/matrix_vector_dot.py", "matrix_vector_dot(A, x, y, alpha, beta)", {"N": 128}, "fp32", "Matrix-vector update followed by dot product."),
+    kbx_task("matmul", "tril_mm_and_scale", "MatrixMultiply/tril_mm_and_scale.py", "tril_mm_and_scale(A, B, alpha, beta)", {"N": 128, "P": 32}, "fp32", "Lower-triangular matrix multiply followed by scaling."),
+    kbx_task("layout", "index_select", "Index/index_select.py", "index_select(input, dim, index)", {"B": 8, "N": 32, "D": 256, "K": 64}, "fp32", "Gather selected indices along a requested dimension."),
+    kbx_task("layout", "permute_copy", "Index/permute_copy.py", "permute_copy(input, dims)", [4, 8, 16, 32], "fp32", "Permute dimensions and materialize a fresh copied tensor."),
+    kbx_task("layout", "scatter", "Index/scatter.py", "scatter(input, dim, index, src)", {"B": 4, "N": 128, "D": 256, "K": 64}, "fp32", "Scatter source values into an input tensor along a requested dimension."),
+    kbx_task("layout", "masked_select", "Index/masked_select.py", "masked_select(input, mask)", [64, 128], "fp32", "Select elements under a boolean mask, returning a compact 1D tensor."),
+    kbx_task("layout", "expand_where", "Index/expand_where.py", "expand_where(input, target_sizes, cond, other)", {"B": 64, "N": 512}, "fp32", "Broadcast expand a singleton input and select with torch.where semantics."),
+    kbx_task("layout", "fused_gather_masked_fill", "Fusion/fused_gather_masked_fill.py", "fused_gather_masked_fill(input, dim, index, mask, value)", {"B": 64, "N": 128, "K": 32}, "fp32", "Gather along a dimension followed by masked fill."),
 ]
 
 
@@ -137,7 +163,20 @@ def hidden_variants(op_family: str, shape: Any, dtype: str) -> list[dict[str, An
     return tests
 
 
-def op_spec(op_family: str, variant: str) -> dict[str, Any]:
+def op_spec(op_family: str, variant: str, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
+    if metadata and metadata.get("kernelbenchx"):
+        kbx = metadata["kernelbenchx"]
+        entrypoint = kbx["entrypoint"]
+        return {
+            "signature": metadata.get("semantics", variant),
+            "candidate_interface": f"candidate(*args, **kwargs) -> same result as `{entrypoint}(...)`; `{kbx['signature']}` must also exist",
+            "semantics": metadata.get("semantics", "Implement the declared KernelBench-X operator semantics."),
+            "tolerance": "dtype-dependent",
+            "kernelbenchx_entrypoint": entrypoint,
+            "kernelbenchx_signature": kbx["signature"],
+            "kernelbenchx_task_file": kbx["task_file"],
+            "target_banned_api": ["Do not call the target torch/PyTorch convenience API as the main submitted computation."],
+        }
     if op_family == "pointwise":
         interfaces = {
             "bias_gelu": "candidate(x, bias) -> y",
@@ -185,8 +224,32 @@ def op_spec(op_family: str, variant: str) -> dict[str, Any]:
     return {}
 
 
-def make_task(round_name: str, op_family: str, variant: str, shape: Any, dtype: str) -> tuple[dict[str, Any], dict[str, Any]]:
-    task_id = safe_id(f"{round_name}_{op_family}_{variant}_{shape_id(shape)}_{dtype}")
+def kbx_hidden_variants(shape: Any, dtype: str) -> list[dict[str, Any]]:
+    if isinstance(shape, list):
+        if len(shape) == 1:
+            alt_shape: Any = [max(1, int(shape[0]) + 17)]
+        else:
+            alt_shape = [max(1, int(shape[0]) // 2 + 7), max(1, int(shape[1]) + 1), *shape[2:]]
+    elif isinstance(shape, dict):
+        alt_shape = {key: max(1, int(value) + (1 if idx % 2 else 7)) for idx, (key, value) in enumerate(shape.items())}
+    else:
+        alt_shape = shape
+    return [
+        {"shape": alt_shape, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
+        {"shape": shape, "dtype": dtype, "layout": "alternate_args", "seed_offset": 200},
+    ]
+
+
+def make_task(
+    round_name: str,
+    op_family: str,
+    variant: str,
+    shape: Any,
+    dtype: str,
+    metadata: dict[str, Any] | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    task_id = metadata.get("task_id") if metadata else None
+    task_id = str(task_id or safe_id(f"{round_name}_{op_family}_{variant}_{shape_id(shape)}_{dtype}"))
     task = {
         "schema_version": "0.1",
         "task_id": task_id,
@@ -196,7 +259,7 @@ def make_task(round_name: str, op_family: str, variant: str, shape: Any, dtype: 
         "variant": variant,
         "shape": shape,
         "dtype": dtype,
-        "op_spec": op_spec(op_family, variant),
+        "op_spec": op_spec(op_family, variant, metadata),
         "op_spec_hash": short_hash([op_family, variant, shape, dtype]),
         "goal": "compile_correct_and_benchmark",
         "public_tests": [{"shape": shape, "dtype": dtype, "layout": "contiguous", "seed_offset": 0}],
@@ -204,7 +267,12 @@ def make_task(round_name: str, op_family: str, variant: str, shape: Any, dtype: 
         "agent_allowed_files": ["candidate.py", "notes.md"],
         "agent_forbidden_files": ["reference.py", "hidden_tests.json", "experiments/h20/harness.py"],
     }
-    hidden = {"schema_version": "0.1", "task_id": task_id, "hidden_tests": hidden_variants(op_family, shape, dtype), "notes": "Do not expose this file to the Coding Agent."}
+    if metadata and metadata.get("kernelbenchx"):
+        task["kernelbenchx"] = metadata["kernelbenchx"]
+        hidden_tests = kbx_hidden_variants(shape, dtype)
+    else:
+        hidden_tests = hidden_variants(op_family, shape, dtype)
+    hidden = {"schema_version": "0.1", "task_id": task_id, "hidden_tests": hidden_tests, "notes": "Do not expose this file to the Coding Agent."}
     return task, hidden
 
 
@@ -226,8 +294,12 @@ def main() -> int:
         rows = EXPANDED_PILOT
     manifest: list[dict[str, str]] = []
 
-    for op_family, variant, shape, dtype in rows:
-        task, hidden = make_task(args.round, op_family, variant, shape, dtype)
+    for row in rows:
+        if isinstance(row, dict):
+            task, hidden = make_task(args.round, row["op_family"], row["op_name"], row["shape"], row["dtype"], row)
+        else:
+            op_family, variant, shape, dtype = row
+            task, hidden = make_task(args.round, op_family, variant, shape, dtype)
         task_path = out_dir / f"{task['task_id']}.json"
         hidden_path = hidden_dir / f"{task['task_id']}.hidden.json"
         write_json(task_path, task)

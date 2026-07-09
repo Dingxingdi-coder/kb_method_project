@@ -153,24 +153,37 @@ def tuning_protocol() -> str:
 - Do not continue random tuning after this fixed budget unless correctness is still failing."""
 
 
+def candidate_skeleton(task: dict[str, Any]) -> str:
+    kbx = task.get("kernelbenchx")
+    if isinstance(kbx, dict) and kbx.get("entrypoint") and kbx.get("signature"):
+        entrypoint = str(kbx["entrypoint"])
+        signature = str(kbx["signature"])
+        return (
+            f'"""Candidate kernel for H20 task {task.get("task_id")}.\n\n'
+            f"H20 entrypoint: candidate(*args, **kwargs)\n"
+            f"KernelBench-X entrypoint: {signature}\n"
+            '"""\n\n'
+            "def candidate(*args, **kwargs):\n"
+            f"    return {entrypoint}(*args, **kwargs)\n\n\n"
+            f"def {signature}:\n"
+            f"    raise NotImplementedError(\"agent must implement {entrypoint}\")\n"
+        )
+    return SKELETONS.get(task.get("op_family"), "def candidate(*args):\n    raise NotImplementedError()\n")
+
+
 def posthoc_portability_protocol(task: dict[str, Any]) -> str:
     op_name = str(task.get("op_name") or task.get("op_family") or "operator")
     impl_name = "".join(ch if ch.isalnum() or ch == "_" else "_" for ch in op_name).strip("_") or "operator"
-    kbx_entry = ""
-    if task.get("op_family") == "softmax" and task.get("op_name") == "row_softmax":
-        kbx_entry = """\n- KernelBench-X overlapping task: also expose `def softmax(input, dim, dtype=None)`.
-  It must be correct for KernelBench-X softmax tests, including `dim=0`, `dim=1`, `dim=-1`, and optional `dtype`. Dispatch to the optimized row-softmax helper when the call matches it."""
-    elif task.get("op_family") == "reduction" and task.get("op_name") == "sum":
-        kbx_entry = """\n- KernelBench-X overlapping task: also expose `def sum(input, dim, keepdim=False, dtype=None)`.
-  It must be correct for KernelBench-X sum tests, including 1D reductions, tuple dims, `keepdim`, and optional `dtype`. Dispatch to the optimized last-dim helper when the call matches it."""
-    elif task.get("op_family") == "matmul":
-        dtype = str(task.get("dtype") or "")
-        if dtype in {"fp16", "float16"}:
-            kbx_entry = """\n- KernelBench-X overlapping task: also expose `def matmul_fp16(input, other)`.
-  It must be correct for KernelBench-X matmul_fp16 tests, including 1D x 2D, 2D x 1D, 2D x 2D, and batched 3D matmul. Dispatch to the optimized 2D helper when the call matches it."""
-        elif dtype in {"bf16", "bfloat16"}:
-            kbx_entry = """\n- KernelBench-X overlapping task: also expose `def matmul_bf16(input, other)`.
-  It must be correct for KernelBench-X matmul_bf16 tests, including 1D x 2D, 2D x 1D, 2D x 2D, and batched 3D matmul. Dispatch to the optimized 2D helper when the call matches it."""
+    kbx = task.get("kernelbenchx")
+    if isinstance(kbx, dict) and kbx.get("entrypoint") and kbx.get("signature") and kbx.get("task_file"):
+        entrypoint = str(kbx["entrypoint"])
+        signature = str(kbx["signature"])
+        task_file = str(kbx["task_file"])
+        kbx_entry = f"""\n- KernelBench-X overlapping task: also expose `def {signature}` as a top-level callable.
+  It must be compatible with KernelBench-X task `{task_file}` and the public callable semantics in `task.json`.
+  The function name must remain `{entrypoint}`; do not expose only `kernel_function`, because the H20 exporter validates the explicit task entrypoint."""
+    else:
+        kbx_entry = ""
     if not kbx_entry:
         kbx_entry = "\n- This H20 task has no declared KernelBench-X overlap in this pilot; do not add a speculative KernelBench-X entrypoint."
     return f"""Post-hoc portability constraint:
@@ -364,7 +377,7 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
 
     candidate = workspace / "candidate.py"
     if not candidate.exists():
-        candidate.write_text(SKELETONS.get(task.get("op_family"), "def candidate(*args):\n    raise NotImplementedError()\n"), encoding="utf-8")
+        candidate.write_text(candidate_skeleton(task), encoding="utf-8")
     (workspace / "context_packets").mkdir(exist_ok=True)
 
     retrieve_script = (repo_root / args.retrieve_script).resolve()
