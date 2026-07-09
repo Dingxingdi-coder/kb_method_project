@@ -251,11 +251,21 @@ def compare_outputs(actual: Any, expected: Any, dtype_name: str, op_family: str)
     return {"status": "pass" if bool(ok) else "fail", "atol": atol, "rtol": rtol, "max_abs_error": max_abs, "max_rel_error": max_rel}
 
 
-def run_suite(task: dict[str, Any], hidden: dict[str, Any], fn: Callable[..., Any], base_seed: int, device: str, log_lines: list[str]) -> dict[str, Any]:
+def run_suite(
+    task: dict[str, Any],
+    hidden: dict[str, Any],
+    fn: Callable[..., Any],
+    base_seed: int,
+    device: str,
+    log_lines: list[str],
+    suite_names: list[str] | None = None,
+) -> dict[str, Any]:
     import torch
-    suites = {"smoke": task.get("public_tests", [])[:1], "quick": task.get("public_tests", []), "hidden": hidden.get("hidden_tests", [])}
+    all_suites = {"smoke": task.get("public_tests", [])[:1], "quick": task.get("public_tests", []), "hidden": hidden.get("hidden_tests", [])}
+    selected = suite_names or ["smoke", "quick", "hidden"]
     result: dict[str, Any] = {}
-    for suite_name, tests in suites.items():
+    for suite_name in selected:
+        tests = all_suites[suite_name]
         suite_records = []
         suite_ok = True
         for idx, test in enumerate(tests):
@@ -371,6 +381,7 @@ def print_summary(results: dict[str, Any], out_dir: Path) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--stage", choices=["full", "compile", "smoke", "quick", "hidden", "benchmark"], default="full")
     parser.add_argument("--task", required=True)
     parser.add_argument("--candidate", required=True)
     parser.add_argument("--out-dir", required=True)
@@ -394,7 +405,8 @@ def main() -> int:
     if requested_device == "cuda" and not cuda_available and args.require_cuda:
         results = {
             "schema_version": "0.1",
-            "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path), 'cuda_unavailable'])}",
+            "run_id": f"harness_{short_hash([task, args.seed, args.stage, sha256_file(candidate_path), 'cuda_unavailable'])}",
+            "stage": args.stage,
             "timestamp": utc_now(),
             "task_id": task.get("task_id"),
             "op_family": task.get("op_family"),
@@ -425,7 +437,7 @@ def main() -> int:
     started = time.time()
     compile_log: list[str] = []
     correctness_log: list[str] = []
-    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, sha256_file(candidate_path)])}", "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}, "runtime": {"requested_device": requested_device, "actual_device": device, "cuda_available": bool(cuda_available), "cuda_device_count": int(torch.cuda.device_count())}}
+    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, args.stage, sha256_file(candidate_path)])}", "stage": args.stage, "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}, "runtime": {"requested_device": requested_device, "actual_device": device, "cuda_available": bool(cuda_available), "cuda_device_count": int(torch.cuda.device_count())}}
     try:
         fn = load_candidate(candidate_path)
         results["compile"] = {"status": "pass"}; compile_log.append("candidate import: pass")
@@ -436,25 +448,40 @@ def main() -> int:
         (out_dir / "correctness.log").write_text("", encoding="utf-8"); write_json(out_dir / "benchmark.json", {}); write_json(out_dir / "profile_summary.json", {})
         print_summary(results, out_dir); return 1
 
-    correctness = run_suite(task, hidden, fn, args.seed, device, correctness_log)
+    if args.stage == "compile":
+        results["final_decision"] = "COMPILE_PASS"
+        results["cost"]["wall_time_s"] = time.time() - started
+        write_json(out_dir / "results.json", results); write_json(out_dir / "benchmark.json", {}); write_json(out_dir / "profile_summary.json", {})
+        (out_dir / "compile.log").write_text("\n".join(compile_log) + "\n", encoding="utf-8")
+        (out_dir / "correctness.log").write_text("", encoding="utf-8")
+        print_summary(results, out_dir)
+        return 0
+
+    suite_names = ["smoke", "quick", "hidden"] if args.stage == "full" else (["hidden"] if args.stage == "benchmark" else [args.stage])
+    correctness = run_suite(task, hidden, fn, args.seed, device, correctness_log, suite_names=suite_names)
     results["correctness"] = correctness
+    required_suite = "hidden" if args.stage in {"full", "benchmark"} else args.stage
+    correctness_ok = str(correctness.get(required_suite, {}).get("status", "fail")) == "pass"
+    failed_suite = next((name for name in suite_names if str(correctness.get(name, {}).get("status", "fail")) != "pass"), required_suite)
     hidden_ok = str(correctness.get("hidden", {}).get("status", "fail")) == "pass"
     bench: dict[str, Any] = {}; prof: dict[str, Any] = {}
-    if hidden_ok:
+    if args.stage in {"full", "benchmark"} and hidden_ok:
         bench = benchmark(task, fn, args.seed, device, warmup, repeats)
         prof = profile_summary(task, bench)
         results["benchmark"] = {"latency_p50_ms": bench["candidate"]["p50_ms"], "latency_p95_ms": bench["candidate"]["p95_ms"], "latency_mean_ms": bench["candidate"]["mean_ms"], "latency_std_ms": bench["candidate"]["std_ms"], "speedup_vs_eager_p50": bench.get("speedup_vs_eager_p50", 0.0), "speedup_vs_torch_compile_p50": bench.get("speedup_vs_torch_compile_p50", 0.0)}
         results["profile_summary"] = prof; results["cost"]["gpu_benchmark_runs"] = repeats
         results["final_decision"] = "KEEP" if results["benchmark"]["speedup_vs_eager_p50"] >= 1.0 else "DISCARD"
+    elif correctness_ok:
+        results["final_decision"] = "PASS"
     else:
         results["final_decision"] = "FAIL"
-        results["diagnosis"] = "hidden correctness failed"
+        results["diagnosis"] = f"{failed_suite} correctness failed"
     results["cost"]["wall_time_s"] = time.time() - started
     write_json(out_dir / "results.json", results); write_json(out_dir / "benchmark.json", bench); write_json(out_dir / "profile_summary.json", prof)
     (out_dir / "compile.log").write_text("\n".join(compile_log) + "\n", encoding="utf-8")
     (out_dir / "correctness.log").write_text("\n".join(correctness_log) + "\n", encoding="utf-8")
     print_summary(results, out_dir)
-    return 0 if results["final_decision"] in {"KEEP", "DISCARD"} else 1
+    return 0 if results["final_decision"] in {"KEEP", "DISCARD", "PASS"} else 1
 
 
 if __name__ == "__main__":
