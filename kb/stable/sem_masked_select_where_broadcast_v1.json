@@ -1,0 +1,62 @@
+{
+  "id": "sem_masked_select_where_broadcast_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory", "pointwise", "elementwise"],
+    "op_names": ["*"],
+    "semantic_signature": "masked_select compaction or expand_where broadcasted conditional selection",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*", "as_declared_by_task"]
+  },
+  "conditions": {
+    "valid_when": ["The task is KBX masked_select, expand_where, fused_gather_masked_fill with mask replacement, or another Boolean-mask/where-like operation."],
+    "invalid_when": ["The task has no Boolean mask or conditional-selection semantics."],
+    "preconditions": ["Read mask dtype, mask/input/other broadcast rules, output shape, and whether the operation is compaction or dense selection."]
+  },
+  "mechanism": "masked_select is a compacting selection that returns a one-dimensional tensor of true-mask elements, while where/expand_where is dense broadcasted conditional selection; mixing these two semantics causes hidden correctness failures.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["For masked_select, compute the number and positions of true-mask elements and return the compact one-dimensional output declared by the task; do not write a dense same-shape masked tensor.", "For expand_where, apply PyTorch-like broadcasting across condition, input, and other, and write the broadcasted dense output shape.", "Treat expanded singleton dimensions as zero-stride reads and avoid materializing expanded inputs in Python.", "For fused_gather_masked_fill, preserve gather addressing first, then apply the mask/value replacement at the gathered output element."],
+    "patch_hint": "Separate compaction kernels from dense where kernels. masked_select usually needs a count/prefix-position strategy; expand_where can use pointwise broadcast indexing."
+  },
+  "expected_effect": {
+    "correctness": "Prevents confusing compact masked_select with dense where/masked-fill semantics.",
+    "performance": "No stable H20 performance claim; compaction cost depends on mask density and implementation strategy.",
+    "search_efficiency": "Routes agents to the right skeleton before they tune the wrong output shape.",
+    "risk": "masked_select may require multi-stage prefix/count logic; a simple single-pass store is only valid if the harness provides precomputed positions."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_masked_select_where_semantics", "source:pytorch_broadcasting_expand_semantics", "claim:clm_masked_select_where_broadcast_01"],
+    "evidence_level": "claim",
+    "confidence": 0.88
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["all-false mask", "all-true mask", "mixed mask", "broadcasted mask", "zero-stride expanded input", "different mask densities"],
+    "promotion_policy": "Stable semantic rule; performance motif for compaction remains candidate until H20 evidence exists."
+  },
+  "failure_boundary": {
+    "known_failures": ["Returning dense same-shape output for masked_select is semantically wrong.", "Ignoring broadcast rules for mask/input/other causes hidden shape failures.", "Materializing expanded tensors through high-level PyTorch can violate kernel-authoring legality."],
+    "boundary_tests": ["mask with no true elements", "mask with all true elements", "broadcasted condition", "non-contiguous input"],
+    "do_not_apply": ["scatter-only tasks", "plain permute_copy", "matmul"]
+  },
+  "retrieval": {
+    "keys": ["layout_indexing", "masked_select", "expand_where", "where", "boolean_mask", "mask", "broadcast", "compaction", "prefix", "fused_gather_masked_fill", "masked_fill", "correctness_repair"],
+    "negative_keys": ["scatter", "permute_copy", "matmul"],
+    "priority": 94,
+    "max_context_tokens": 560
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": [],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
