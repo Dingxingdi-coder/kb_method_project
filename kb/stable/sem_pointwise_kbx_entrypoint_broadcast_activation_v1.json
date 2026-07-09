@@ -1,0 +1,108 @@
+{
+  "id": "sem_pointwise_kbx_entrypoint_broadcast_activation_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["pointwise", "elementwise"],
+    "op_names": ["*"],
+    "semantic_signature": "KBX concrete pointwise/fused elementwise expression with broadcasting, activation, dtype, and tail-mask semantics",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*"]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": ["program", "warp-or-wave", "lane", "vector"],
+    "memory_hierarchy": ["global", "cache", "register"],
+    "synchronization": [],
+    "profile_symptoms": ["memory_bound", "launch_bound"]
+  },
+  "conditions": {
+    "valid_when": [
+      "The concrete KBX op is add, mul, gelu_fp16, gelu_bf16, fused_add_gelu, fused_mul_sub, or an equivalent pointwise/fused elementwise task.",
+      "Output shape follows OpSpec/PyTorch broadcasting or a declared pointwise same-shape contract."
+    ],
+    "invalid_when": [
+      "The dominant operation is a reduction, softmax/logsumexp, normalization statistic, matmul/tensor-core contraction, or irregular gather/scatter rather than pointwise fusion.",
+      "The candidate changes activation approximation mode, dtype policy, alpha/out semantics, or broadcast semantics from the task contract."
+    ],
+    "preconditions": [
+      "Read the KBX entrypoint signature and OpSpec for alpha, approximate, out, dtype, shape, stride, and broadcasting rules before writing pointer arithmetic."
+    ]
+  },
+  "mechanism": "Concrete KBX pointwise names are retrieval aliases for the same portable elementwise rules: compute a logical output index, reconstruct each operand address under broadcasting/stride rules, preserve activation formulas and dtype tolerance, and mask tail lanes.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "For add and mul, preserve scalar/tensor broadcasting and alpha/out semantics declared by the task; do not assume all operands are same-shape contiguous tensors.",
+      "For gelu_fp16, gelu_bf16, and fused_add_gelu, implement the task-declared GELU approximation mode and validate fp16/bf16 tolerance; use fp32 intermediates when OpSpec tolerance requires it.",
+      "For fused_mul_sub, compute multiply and subtract in the same low-level path without materializing temporary tensors, while preserving broadcast and output dtype semantics.",
+      "Use tail masks on tl.load/tl.store or equivalent low-level operations for non-power-of-two element counts.",
+      "Validate singleton broadcast dimensions, odd numel, positive/negative activation inputs, and dtype-specific tolerances before performance tuning."
+    ],
+    "patch_hint": "Map one program to a contiguous output block when output is contiguous; for each operand, convert output offsets to logical indices, then to storage offsets using the operand's broadcasted shape and strides."
+  },
+  "expected_effect": {
+    "correctness": "Makes concrete KBX pointwise tasks retrieve the same broadcast, activation, tail-mask, and dtype constraints as the abstract pointwise design tasks.",
+    "performance": "No direct H20 performance claim; it is a semantic prerequisite for legal optimization.",
+    "search_efficiency": "Prevents A3 hard-filter misses caused by concrete KBX op names and reduces correctness-repair loops from wrong broadcasting or activation math.",
+    "risk": "Pure add/mul may be too small or launch-bound; performance claims still require benchmark_repeat and profile_attribution gates."
+  },
+  "evidence": {
+    "source_refs": [
+      "source:kbx_expanded_pilot_task_manifest",
+      "source:pytorch_broadcasting_expand_semantics",
+      "source:pytorch_gelu_silu_semantics",
+      "source:triton_vector_add_pointwise_tail_mask",
+      "claim:clm_kbx_pointwise_entrypoint_bridge_01"
+    ],
+    "evidence_level": "claim",
+    "confidence": 0.86
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": [
+      "KBX add/mul scalar and tensor operand cases",
+      "GELU approximate none/tanh as declared",
+      "fp16 and bf16 activation tolerance",
+      "singleton broadcast dimension",
+      "non-power-of-two element count",
+      "out parameter behavior if the task enables it"
+    ],
+    "promotion_policy": "Stable semantic bridge only; do not promote any performance conclusion from this capsule."
+  },
+  "failure_boundary": {
+    "known_failures": [
+      "Concrete KBX op names fail A3 retrieval when old capsules list only abstract op_names.",
+      "Using a flat offset for a broadcasted or strided operand reads the wrong element.",
+      "Using the wrong GELU approximation or fp16-only activation math can fail dtype tolerance."
+    ],
+    "boundary_tests": ["scalar other", "broadcast other", "odd tail", "large positive/negative GELU inputs", "out=None vs out provided when applicable"],
+    "do_not_apply": ["reduction", "softmax", "layernorm", "matmul", "scatter or gather dominated tasks"]
+  },
+  "migration": {
+    "transfer_policy": "portable",
+    "portable_part": ["broadcast address semantics", "activation formula semantics", "tail masking", "KBX concrete-op aliasing"],
+    "replace_on_new_backend": ["DSL-specific load/store syntax", "vector width", "activation intrinsic or approximation implementation"]
+  },
+  "retrieval": {
+    "keys": [
+      "pointwise", "elementwise", "kbx", "add", "mul", "gelu_fp16", "gelu_bf16", "fused_add_gelu", "fused_mul_sub",
+      "bias_gelu", "bias_silu", "broadcast_affine", "gated_multiply", "clamp_mul_add", "gelu", "silu", "activation",
+      "broadcast", "tail_mask", "fp32_intermediate", "approximate", "correctness_repair"
+    ],
+    "negative_keys": ["reduction", "softmax", "matmul", "layernorm", "scatter", "gather", "high_level_fallback"],
+    "priority": 96,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_pointwise_broadcast_activation_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
