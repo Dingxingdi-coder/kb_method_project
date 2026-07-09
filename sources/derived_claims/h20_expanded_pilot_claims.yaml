@@ -1,5 +1,5 @@
-version: h20_expanded_pilot_claims_v0
-generated_at: '2026-07-08T00:00:00Z'
+version: h20_expanded_pilot_claims_v1
+generated_at: '2026-07-09T00:00:00Z'
 scope: Claims extracted only from the supplemental expanded-pilot raw corpus. They prepare KB retrieval and do not encode H20 benchmark outcomes.
 claims:
   - claim_id: clm_pointwise_broadcast_activation_01
@@ -54,5 +54,95 @@ claims:
     source_refs: [source:pytorch_stride_contiguous_tensor_views, source:pytorch_broadcasting_expand_semantics, source:pytorch_gather_index_select_semantics, source:pytorch_scatter_add_semantics]
     derived_kb_units: [fail_layout_assume_contiguous_or_unique_indices_v1]
     claim: Contiguous-only address math and unique-index assumptions are likely correctness failure signatures for layout/indexing tasks with hidden stride or duplicate-index cases.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_pointwise_entrypoint_bridge_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_broadcasting_expand_semantics, source:pytorch_gelu_silu_semantics, source:triton_vector_add_pointwise_tail_mask]
+    derived_kb_units: [sem_pointwise_kbx_entrypoint_broadcast_activation_v1]
+    claim: Concrete KBX pointwise op names add, mul, gelu_fp16, gelu_bf16, fused_add_gelu, and fused_mul_sub should retrieve pointwise broadcast, activation, tail-mask, dtype, and validation knowledge.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_pointwise_fallback_bridge_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:h20_formal_kernel_authoring_rules]
+    derived_kb_units: [legality_no_high_level_kbx_pointwise_fallback_v1]
+    claim: Concrete KBX pointwise tasks remain in kernel-authoring mode and must not delegate add, mul, GELU, fused add+GELU, or fused mul-sub semantics to high-level PyTorch calls in the submitted path.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_pointwise_memory_bound_candidate_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:triton_vector_add_pointwise_tail_mask, source:cuda_best_practices_memory_coalescing]
+    derived_kb_units: [perf_pointwise_kbx_fusion_memory_bound_candidate_v1]
+    claim: Single-pass pointwise fusion is candidate-only guidance for concrete KBX pointwise tasks and requires H20 hidden-correct benchmark/profile evidence before promotion.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_pointwise_stop_candidate_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:cuda_best_practices_memory_coalescing, source:h20_mvp_benchmark_profile_protocol]
+    derived_kb_units: [stop_pointwise_kbx_memory_bound_candidate_v1]
+    claim: Concrete KBX pointwise tuning should stop only after hidden correctness, repeated benchmark, and profile attribution indicate a memory-bound plateau.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_layout_entrypoint_stride_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_stride_contiguous_tensor_views, source:pytorch_broadcasting_expand_semantics]
+    derived_kb_units: [sem_layout_kbx_stride_indexing_v1]
+    claim: Concrete KBX layout tasks should retrieve stride-aware address, view-vs-copy, bounds-mask, and high-level copy fallback constraints.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_index_select_gather_bounds_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_gather_index_select_semantics]
+    derived_kb_units: [sem_index_select_gather_bounds_v1]
+    claim: KBX index_select and fused_gather_masked_fill require index dtype, dimension, bounds, and non-unique/unsorted-index assumptions to be explicit.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_masked_select_where_broadcast_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_masked_select_where_semantics, source:pytorch_broadcasting_expand_semantics]
+    derived_kb_units: [sem_masked_select_where_broadcast_v1]
+    claim: KBX masked_select requires Boolean-mask compaction semantics, while expand_where requires broadcasted conditional-selection semantics.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_scatter_overwrite_duplicate_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_scatter_overwrite_semantics]
+    derived_kb_units: [sem_scatter_overwrite_indexing_v1]
+    claim: KBX scatter overwrite semantics differ from scatter-add; duplicate-index and bounds behavior must follow OpSpec and PyTorch scatter boundaries.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_layout_transpose_tile_copy_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:cuda_best_practices_memory_coalescing, source:pytorch_stride_contiguous_tensor_views]
+    derived_kb_units: [perf_layout_kbx_transpose_tile_copy_candidate_v1]
+    claim: KBX permute_copy can use regular tile-copy candidate motifs only after stride-correct hidden correctness; H20 tile performance remains unverified.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_kbx_irregular_gather_scatter_coalescing_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_gather_index_select_semantics, source:pytorch_scatter_overwrite_semantics, source:pytorch_masked_select_where_semantics, source:cuda_best_practices_memory_coalescing]
+    derived_kb_units: [perf_irregular_kbx_gather_scatter_coalescing_candidate_v1]
+    claim: KBX index_select, scatter, masked_select, expand_where, and fused_gather_masked_fill need separate treatment of index loads, source reads, destination writes, masks, compaction, and index distribution.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_fail_kbx_layout_assumptions_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_stride_contiguous_tensor_views, source:pytorch_gather_index_select_semantics, source:pytorch_scatter_overwrite_semantics, source:pytorch_masked_select_where_semantics]
+    derived_kb_units: [fail_layout_kbx_assume_contiguous_or_unique_indices_v1]
+    claim: Concrete KBX layout tasks can fail when candidates assume contiguous inputs, view-only copies, unique/sorted indices, dense masked_select output, or scatter-add semantics for scatter overwrite.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_reduction_kbx_std_arg_index_gap_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_reduction_kbx_semantics]
+    derived_kb_units: [sem_reduction_kbx_std_arg_index_candidate_v1]
+    claim: Existing row-reduction KB covers base sum/max but expanded KBX std, mean, min, argmax, tuple dims, keepdim, correction, and value/index outputs need candidate semantic guidance.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_softmax_kbx_fused_attention_gap_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_softmax_ce_attention_semantics]
+    derived_kb_units: [sem_softmax_kbx_fused_attention_candidate_v1]
+    claim: Existing row-softmax KB covers base stability but fused log-softmax, cross entropy, repeat_interleave, linear+log_softmax, and attention need candidate semantic guidance.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_norm_kbx_fused_rms_gap_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_normalization_rms_dropout_semantics]
+    derived_kb_units: [sem_normalization_kbx_fused_rms_candidate_v1]
+    claim: Existing layernorm-forward KB covers basic layernorm but expanded W8A8, RMSNorm, dropout, conv2d, bmm, and fused-normalization variants require candidate-only guidance.
+    evidence_level: claim
+    h20_measured: false
+  - claim_id: clm_matmul_kbx_epilogue_gap_01
+    source_refs: [source:kbx_expanded_pilot_task_manifest, source:pytorch_matmul_addmm_bmm_semantics]
+    derived_kb_units: [sem_matmul_kbx_epilogue_candidate_v1]
+    claim: Existing GEMM KB covers base matmul but expanded addmm, matvec, batched matmul, triangular mask, and scale epilogues require candidate semantic and legality guidance.
     evidence_level: claim
     h20_measured: false
