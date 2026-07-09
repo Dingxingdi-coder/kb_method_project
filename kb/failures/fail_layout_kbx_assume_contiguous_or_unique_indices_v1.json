@@ -1,0 +1,62 @@
+{
+  "id": "fail_layout_kbx_assume_contiguous_or_unique_indices_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "failure_signature",
+  "status": "candidate",
+  "abstraction_level": "portable",
+  "task_phases": ["correctness_repair", "retrospective"],
+  "operator_scope": {
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory"],
+    "op_names": ["*"],
+    "semantic_signature": "KBX layout correctness failure from contiguous-only, view-only, unique-index, dense-mask, or wrong-scatter assumptions",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["*"],
+    "layout_scope": ["*", "non_contiguous", "as_declared_by_task"]
+  },
+  "conditions": {
+    "valid_when": ["A KBX layout/indexing candidate passes simple public cases but fails hidden, non-contiguous, indexed, masked, or duplicate-index cases."],
+    "invalid_when": ["The failure is a compile error or pure dtype mismatch unrelated to indexing/layout/mask semantics."],
+    "preconditions": ["Inspect candidate pointer arithmetic, high-level layout calls, index assumptions, mask-output shape, and scatter semantics."]
+  },
+  "mechanism": "Expanded KBX layout tasks deliberately include concrete operations whose correctness depends on stride-aware offsets, materialized-copy semantics, index/mask bounds, duplicate-index policy, and compact vs dense output shape.",
+  "action": {
+    "kind": "repair",
+    "instructions": ["If hidden failures appear after public contiguous cases pass, replace linear contiguous offsets with shape/stride offset calculations.", "For permute_copy, verify the candidate materializes the permuted output rather than returning a view or delegating to contiguous().", "For index_select/fused_gather_masked_fill, remove sorted/unique/contiguous-index assumptions and add index bounds tests.", "For masked_select, check that output is compact one-dimensional as declared; for expand_where, check dense broadcasted output shape.", "For scatter, verify overwrite semantics and duplicate-index policy rather than assuming scatter-add or unique indices."],
+    "patch_hint": "Build a small correctness matrix with non-contiguous source, random index, duplicate scatter, broadcasted mask, and all-false/all-true mask before changing performance knobs."
+  },
+  "expected_effect": {
+    "correctness": "Targets common hidden-correctness failures for concrete KBX layout tasks.",
+    "performance": "No performance claim; repairs should run before tuning.",
+    "search_efficiency": "Moves the agent away from random launch-parameter tuning when the failure is semantic.",
+    "risk": "Some tasks may not include all boundary cases; apply only when OpSpec allows the relevant layout/index/mask behavior."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_stride_contiguous_tensor_views", "source:pytorch_gather_index_select_semantics", "source:pytorch_scatter_overwrite_semantics", "source:pytorch_masked_select_where_semantics", "claim:clm_fail_kbx_layout_assumptions_01"],
+    "evidence_level": "claim",
+    "confidence": 0.78
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["non-contiguous source", "random index", "duplicate scatter index", "broadcasted mask", "masked_select empty output", "permute_copy asymmetric dims"],
+    "promotion_policy": "Candidate failure signature; promote only after repeated observed H20 failure traces across tasks."
+  },
+  "failure_boundary": {
+    "known_failures": ["Contiguous-only address math", "view-only return for copy task", "unique/sorted index assumption", "dense output for masked_select", "scatter-add logic for scatter overwrite"],
+    "boundary_tests": ["non-contiguous stride seed", "unsorted index tensor", "duplicate scatter target", "all-false mask", "broadcast condition", "small edge tile"],
+    "do_not_apply": ["pure matmul", "row reduction", "row softmax", "pointwise contiguous add/mul"]
+  },
+  "retrieval": {
+    "keys": ["layout_indexing", "kbx", "failure", "correctness_repair", "contiguous_only", "non_contiguous", "unique_indices", "index_select", "permute_copy", "scatter", "masked_select", "expand_where", "fused_gather_masked_fill", "wrong_output_shape", "bounds"],
+    "negative_keys": ["performance_optimize_only", "unverified_speedup"],
+    "priority": 86,
+    "max_context_tokens": 560
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["fail_layout_assume_contiguous_or_unique_indices_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
