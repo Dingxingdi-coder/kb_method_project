@@ -1,0 +1,62 @@
+{
+  "id": "sem_reduction_kbx_std_arg_index_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "quarantine",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["reduction"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate semantic bridge for expanded KBX reductions: mean, std, min, argmax, and fused_sum_std",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["*"],
+    "layout_scope": ["*"]
+  },
+  "conditions": {
+    "valid_when": ["The concrete KBX op is sum, mean, std, min, argmax, fused_sum_std, or another reduction variant beyond the original row-sum/max MVP task."],
+    "invalid_when": ["The task is not a reduction or the OpSpec delegates the reduction to a different fused primitive."],
+    "preconditions": ["Read dim, tuple-dim behavior, keepdim, dtype, correction, value+index output, and empty/degenerate reduction rules from OpSpec."]
+  },
+  "mechanism": "Old row-reduction capsules cover useful skeletons, tail masks, and accumulation dtype, but expanded KBX reductions introduce std correction, argmax/index outputs, mean normalization, tuple dims, and fused sum+std semantics.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["For std, preserve correction and keepdim semantics; use numerically guarded fp32 statistics when dtype/tolerance requires it.", "For min(dim=...) and argmax, return the declared value/index or index-only output with correct integer dtype and tie policy.", "For mean, divide by the actual reduction element count after masks, not by block size.", "For tuple dims or dim=None, ensure the output shape matches OpSpec before applying row-wise skeletons.", "For fused_sum_std, validate both outputs independently before claiming fusion helps."],
+    "patch_hint": "Start from existing row-reduction skeletons only when the reduction axis and output shape match; otherwise add shape-general dim mapping before tuning."
+  },
+  "expected_effect": {
+    "correctness": "Supplements old sum/max KB so expanded KBX reductions retrieve std/arg/index candidate constraints.",
+    "performance": "No H20 performance claim; keep in quarantine until task-specific runs validate schedules.",
+    "search_efficiency": "Prevents applying row-sum skeleton blindly to std/argmax/min variants.",
+    "risk": "Tie behavior and correction semantics may require task-specific tolerance checks."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_reduction_kbx_semantics", "claim:clm_reduction_kbx_std_arg_index_gap_01"],
+    "evidence_level": "claim",
+    "confidence": 0.62
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["dim scalar", "dim tuple", "dim None", "keepdim true/false", "std correction", "argmax/min tie case", "non-power-of-two length"],
+    "promotion_policy": "Remain candidate/quarantine until H20 traces show robust correctness and performance across expanded reduction variants."
+  },
+  "failure_boundary": {
+    "known_failures": ["Using row-only offsets for arbitrary dim reductions.", "Dividing mean/std by padded block size.", "Returning values instead of indices for argmax.", "Ignoring correction in std."],
+    "boundary_tests": ["length 1", "odd length", "tuple dims", "duplicate max/min values", "dtype override"],
+    "do_not_apply": ["softmax", "matmul", "pointwise", "layout_indexing"]
+  },
+  "retrieval": {
+    "keys": ["reduction", "kbx", "sum", "mean", "std", "argmax", "min", "fused_sum_std", "correction", "keepdim", "dtype", "value_index", "tuple_dim", "correctness_repair"],
+    "negative_keys": ["softmax", "matmul", "pointwise"],
+    "priority": 72,
+    "max_context_tokens": 560
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_reduction_sum_dtype_v1", "sem_reduction_max_axis_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
