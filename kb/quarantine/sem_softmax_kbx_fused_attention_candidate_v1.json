@@ -1,0 +1,63 @@
+{
+  "id": "sem_softmax_kbx_fused_attention_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "quarantine",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["softmax"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate semantic bridge for expanded KBX softmax/log-softmax/cross-entropy/attention primitives",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*"]
+  },
+  "conditions": {
+    "valid_when": ["The concrete KBX op is softmax, fused_softmax_log, fused_log_softmax_linear, fused_repeat_interleave_log_softmax, fused_cross_entropy_log_softmax, attention, or an equivalent softmax-centered primitive."],
+    "invalid_when": ["The task is pure matmul, pure layernorm, or a non-softmax pointwise expression."],
+    "preconditions": ["Read dim, dtype, reduction, target, ignore_index, label_smoothing, causal mask, softmax_scale, and output contract from OpSpec."
+    ]
+  },
+  "mechanism": "Old row-softmax capsules cover max-subtract stability and masked denominator lanes, but expanded KBX tasks add log-space outputs, cross-entropy target/reduction semantics, repeat_interleave shape changes, linear/matmul subexpressions, and attention score/value aggregation.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["For softmax/log_softmax subexpressions, preserve max-subtraction numerical stability and declared output dtype.", "For fused_softmax_log and fused log-softmax variants, do not confuse log(softmax(x)) with softmax(x) or return the wrong domain.", "For cross entropy, handle target indices, ignore_index, optional class weights, reduction mode, and label_smoothing exactly as declared before optimizing.", "For attention, treat qk score matmul, optional causal mask, softmax scale, and value aggregation as part of the contract; do not apply a row-softmax-only skeleton to the whole task.", "Keep high-level PyTorch cross_entropy/log_softmax/attention fallbacks out of the submitted target path unless a task-specific legality rule allows them."],
+    "patch_hint": "Reuse existing softmax stable capsules for the softmax subexpression, then explicitly model any fused pre/post operation and output shape before tuning."
+  },
+  "expected_effect": {
+    "correctness": "Supplements old row-softmax KB for fused log-softmax, CE, repeat-interleave, linear, and attention variants.",
+    "performance": "No H20 performance claim; candidate remains quarantine until validated by runs.",
+    "search_efficiency": "Prevents treating all expanded softmax tasks as plain row softmax.",
+    "risk": "Attention and cross entropy combine multiple primitives and may require task/harness-specific legality support."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_softmax_ce_attention_semantics", "claim:clm_softmax_kbx_fused_attention_gap_01"],
+    "evidence_level": "claim",
+    "confidence": 0.6
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["dim 0/1/-1", "dtype override", "large logits", "ignore_index", "label_smoothing", "causal attention", "repeat_interleave output_size"],
+    "promotion_policy": "Remain quarantine until individual expanded softmax tasks have legal hidden-correct H20 traces."
+  },
+  "failure_boundary": {
+    "known_failures": ["Returning softmax where log_softmax is required.", "Ignoring target/ignore_index/reduction in CE.", "Applying softmax before causal mask in attention.", "Hardcoding row-last dimension only."],
+    "boundary_tests": ["large positive/negative logits", "ignored class target", "different dim", "causal true/false", "optional bias/weight where task includes them"],
+    "do_not_apply": ["pure reduction", "pure matmul without softmax", "pure layout indexing"]
+  },
+  "retrieval": {
+    "keys": ["softmax", "kbx", "log_softmax", "fused_softmax_log", "fused_log_softmax_linear", "fused_repeat_interleave_log_softmax", "fused_cross_entropy_log_softmax", "cross_entropy", "attention", "causal", "softmax_scale", "ignore_index", "label_smoothing", "correctness_repair"],
+    "negative_keys": ["pure_matmul", "layernorm", "pointwise_only"],
+    "priority": 72,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_softmax_log_boundary_v1", "sem_softmax_dtype_output_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
