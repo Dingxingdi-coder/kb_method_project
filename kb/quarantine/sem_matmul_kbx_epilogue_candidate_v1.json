@@ -1,0 +1,62 @@
+{
+  "id": "sem_matmul_kbx_epilogue_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "quarantine",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair", "performance_optimize"],
+  "operator_scope": {
+    "families": ["matmul"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate semantic bridge for expanded KBX matmul, addmm, matvec, bmm, and triangular epilogue tasks",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*"]
+  },
+  "conditions": {
+    "valid_when": ["The concrete KBX op is matmul, matmul_fp16, matmul_bf16, addmm, matrix_vector_dot, tril_mm_and_scale, or a matmul-like fused-normalization subgraph."],
+    "invalid_when": ["The task is not contraction/matmul-like or the epilogue dominates without a contraction."],
+    "preconditions": ["Read batch dimensions, 1D/2D/3D matmul cases, alpha/beta epilogue, triangular mask, scale, bias/addend, dtype, and output shape from OpSpec."]
+  },
+  "mechanism": "Old GEMM capsules cover core tiled contraction, but expanded KBX matmul-like tasks add batched dispatch, vector cases, addmm alpha/beta epilogues, matrix-vector dot accumulation, triangular masks, and fused normalization/activation subgraphs.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["For addmm, compute beta * input + alpha * (mat1 @ mat2) with broadcast/output semantics declared by OpSpec.", "For matrix_vector_dot and 1D matmul cases, preserve vector output shape and alpha/beta accumulation rather than forcing 2D GEMM layout.", "For tril_mm_and_scale, apply triangular mask and scale in the declared order and validate boundary masks before tensor-core tuning.", "For fp16/bf16 matmul, declare accumulation dtype/TF32 policy and compare against task tolerance.", "Do not call torch.matmul, torch.bmm, torch.addmm, cuBLAS, or equivalent high-level fallback as the submitted target implementation."],
+    "patch_hint": "Start from the existing matmul tile skeleton only for the contraction core; add explicit epilogue code and boundary masks before tuning block sizes."
+  },
+  "expected_effect": {
+    "correctness": "Supplements old GEMM KB for addmm, matvec, batched, triangular-mask, and epilogue semantics.",
+    "performance": "No H20 performance claim; epilogue fusion and tensor-core choices require validation.",
+    "search_efficiency": "Prevents treating every expanded matmul task as plain 2D GEMM.",
+    "risk": "Shape-general matmul and epilogues can increase complexity; preserve correctness before tensor-core tuning."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_matmul_addmm_bmm_semantics", "claim:clm_matmul_kbx_epilogue_gap_01"],
+    "evidence_level": "claim",
+    "confidence": 0.6
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["2D GEMM", "batched matmul", "1D x 2D", "2D x 1D", "addmm alpha/beta", "triangular mask", "fp16/bf16 accumulation tolerance"],
+    "promotion_policy": "Remain quarantine until concrete expanded matmul tasks have legal hidden-correct H20 traces and profile evidence."
+  },
+  "failure_boundary": {
+    "known_failures": ["Ignoring addmm beta/alpha epilogue.", "Forcing 1D matvec to 2D output shape.", "Applying triangular mask on the wrong matrix or wrong side of scaling.", "Using high-level matmul/cuBLAS fallback in kernel-authoring mode."],
+    "boundary_tests": ["alpha != 1", "beta != 0", "vector input", "batched input", "non-square triangular mask", "M/N/K tails"],
+    "do_not_apply": ["pure pointwise", "pure layout indexing", "row softmax without matmul"]
+  },
+  "retrieval": {
+    "keys": ["matmul", "kbx", "matmul_fp16", "matmul_bf16", "addmm", "matrix_vector_dot", "tril_mm_and_scale", "bmm", "matvec", "epilogue", "alpha", "beta", "triangular", "tril", "tensor_core", "correctness_repair", "performance_optimize"],
+    "negative_keys": ["pure_pointwise", "scatter", "unverified_speedup"],
+    "priority": 72,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_matmul_contract_v1", "sem_matmul_bias_boundary_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
