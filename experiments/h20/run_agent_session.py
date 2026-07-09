@@ -153,6 +153,35 @@ def tuning_protocol() -> str:
 - Do not continue random tuning after this fixed budget unless correctness is still failing."""
 
 
+def posthoc_portability_protocol(task: dict[str, Any]) -> str:
+    op_name = str(task.get("op_name") or task.get("op_family") or "operator")
+    impl_name = "".join(ch if ch.isalnum() or ch == "_" else "_" for ch in op_name).strip("_") or "operator"
+    kbx_entry = ""
+    if task.get("op_family") == "softmax" and task.get("op_name") == "row_softmax":
+        kbx_entry = """\n- KernelBench-X overlapping task: also expose `def softmax(input, dim, dtype=None)`.
+  It must be correct for KernelBench-X softmax tests, including `dim=0`, `dim=1`, `dim=-1`, and optional `dtype`. Dispatch to the optimized row-softmax helper when the call matches it."""
+    elif task.get("op_family") == "reduction" and task.get("op_name") == "sum":
+        kbx_entry = """\n- KernelBench-X overlapping task: also expose `def sum(input, dim, keepdim=False, dtype=None)`.
+  It must be correct for KernelBench-X sum tests, including 1D reductions, tuple dims, `keepdim`, and optional `dtype`. Dispatch to the optimized last-dim helper when the call matches it."""
+    elif task.get("op_family") == "matmul":
+        dtype = str(task.get("dtype") or "")
+        if dtype in {"fp16", "float16"}:
+            kbx_entry = """\n- KernelBench-X overlapping task: also expose `def matmul_fp16(input, other)`.
+  It must be correct for KernelBench-X matmul_fp16 tests, including 1D x 2D, 2D x 1D, 2D x 2D, and batched 3D matmul. Dispatch to the optimized 2D helper when the call matches it."""
+        elif dtype in {"bf16", "bfloat16"}:
+            kbx_entry = """\n- KernelBench-X overlapping task: also expose `def matmul_bf16(input, other)`.
+  It must be correct for KernelBench-X matmul_bf16 tests, including 1D x 2D, 2D x 1D, 2D x 2D, and batched 3D matmul. Dispatch to the optimized 2D helper when the call matches it."""
+    if not kbx_entry:
+        kbx_entry = "\n- This H20 task has no declared KernelBench-X overlap in this pilot; do not add a speculative KernelBench-X entrypoint."
+    return f"""Post-hoc portability constraint:
+- `candidate.py` remains the H20 submission and `candidate(...)` remains the H20 entrypoint.
+- When practical, put the optimized implementation behind a top-level helper named `{impl_name}_impl(...)`, then have `candidate(...)` call that helper with the declared H20 arguments.
+- Keep helper kernels and helper functions at module top level rather than nested inside `candidate(...)`.
+- Avoid import-time execution, local file reads, or current-working-directory assumptions so the final file can be copied or wrapped after the experiment.
+- For the KernelBench-X overlap below, define the listed top-level entrypoint in this same `candidate.py`; the post-hoc exporter will copy the file to the matching KernelBench-X basename and will not synthesize missing semantics.{kbx_entry}
+- Do not replace the H20 interface with a KernelBench-X function, JSONL record, or differently named output file during this pilot."""
+
+
 def group_retrieval_protocol(
     retrieve_script: Path,
     backend_path: Path,
@@ -237,6 +266,7 @@ def write_prompt(
     background = background_protocol()
     workflow = workflow_protocol()
     tuning = tuning_protocol()
+    posthoc_portability = posthoc_portability_protocol(task)
     protocol = group_retrieval_protocol(
         retrieve_script,
         backend_path,
@@ -275,6 +305,8 @@ Rules:
 {workflow}
 
 {tuning}
+
+{posthoc_portability}
 
 {protocol}
 
