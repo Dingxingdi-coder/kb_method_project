@@ -1,0 +1,64 @@
+{
+  "id": "stop_pointwise_kbx_memory_bound_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "stop_capsule",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": ["performance_optimize", "autotune"],
+  "operator_scope": {
+    "families": ["pointwise", "elementwise"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate stop condition for legal hidden-correct KBX pointwise kernels",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["contiguous", "as_declared_by_task"]
+  },
+  "conditions": {
+    "valid_when": ["Candidate is legal and hidden-correct.", "Repeated benchmark and profile summary consistently indicate memory_bound behavior.", "Several low-risk block-size or num_warps attempts do not improve p50/p95 beyond benchmark noise."],
+    "invalid_when": ["Correctness is not stable.", "Profile shows uncoalesced memory, excessive temporary materialization, fallback, register pressure, or occupancy bottleneck with a targeted repair still available."],
+    "preconditions": ["Do not stop without benchmark_repeat and profile_attribution gates."]
+  },
+  "mechanism": "For pointwise memory-bound kernels, broad random tuning can consume token/time/GPU budget after the implementation already performs the required low-level expression in a single legal pass.",
+  "action": {
+    "kind": "stop",
+    "instructions": ["Stop broad local tuning only after hidden correctness, repeated p50/p95 benchmarks, and profile attribution show a stable memory-bound plateau.", "Before stopping, check for obvious wasted bandwidth: high-level fallback, temporary tensors, non-coalesced contiguous operands, missing tail masks, or broadcast materialization.", "Record the stop decision as candidate/quarantine evidence, not as a stable optimality claim."],
+    "patch_hint": "Store candidate hash, attempted knobs, p50/p95 summary, and profile symptom in the run trace when stopping."
+  },
+  "expected_effect": {
+    "correctness": "No semantic effect.",
+    "performance": "Avoids low-yield tuning; does not assert optimal H20 latency.",
+    "search_efficiency": "Reduces time/token/benchmark calls spent after a likely memory-bound plateau.",
+    "risk": "Premature stopping can miss a coalescing or register-pressure fix if profile attribution is weak."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:cuda_best_practices_memory_coalescing", "source:h20_mvp_benchmark_profile_protocol", "claim:clm_kbx_pointwise_stop_candidate_01"],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.55
+  },
+  "validation": {
+    "gates": ["hidden_correctness", "benchmark_repeat", "profile_attribution", "reproducibility"],
+    "performance_requirements": ["Require fixed warmup/repeat settings and p50/p95 report.", "Require profile summary to distinguish memory_bound from uncoalesced or occupancy-limited symptoms."],
+    "promotion_policy": "Remain quarantine until multiple H20 traces show this stop rule saves budget without hurting oracle-best legal p50."
+  },
+  "failure_boundary": {
+    "known_failures": ["Stopping before fixing uncoalesced accesses can lock in a poor kernel.", "A single benchmark sample can mistake noise for a plateau."],
+    "boundary_tests": ["profile changes after coalescing fix", "benchmark variance masks small differences"],
+    "do_not_apply": ["correctness_repair", "compile_repair", "uncoalesced memory with available repair", "atomic contention"]
+  },
+  "retrieval": {
+    "keys": ["pointwise", "kbx", "memory_bound", "stop", "stop_condition", "bandwidth", "benchmark_repeat", "profile_attribution", "p50", "p95", "token_budget", "time_budget", "add", "mul", "gelu_fp16", "fused_add_gelu"],
+    "negative_keys": ["correctness_failed", "compile_failed", "uncoalesced", "atomic_contention"],
+    "priority": 68,
+    "max_context_tokens": 480
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["stop_memory_bound_pointwise_candidate_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
