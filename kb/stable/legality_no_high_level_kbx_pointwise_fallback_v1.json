@@ -1,0 +1,66 @@
+{
+  "id": "legality_no_high_level_kbx_pointwise_fallback_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "legality_constraint",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair", "performance_optimize"],
+  "operator_scope": {
+    "families": ["pointwise", "elementwise"],
+    "op_names": ["*"],
+    "semantic_signature": "kernel-authoring legality for concrete KBX pointwise and fused elementwise entrypoints",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["*"],
+    "layout_scope": ["*"]
+  },
+  "conditions": {
+    "valid_when": ["Experiment mode is kernel-authoring mode and the submitted candidate path must implement KBX pointwise semantics in a custom low-level kernel."],
+    "invalid_when": ["A separately reported library-composition mode explicitly permits framework composition."],
+    "preconditions": ["Check the task-specific banned API list and the required KBX entrypoint before generating candidate code."]
+  },
+  "mechanism": "High-level PyTorch/ATen functions that perform add, mul, GELU, fused add+GELU, fused mul-sub, clamp, or equivalent target semantics bypass the kernel-authoring objective even if they pass correctness.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "Do not call torch.add, torch.mul, torch.sub, torch.clamp, torch.gelu, torch.nn.functional.gelu, torch.nn.functional.silu, or equivalent high-level target operations to implement the concrete KBX pointwise semantic path.",
+      "Allowed host-side actions are metadata reads, output allocation, shape/stride checks, and launching the custom kernel, unless the task spec declares a stricter rule.",
+      "Move add/mul/sub/GELU/activation/affine arithmetic into the Triton/CUDA/custom-kernel body and keep wrapper code limited to infrastructure."
+    ],
+    "patch_hint": "If a candidate currently calls PyTorch for the target expression, replace that path with a custom kernel launch and validate through static_legality and anti_cheating gates."
+  },
+  "expected_effect": {
+    "correctness": "Does not by itself prove numerical correctness; it preserves legal evaluation boundaries.",
+    "performance": "Prevents illegal framework fast paths from being counted as legal H20 results.",
+    "search_efficiency": "Avoids iterations spent on candidates that will be rejected during legality review.",
+    "risk": "Static scans can miss indirect fallbacks, so dynamic tracing or human review may still be required."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:h20_formal_kernel_authoring_rules", "claim:clm_kbx_pointwise_fallback_bridge_01"],
+    "evidence_level": "claim",
+    "confidence": 0.9
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "anti_cheating", "compile", "smoke_correctness", "hidden_correctness"],
+    "correctness_matrix": ["candidate path trace contains no target high-level fallback", "wrapper only allocates output and launches custom kernel"],
+    "promotion_policy": "Stable repository legality rule; not a hardware performance rule."
+  },
+  "failure_boundary": {
+    "known_failures": ["Calling PyTorch add/mul/GELU can pass correctness while remaining illegal under kernel-authoring mode.", "Using out= with a framework op can still delegate target semantics to PyTorch."],
+    "boundary_tests": ["static scan for torch.* target ops", "dynamic trace of submitted candidate path"],
+    "do_not_apply": ["secondary library-composition mode with separate reporting"]
+  },
+  "retrieval": {
+    "keys": ["pointwise", "kbx", "add", "mul", "gelu_fp16", "gelu_bf16", "fused_add_gelu", "fused_mul_sub", "high_level_fallback", "torch.add", "torch.mul", "torch.nn.functional.gelu", "legality", "anti_cheating", "kernel_authoring"],
+    "negative_keys": ["library_composition_mode"],
+    "priority": 97,
+    "max_context_tokens": 430
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["legality_no_high_level_pointwise_fallback_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
