@@ -4,6 +4,7 @@ derived_from:
   - sources/registry/h20_expanded_pilot_sources.yaml
 frozen_as: h20_expanded_pilot_seed
 ingested_at: 2026-07-08
+updated_at: 2026-07-09
 ---
 
 # Pointwise / fused memory-bound raw corpus notes
@@ -79,6 +80,19 @@ This cleaned corpus file adds traceable source notes for the expanded pilot cate
 - applicability: all expanded pilot kernel-authoring tasks.
 - limitations: this is a repository legality rule, not an upstream CUDA or PyTorch performance rule.
 
+## kbx_expanded_pilot_pointwise_entrypoints — concrete KBX task bridge
+
+- uri: experiments/h20/expanded_pilot_tasks.md
+- kind: project_protocol; trust: project_report; license: repository
+- topics: kernelbenchx, pointwise, fused memory-bound, concrete entrypoints, task bridge
+- backends: nvidia_cuda; operators: pointwise
+- candidate_fact_1: The expanded pilot concrete Pointwise / Fused Memory-Bound tasks are `add`, `mul`, `gelu_fp16`, `gelu_bf16`, `fused_add_gelu`, and `fused_mul_sub`.
+- candidate_fact_2: These concrete KBX op names must retrieve the same pointwise correctness, legality, tail-mask, broadcast-indexing, activation-intermediate, and memory-bound candidate knowledge as the abstract design examples.
+- candidate_fact_3: `add` and `mul` are simpler elementwise forms; `gelu_fp16`, `gelu_bf16`, and `fused_add_gelu` need activation formula and dtype/tolerance checks; `fused_mul_sub` needs fused arithmetic without materializing temporary tensors.
+- candidate_fact_4: This entry is a task-manifest bridge only; it does not add benchmark shapes, hidden-test details, or H20 performance measurements.
+- applicability: actual KBX-expanded pointwise tasks generated from `experiments/h20/expanded_pilot_tasks.md`.
+- limitations: entrypoint mapping does not prove a fused custom kernel is faster than any baseline.
+
 ## Candidate task mapping
 
 - bias + GELU: use broadcast address calculation, GELU formula, optional fp32 intermediate, tail masks, and no high-level activation fallback.
@@ -87,3 +101,7 @@ This cleaned corpus file adds traceable source notes for the expanded pilot cate
 - broadcast affine `y = x * scale + bias`: compute `x`, `scale`, and `bias` addresses from output logical indices and per-operand broadcast/stride metadata.
 - gated multiply `y = silu(x1) * x2`: preserve SiLU formula and gated multiplication order; cast intermediates according to OpSpec tolerance.
 - clamp + mul + add: implement clamp bounds and arithmetic in the low-level kernel; keep output dtype per OpSpec.
+- KBX `add` / `mul`: use the same tail-safe pointwise skeleton and honor scalar/tensor operand broadcasting plus optional alpha/out semantics declared by the task.
+- KBX `gelu_fp16` / `gelu_bf16`: preserve the `approximate` mode and validate activation precision before performance tuning.
+- KBX `fused_add_gelu`: fuse add and GELU in the custom kernel; do not call PyTorch add/GELU to implement the target semantic path.
+- KBX `fused_mul_sub`: fuse multiply and subtract in one low-level path; validate broadcasting, tail masks, and output dtype.
