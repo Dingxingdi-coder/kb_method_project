@@ -1,11 +1,20 @@
-version: kb_expanded_pilot_manifest_v1
+version: kb_expanded_pilot_manifest_v2
 generated_at: '2026-07-09T00:00:00Z'
 branch: h20-demo-round2
-scope: Supplemental KB entries for the H20 6-category expanded pilot. Entries are derived from sources/raw_corpus/pointwise_fusion_corpus.md, sources/raw_corpus/layout_indexing_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md, and sources/derived_claims/h20_expanded_pilot_claims.yaml.
+scope: Supplemental KB entries for the H20 6-category expanded pilot. Entries are derived from sources/raw_corpus/pointwise_fusion_corpus.md, sources/raw_corpus/layout_indexing_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md, sources/derived_claims/h20_expanded_pilot_claims.yaml, and sources/derived_claims/h20_expanded_pilot_coverage_audit.yaml.
 policy:
   - A1, A2, and A3 share the same source-visible supplemental raw corpus; no KB entry cites sources outside sources/registry/h20_expanded_pilot_sources.yaml or existing raw_corpus_v0 registries.
   - Stable entries are limited to semantic or repository-legality constraints supported by official/project documentation.
   - Performance motifs and old-family expanded-gap entries remain quarantine/candidate because they have no H20 benchmark/profile evidence.
+traceability_repairs:
+  - repaired_source_id: source:h20_mvp_benchmark_profile_protocol
+    registered_in: sources/registry/h20_expanded_pilot_sources.yaml
+    raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    affected_refs:
+      - kb/quarantine/stop_memory_bound_pointwise_candidate_v1.json
+      - kb/quarantine/stop_pointwise_kbx_memory_bound_candidate_v1.json
+      - sources/derived_claims/h20_expanded_pilot_claims.yaml
+coverage_audit: sources/derived_claims/h20_expanded_pilot_coverage_audit.yaml
 new_stable_entries:
   pointwise:
     - kb/stable/sem_pointwise_kbx_entrypoint_broadcast_activation_v1.json
@@ -52,19 +61,23 @@ coverage_map:
     failure_capsules:
       - fail_layout_kbx_assume_contiguous_or_unique_indices_v1
   reduction:
+    concrete_kbx_ops: [sum, mean, std, min, argmax, fused_sum_std]
     existing_coverage: Base row sum/max, fp32 accumulation, masks, and non-power-of-two coverage remain from KB v0.
     supplemental_candidate: sem_reduction_kbx_std_arg_index_candidate_v1
   softmax_attention:
+    concrete_kbx_ops: [softmax, fused_softmax_log, fused_log_softmax_linear, fused_repeat_interleave_log_softmax, fused_cross_entropy_log_softmax, attention]
     existing_coverage: Base row softmax stability, mask, dtype, and profile-after-correctness coverage remain from KB v0.
     supplemental_candidate: sem_softmax_kbx_fused_attention_candidate_v1
   normalization:
+    concrete_kbx_ops: [layernorm_w8a8, fused_layer_norm_relu_linear, fused_cross_entropy_softmax_layernorm, fused_silu_layer_norm_conv2d, fused_bmm_rmsnorm_gelu_dropout, fused_bmm_rmsnorm_gelu_dropout_sub]
     existing_coverage: Base LayerNorm forward formula, eps, affine, and fp32 accumulation coverage remain from KB v0.
     supplemental_candidate: sem_normalization_kbx_fused_rms_candidate_v1
   matmul_like:
+    concrete_kbx_ops: [matmul, matmul_fp16, matmul_bf16, addmm, matrix_vector_dot, tril_mm_and_scale]
     existing_coverage: Base GEMM/tl.dot/tile/boundary-mask coverage remains from KB v0.
     supplemental_candidate: sem_matmul_kbx_epilogue_candidate_v1
 retrieval_notes:
   - New pointwise/layout bridge capsules use op_names ['*'] with concrete retrieval.keys because tools/retrieve_context.py hard-filters exact op_names when op_names is present.
   - This avoids schema-enum changes while allowing A3 to match concrete KBX op_names emitted by future task JSON.
-  - If future task JSON emits a new op_family value such as normalization instead of layernorm, a minimal family-alias change in tools/retrieve_context.py may still be needed.
+  - sem_normalization_kbx_fused_rms_candidate_v1 includes family common as a retrieval alias so it remains reachable if future task JSON labels the category as normalization rather than layernorm.
 index_rebuild_required: true

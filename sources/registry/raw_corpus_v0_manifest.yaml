@@ -4,9 +4,9 @@ expanded_pilot_supplement_timestamp: '2026-07-09T00:00:00Z'
 branch: h20-demo-round2
 repository: Dingxingdi-coder/kb_method_project
 counts:
-  sources: 143
+  sources: 144
   base_sources: 128
-  expanded_pilot_supplemental_sources: 15
+  expanded_pilot_supplemental_sources: 16
   raw_archive_files: 19
   raw_corpus_files: 8
   base_raw_corpus_files: 5
@@ -14,6 +14,7 @@ counts:
   claims: 664
   base_claims: 640
   expanded_pilot_claims: 24
+  coverage_audit_files: 1
 coverage_summary:
   common_public_sources: 40
   operator_family_sources_total: 88
@@ -23,7 +24,7 @@ coverage_summary:
   matmul_sources: 23
   pointwise_expanded_sources: 5
   layout_indexing_expanded_sources: 6
-  kbx_gap_check_sources: 5
+  kbx_gap_check_sources: 6
 files:
   source_registry:
   - sources/registry/sources.yaml
@@ -64,6 +65,8 @@ files:
   - sources/derived_claims/row_reduction_claims.claims.yaml
   - sources/derived_claims/softmax_claims.claims.yaml
   - sources/derived_claims/h20_expanded_pilot_claims.yaml
+  coverage_audits:
+  - sources/derived_claims/h20_expanded_pilot_coverage_audit.yaml
   kb_lineage: sources/derived_claims/kb_v0_lineage.yaml
   expanded_pilot_kb_manifest: kb/kb_expanded_pilot_manifest.yaml
 derivation_relationships:
@@ -73,5 +76,5 @@ derivation_relationships:
 - derived_claims -> KB v0 and expanded-pilot capsules
 notes:
 - The original MVP raw corpus remains intact; pointwise/layout/gap files are supplemental source-visible material for the expanded pilot.
-- Supplemental entries contain public documentation and project task-manifest bridges only. They contain no hidden tests, benchmark shapes, or unverified H20 performance numbers.
+- Supplemental entries contain public documentation and project task-manifest bridges/protocols only. They contain no hidden tests, benchmark shapes, or unverified H20 performance numbers.
 - Rebuild raw_corpus_vector_v0 and kb_vector_v0 after this manifest change before running A1/A2/A3 expanded-pilot sessions.

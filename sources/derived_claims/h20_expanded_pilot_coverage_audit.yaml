@@ -1,0 +1,150 @@
+version: h20_expanded_pilot_coverage_audit_v1
+generated_at: '2026-07-09T00:00:00Z'
+scope: Per-KBX-op coverage audit for the concrete 36-task expanded pilot list in experiments/h20/expanded_pilot_tasks.md.
+policy:
+  - This file is an audit/manifest, not H20 benchmark evidence.
+  - Stable coverage means semantic or repository-legality support only.
+  - Performance, stop, schedule, and tuning support remains quarantine/candidate unless H20 run evidence is attached.
+source_registry_refs:
+  - sources/registry/sources.yaml
+  - sources/registry/h20_expanded_pilot_sources.yaml
+task_manifest_ref: source:kbx_expanded_pilot_task_manifest
+source_ref_audit:
+  status: pass_after_repair
+  repaired_source_ids:
+    - source:h20_mvp_benchmark_profile_protocol
+  notes:
+    - source:h20_mvp_benchmark_profile_protocol is now registered in sources/registry/h20_expanded_pilot_sources.yaml and points to sources/raw_corpus/kbx_expanded_gap_corpus.md.
+per_category:
+  pointwise_fused_memory_bound:
+    raw_corpus_refs: [sources/raw_corpus/pointwise_fusion_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md]
+    claim_refs:
+      - clm_kbx_pointwise_entrypoint_bridge_01
+      - clm_kbx_pointwise_fallback_bridge_01
+      - clm_kbx_pointwise_memory_bound_candidate_01
+      - clm_kbx_pointwise_stop_candidate_01
+    stable_capsules:
+      - sem_pointwise_kbx_entrypoint_broadcast_activation_v1
+      - legality_no_high_level_kbx_pointwise_fallback_v1
+    quarantine_capsules:
+      - perf_pointwise_kbx_fusion_memory_bound_candidate_v1
+      - stop_pointwise_kbx_memory_bound_candidate_v1
+    ops:
+      add: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      mul: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      gelu_fp16: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      gelu_bf16: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      fused_add_gelu: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      fused_mul_sub: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+  reduction:
+    raw_corpus_refs: [sources/raw_corpus/row_reduction_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md]
+    claim_refs:
+      - clm_reduction_kbx_std_arg_index_gap_01
+      - existing_kb_v0_reduction_claims
+    stable_capsules:
+      - sem_reduction_sum_dtype_v1
+      - sem_reduction_max_axis_v1
+      - sem_reduction_mean_boundary_v1
+    quarantine_capsules:
+      - sem_reduction_kbx_std_arg_index_candidate_v1
+    ops:
+      sum: {coverage: covered, semantic_status: stable_plus_candidate_bridge, performance_status: existing_quarantine_or_unverified}
+      mean: {coverage: covered, semantic_status: stable_plus_candidate_bridge, performance_status: existing_quarantine_or_unverified}
+      std: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      min: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      argmax: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_sum_std: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+  softmax_attention:
+    raw_corpus_refs: [sources/raw_corpus/softmax_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md]
+    claim_refs:
+      - clm_softmax_kbx_fused_attention_gap_01
+      - existing_kb_v0_softmax_claims
+    stable_capsules:
+      - sem_softmax_stability_v1
+      - sem_softmax_dtype_output_v1
+      - sem_softmax_log_boundary_v1
+    quarantine_capsules:
+      - sem_softmax_kbx_fused_attention_candidate_v1
+    ops:
+      softmax: {coverage: covered, semantic_status: stable_plus_candidate_bridge, performance_status: existing_quarantine_or_unverified}
+      fused_softmax_log: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_log_softmax_linear: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_repeat_interleave_log_softmax: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_cross_entropy_log_softmax: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      attention: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+  normalization:
+    raw_corpus_refs: [sources/raw_corpus/layernorm_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md]
+    claim_refs:
+      - clm_norm_kbx_fused_rms_gap_01
+      - existing_kb_v0_layernorm_claims
+    stable_capsules:
+      - sem_layernorm_formula_v1
+      - sem_layernorm_eps_v1
+      - sem_layernorm_affine_v1
+    quarantine_capsules:
+      - sem_normalization_kbx_fused_rms_candidate_v1
+    ops:
+      layernorm_w8a8: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_layer_norm_relu_linear: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_cross_entropy_softmax_layernorm: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_silu_layer_norm_conv2d: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_bmm_rmsnorm_gelu_dropout: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      fused_bmm_rmsnorm_gelu_dropout_sub: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+  matmul_like:
+    raw_corpus_refs: [sources/raw_corpus/matmul_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md]
+    claim_refs:
+      - clm_matmul_kbx_epilogue_gap_01
+      - existing_kb_v0_matmul_claims
+    stable_capsules:
+      - sem_matmul_contract_v1
+      - sem_matmul_broadcast_v1
+      - sem_matmul_bias_boundary_v1
+    quarantine_capsules:
+      - sem_matmul_kbx_epilogue_candidate_v1
+    ops:
+      matmul: {coverage: covered, semantic_status: stable_plus_candidate_bridge, performance_status: existing_quarantine_or_unverified}
+      matmul_fp16: {coverage: covered, semantic_status: stable_plus_candidate_bridge, performance_status: existing_quarantine_or_unverified}
+      matmul_bf16: {coverage: covered, semantic_status: stable_plus_candidate_bridge, performance_status: existing_quarantine_or_unverified}
+      addmm: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      matrix_vector_dot: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+      tril_mm_and_scale: {coverage: covered, semantic_status: quarantine_candidate, performance_status: quarantine_candidate}
+  layout_indexing_irregular_memory:
+    raw_corpus_refs: [sources/raw_corpus/layout_indexing_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md]
+    claim_refs:
+      - clm_kbx_layout_entrypoint_stride_01
+      - clm_index_select_gather_bounds_01
+      - clm_masked_select_where_broadcast_01
+      - clm_scatter_overwrite_duplicate_01
+      - clm_kbx_layout_transpose_tile_copy_01
+      - clm_kbx_irregular_gather_scatter_coalescing_01
+      - clm_fail_kbx_layout_assumptions_01
+    stable_capsules:
+      - sem_layout_kbx_stride_indexing_v1
+      - sem_index_select_gather_bounds_v1
+      - sem_masked_select_where_broadcast_v1
+      - sem_scatter_overwrite_indexing_v1
+    quarantine_capsules:
+      - perf_layout_kbx_transpose_tile_copy_candidate_v1
+      - perf_irregular_kbx_gather_scatter_coalescing_candidate_v1
+    failure_capsules:
+      - fail_layout_kbx_assume_contiguous_or_unique_indices_v1
+    ops:
+      index_select: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      permute_copy: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      scatter: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      masked_select: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      expand_where: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+      fused_gather_masked_fill: {coverage: covered, semantic_status: stable, performance_status: quarantine_candidate}
+coverage_result:
+  total_kbx_ops: 36
+  covered_kbx_ops: 36
+  stable_semantic_or_legality_coverage:
+    pointwise_fused_memory_bound: 6
+    layout_indexing_irregular_memory: 6
+    old_mvp_families_base_ops: 7
+  candidate_or_quarantine_gap_coverage:
+    reduction_expanded_variants: [std, min, argmax, fused_sum_std]
+    softmax_expanded_variants: [fused_softmax_log, fused_log_softmax_linear, fused_repeat_interleave_log_softmax, fused_cross_entropy_log_softmax, attention]
+    normalization_expanded_variants: [layernorm_w8a8, fused_layer_norm_relu_linear, fused_cross_entropy_softmax_layernorm, fused_silu_layer_norm_conv2d, fused_bmm_rmsnorm_gelu_dropout, fused_bmm_rmsnorm_gelu_dropout_sub]
+    matmul_epilogue_variants: [addmm, matrix_vector_dot, tril_mm_and_scale]
+index_rebuild_required: true

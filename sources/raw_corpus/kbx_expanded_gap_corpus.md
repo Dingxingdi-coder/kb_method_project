@@ -4,6 +4,7 @@ derived_from:
   - sources/registry/h20_expanded_pilot_sources.yaml
 frozen_as: h20_expanded_pilot_seed
 ingested_at: 2026-07-09
+updated_at: 2026-07-09
 ---
 
 # KBX expanded pilot gap-check raw corpus notes
@@ -21,6 +22,19 @@ This cleaned corpus file records the gap check from the actual `experiments/h20/
 - candidate_fact_3: This source is a manifest bridge; it does not include hidden tests, benchmark shapes, or performance measurements.
 - applicability: all expanded pilot task generation and retrieval validation.
 - limitations: use only for task mapping and coverage accounting; consult official operator docs and OpSpec for exact semantics.
+
+## h20_mvp_benchmark_profile_protocol — repository benchmark/profile protocol
+
+- uri: docs/h20_mvp_protocol.md
+- kind: project_protocol; trust: project_report; license: repository
+- topics: benchmark, profile, correctness_gate, p50, p95, memory_bound, stop_condition
+- backends: nvidia_cuda; operators: common, pointwise, reduction, softmax, layernorm, matmul, layout_indexing
+- candidate_fact_1: Performance testing is gated by correctness; benchmark/profile interpretation should happen after compile and correctness checks.
+- candidate_fact_2: Repository benchmark summaries use repeated timing with p50/p95 style reporting rather than single-sample latency claims.
+- candidate_fact_3: Profile summaries are normalized into coarse symptoms such as memory_bound, compute_bound, occupancy_limited, launch_bound, or unknown.
+- candidate_fact_4: Stop-condition capsules may cite this protocol for the rule that repeated benchmark and profile attribution are required before concluding a tuning plateau.
+- applicability: stop capsules and performance-candidate capsules that require benchmark_repeat and profile_attribution gates.
+- limitations: this protocol source does not provide H20 performance numbers or prove a motif is faster; it only supports validation ordering and measurement requirements.
 
 ## pytorch_reduction_kbx_semantics — reduction variants beyond MVP sum/max
 
