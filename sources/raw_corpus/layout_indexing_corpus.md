@@ -4,6 +4,7 @@ derived_from:
   - sources/registry/h20_expanded_pilot_sources.yaml
 frozen_as: h20_expanded_pilot_seed
 ingested_at: 2026-07-08
+updated_at: 2026-07-09
 ---
 
 # Layout / indexing / irregular memory raw corpus notes
@@ -59,6 +60,34 @@ This cleaned corpus file adds traceable source notes for the expanded pilot cate
 - applicability: scatter-add, embedding backward-like accumulation, irregular write-side kernels.
 - limitations: this source supports semantic and validation rules; performance depends on collision distribution and backend atomic behavior.
 
+## pytorch_masked_select_where_semantics — PyTorch masked_select and where semantics
+
+- uri:
+  - https://docs.pytorch.org/docs/stable/generated/torch.masked_select.html
+  - https://docs.pytorch.org/docs/stable/generated/torch.where.html
+- kind: official_doc; trust: official; license: bsd_3_clause; version/date: PyTorch stable docs accessed 2026-07-09
+- topics: pytorch, masked_select, boolean mask, where, broadcasting, output shape
+- backends: cpu, nvidia_cuda; operators: layout_indexing, pointwise
+- candidate_fact_1: `masked_select(input, mask)` selects elements where a Boolean mask is true; input and mask are broadcastable and the result is a new one-dimensional tensor.
+- candidate_fact_2: `where(condition, input, other)` returns elements selected from `input` or `other`; condition, input, and other must be broadcastable.
+- candidate_fact_3: A custom `masked_select` kernel must implement compaction/prefix-count semantics, not merely write masked positions into the original dense shape.
+- candidate_fact_4: A custom `expand_where` kernel must preserve expand/broadcast address rules and produce the broadcasted output shape.
+- applicability: `masked_select`, `expand_where`, and fused masked-fill/where-like layout tasks.
+- limitations: these are semantic rules only; no H20 compaction or where performance claim is included.
+
+## pytorch_scatter_overwrite_semantics — PyTorch scatter overwrite semantics
+
+- uri: https://docs.pytorch.org/docs/stable/generated/torch.Tensor.scatter_.html
+- kind: official_doc; trust: official; license: bsd_3_clause; version/date: PyTorch stable docs accessed 2026-07-09
+- topics: pytorch, scatter, index bounds, duplicate indices, nondeterminism, overwrite semantics
+- backends: cpu, nvidia_cuda; operators: layout_indexing
+- candidate_fact_1: Scatter writes source values into positions declared by an index tensor along a dimension; index values must be within output bounds.
+- candidate_fact_2: PyTorch warns that non-unique indices can make scatter behavior nondeterministic and can propagate gradients incorrectly.
+- candidate_fact_3: Scatter overwrite differs from scatter-add: duplicate indices do not mean all contributions are summed.
+- candidate_fact_4: A custom scatter kernel must follow the task's duplicate-index policy and must not silently substitute scatter-add or unique-index assumptions.
+- applicability: KBX `scatter` and other indexed write-side tasks.
+- limitations: this source supports legality/correctness boundaries, not an H20 atomic or overwrite performance conclusion.
+
 ## cuda_best_practices_memory_coalescing — CUDA Best Practices Guide
 
 - uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
@@ -84,6 +113,19 @@ This cleaned corpus file adds traceable source notes for the expanded pilot cate
 - applicability: strided copy, transpose/permute edge tiles, gather/scatter bounds masks.
 - limitations: vector add is not an irregular memory benchmark.
 
+## kbx_expanded_pilot_layout_entrypoints — concrete KBX task bridge
+
+- uri: experiments/h20/expanded_pilot_tasks.md
+- kind: project_protocol; trust: project_report; license: repository
+- topics: kernelbenchx, layout_indexing, concrete entrypoints, irregular memory
+- backends: nvidia_cuda; operators: layout_indexing
+- candidate_fact_1: The expanded pilot concrete Layout / Indexing / Irregular Memory tasks are `index_select`, `permute_copy`, `scatter`, `masked_select`, `expand_where`, and `fused_gather_masked_fill`.
+- candidate_fact_2: These KBX op names need retrieval coverage from stride-aware indexing, gather/index bounds, scatter duplicate-index policy, boolean-mask compaction, broadcasted where, and irregular coalescing capsules.
+- candidate_fact_3: `permute_copy` is a regular materialized layout transform candidate; `index_select` and `fused_gather_masked_fill` are indexed read-side tasks; `scatter` is indexed write-side; `masked_select` is compacting mask selection; `expand_where` combines broadcasted view semantics and conditional pointwise selection.
+- candidate_fact_4: This entry is a task-manifest bridge only; it does not expose hidden tests, benchmark shapes, or H20 performance measurements.
+- applicability: actual KBX-expanded layout/indexing tasks generated from `experiments/h20/expanded_pilot_tasks.md`.
+- limitations: entrypoint mapping does not prove any schedule is faster on H20.
+
 ## Candidate task mapping
 
 - transpose / permute copy: compute source and destination logical coordinates explicitly; use tile masks at edges; consider tiled coalesced copy only after correctness.
@@ -92,3 +134,9 @@ This cleaned corpus file adds traceable source notes for the expanded pilot cate
 - scatter-add: preserve additive collision semantics with atomics or staged reduction; validate duplicate indices and CUDA nondeterminism tolerance.
 - slice + concat: partition output logical space into source regions; apply source base offsets and bounds.
 - strided copy / layout transform: compute every source and destination storage offset from strides; do not use high-level `contiguous()` or `permute()` to perform the target copy in the submitted path.
+- KBX `index_select`: use gather/index-select semantics with declared dim, int32/int64 index support as required by task, and bounds validation.
+- KBX `permute_copy`: materialize the permuted output; do not rely on a view-only permute or Python-level `contiguous()` fallback.
+- KBX `scatter`: implement overwrite semantics and duplicate-index policy from OpSpec; do not replace it with scatter-add.
+- KBX `masked_select`: implement Boolean mask broadcasting and one-dimensional compaction semantics.
+- KBX `expand_where`: preserve expand/broadcast zero-stride semantics and conditional selection in the low-level kernel.
+- KBX `fused_gather_masked_fill`: combine gather/index addressing and mask/value replacement without delegating either target suboperation to high-level PyTorch.
