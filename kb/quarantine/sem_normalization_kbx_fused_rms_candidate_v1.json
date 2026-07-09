@@ -1,0 +1,62 @@
+{
+  "id": "sem_normalization_kbx_fused_rms_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "quarantine",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["layernorm"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate semantic bridge for expanded KBX normalization, RMSNorm, dropout, and fused-normalization tasks",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*"]
+  },
+  "conditions": {
+    "valid_when": ["The task is a layernorm-like or normalization-centered expanded KBX op, including W8A8 layernorm, fused layer_norm, RMSNorm, dropout, bmm, conv2d, GELU, or SiLU subgraphs."],
+    "invalid_when": ["The task is a pure pointwise activation, pure matmul, or pure softmax without normalization statistics."],
+    "preconditions": ["Read normalized_shape, eps, weight/bias, RMSNorm vs LayerNorm semantics, quantization policy, dropout training flag, and fused subgraph order from OpSpec."]
+  },
+  "mechanism": "Old layernorm-forward capsules cover mean/variance/eps/affine basics, but expanded KBX normalization tasks add RMSNorm, dropout, quantized W8A8 policy, and fused bmm/conv/activation/CE subgraphs.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["Do not reuse LayerNorm mean-subtraction code for RMSNorm unless OpSpec declares LayerNorm; RMSNorm normalizes by root mean square rather than centering by mean.", "Preserve eps placement and affine weight/bias semantics for layer_norm-like subexpressions.", "For dropout-containing fused tasks, respect training/eval behavior and harness randomness policy; do not silently remove dropout for speed unless OpSpec says inference-only.", "For W8A8 or quantized layernorm tasks, keep quantization/dequantization policy explicit and candidate-only until validated.", "Validate each fused subexpression order—bmm/conv, normalization, activation, dropout, subtraction, CE/softmax—before tuning."],
+    "patch_hint": "Compose the fused task from verified sub-kernels only after each semantic block is hidden-correct on the task interface; avoid task-wide high-level PyTorch fallback."
+  },
+  "expected_effect": {
+    "correctness": "Supplements old LayerNorm coverage for RMSNorm, dropout, W8A8, and complex fused normalization tasks.",
+    "performance": "No H20 performance claim; complex fused schedules remain candidate/quarantine.",
+    "search_efficiency": "Prevents incorrect reuse of basic LayerNorm capsules for RMSNorm/dropout/fused subgraphs.",
+    "risk": "The retrieval script currently treats LayerNorm as the normalized family; if task JSON emits a distinct normalization family, a small alias may still be needed."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_normalization_rms_dropout_semantics", "claim:clm_norm_kbx_fused_rms_gap_01"],
+    "evidence_level": "claim",
+    "confidence": 0.57
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["eps variation", "weight/bias None", "RMSNorm vs LayerNorm input", "training true/false dropout", "normalized_shape variants", "fused subgraph output dtype"],
+    "promotion_policy": "Remain quarantine until concrete normalization tasks have legal hidden-correct H20 traces and operator-family retrieval is confirmed."
+  },
+  "failure_boundary": {
+    "known_failures": ["Using LayerNorm formula for RMSNorm.", "Dropping dropout semantics for speed.", "Ignoring quantized W8A8 policy.", "Calling high-level fused PyTorch path for the target subgraph."],
+    "boundary_tests": ["zero-mean vs nonzero-mean input", "dropout_p 0 and nonzero", "training false", "weight/bias absent", "large hidden size"],
+    "do_not_apply": ["pure pointwise", "pure matmul without normalization", "pure layout indexing"]
+  },
+  "retrieval": {
+    "keys": ["layernorm", "normalization", "norm", "kbx", "layernorm_w8a8", "fused_layer_norm_relu_linear", "fused_cross_entropy_softmax_layernorm", "fused_silu_layer_norm_conv2d", "fused_bmm_rmsnorm_gelu_dropout", "fused_bmm_rmsnorm_gelu_dropout_sub", "rmsnorm", "dropout", "eps", "gelu", "silu", "correctness_repair"],
+    "negative_keys": ["pure_pointwise", "pure_matmul", "unverified_speedup"],
+    "priority": 70,
+    "max_context_tokens": 620
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_layernorm_formula_v1", "sem_layernorm_eps_v1", "sem_layernorm_affine_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
