@@ -1,0 +1,62 @@
+{
+  "id": "sem_index_select_gather_bounds_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory"],
+    "op_names": ["*"],
+    "semantic_signature": "index_select or gather-like indexed read with declared dim, index dtype, and bounds semantics",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*", "as_declared_by_task"]
+  },
+  "conditions": {
+    "valid_when": ["The task is KBX index_select, fused_gather_masked_fill, gather rows, embedding lookup, or another indexed read-side layout operation."],
+    "invalid_when": ["The task is scatter-write or masked_select compaction without an indexed source read."],
+    "preconditions": ["Read dim, index dtype, index shape, source strides, and output shape from OpSpec."]
+  },
+  "mechanism": "Indexed reads use an index tensor to choose source positions; correctness depends on respecting the declared dimension, bounds, dtype, and output shape rather than assuming contiguous/sorted indices.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": ["Use the task-declared index dtype and dimension; support int64 and hidden int32 variants when OpSpec enables them.", "Check or mask index values so every source read is in bounds.", "Do not assume index values are sorted, unique, contiguous, or adjacent in memory unless OpSpec guarantees it.", "For fused_gather_masked_fill, apply the mask/value replacement after the correct gather address calculation."],
+    "patch_hint": "Separate index load from source payload copy. Compute src_offset = base + index_value * stride_dim + remaining_logical_indices * corresponding_strides."
+  },
+  "expected_effect": {
+    "correctness": "Avoids wrong rows/elements and out-of-bounds reads for indexed read-side tasks.",
+    "performance": "No stable speedup claim; coalescing depends on index distribution.",
+    "search_efficiency": "Prevents repeated failures from sorted/unique/contiguous-index assumptions.",
+    "risk": "Bounds checks and irregular index loads can be performance-sensitive but must not be removed before validation."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_gather_index_select_semantics", "claim:clm_index_select_gather_bounds_01"],
+    "evidence_level": "claim",
+    "confidence": 0.87
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["random unsorted indices", "repeated indices", "boundary index 0", "boundary index dim-1", "empty index", "non-contiguous source", "index dtype int64/int32 as declared"],
+    "promotion_policy": "Stable semantic rule; performance schedules require H20 benchmark/profile evidence."
+  },
+  "failure_boundary": {
+    "known_failures": ["Assuming contiguous row order can read wrong rows.", "Removing bounds checks can produce illegal memory accesses.", "Treating index_select as a simple contiguous copy fails random-index cases."],
+    "boundary_tests": ["unsorted index", "duplicate index", "negative or out-of-range index if harness tests error path", "row width tail"],
+    "do_not_apply": ["regular permute_copy", "scatter overwrite", "scatter_add", "pure pointwise"]
+  },
+  "retrieval": {
+    "keys": ["layout_indexing", "index_select", "gather", "gather_rows", "embedding_lookup", "fused_gather_masked_fill", "index_dtype", "bounds", "unsorted", "duplicate_indices", "irregular", "correctness_repair"],
+    "negative_keys": ["permute_copy", "scatter_overwrite", "masked_select_only"],
+    "priority": 94,
+    "max_context_tokens": 520
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_layout_stride_indexing_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
