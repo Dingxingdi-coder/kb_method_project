@@ -1,7 +1,7 @@
-version: h20_expanded_pilot_sources_v1
+version: h20_expanded_pilot_sources_v2
 branch: h20-demo-round2
 generated_at: '2026-07-09T00:00:00Z'
-policy: Supplemental source registry for the H20 expanded pilot pointwise, layout/indexing, and concrete KernelBench-X gap-check coverage. These entries prepare retrieval material only; they are not historical experiment results and do not update existing benchmark claims.
+policy: Supplemental source registry for the H20 expanded pilot pointwise, layout/indexing, concrete KernelBench-X gap-check coverage, and project benchmark/profile protocol traceability. These entries prepare retrieval material only; they are not historical experiment results and do not update existing benchmark claims.
 sources:
   - source_id: triton_vector_add_pointwise_tail_mask
     title: Triton vector add tutorial for tail masks and custom-op validation
@@ -142,6 +142,22 @@ sources:
     version_or_date: repository h20 formal protocol
     usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
     notes: Project legality rule for submitted candidate path; not an upstream performance source.
+  - source_id: h20_mvp_benchmark_profile_protocol
+    title: H20 MVP benchmark and profile protocol
+    kind: project_protocol
+    uri: docs/h20_mvp_protocol.md
+    local_raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    local_raw_archive_path: null
+    license: repository
+    trust_level: project_report
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [benchmark, profile, correctness_gate, p50, p95, memory_bound, stop_condition]
+    backends: [nvidia_cuda]
+    operators: [common, pointwise, reduction, softmax, layernorm, matmul, layout_indexing]
+    version_or_date: repository h20 MVP protocol
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Added to repair source_refs in stop capsules. Supports validation ordering and measurement requirements only; no H20 speedup claim.
   - source_id: kbx_expanded_pilot_task_manifest
     title: H20 expanded pilot KernelBench-X concrete task manifest
     kind: project_protocol
@@ -276,5 +292,5 @@ sources:
     usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
     notes: Used to supplement old GEMM coverage for addmm, matvec, batched matmul, and triangular epilogue tasks.
 excluded_categories_note:
-  - This supplemental registry records only source-visible task bridges and public official documentation.
+  - This supplemental registry records only source-visible task bridges, public official documentation, and project protocols.
   - It does not include hidden tests, benchmark shapes, private KBX evaluator details, or unverified H20 performance numbers.
