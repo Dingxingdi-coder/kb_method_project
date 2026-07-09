@@ -1,0 +1,70 @@
+{
+  "id": "perf_pointwise_kbx_fusion_memory_bound_candidate_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "optimization_motif",
+  "status": "quarantine",
+  "abstraction_level": "backend_abstract",
+  "task_phases": ["performance_optimize", "autotune"],
+  "operator_scope": {
+    "families": ["pointwise", "elementwise"],
+    "op_names": ["*"],
+    "semantic_signature": "candidate single-pass fusion for concrete KBX pointwise memory-bound tasks after correctness passes",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["contiguous", "as_declared_by_task"]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": ["program", "warp-or-wave", "lane", "vector"],
+    "memory_hierarchy": ["global", "cache", "register"],
+    "synchronization": [],
+    "profile_symptoms": ["memory_bound", "launch_bound"]
+  },
+  "conditions": {
+    "valid_when": ["A legal concrete KBX pointwise candidate is hidden-correct.", "The profile summary indicates memory_bound or launch_bound behavior and the expression is add, mul, GELU, fused add+GELU, fused mul-sub, or equivalent pointwise fusion."],
+    "invalid_when": ["Correctness gates have not passed.", "The dominant operation is irregular gather/scatter, reduction, softmax, normalization, or matmul.", "The candidate already performs a single low-level fused pass and profile indicates occupancy/register/arithmetic bottleneck."],
+    "preconditions": ["Apply semantic and legality capsules first; benchmark only legal hidden-correct candidates."]
+  },
+  "mechanism": "A single custom kernel can reduce temporary tensors and launch count for pointwise chains, but concrete H20 benefit is workload-, dtype-, and layout-dependent.",
+  "action": {
+    "kind": "recommend",
+    "instructions": ["Try one low-level kernel that computes the whole KBX pointwise expression in one pass with masked loads/stores.", "Keep activation/arithmetic intermediates in registers and avoid materializing expanded/broadcast tensors.", "Tune only a small block-size/num_warps set after correctness; do not hardcode visible shapes or public benchmark sizes.", "Promote no speedup claim without repeated H20 benchmark and profile attribution."],
+    "knob_space": {"BLOCK_SIZE": ["256", "512", "1024", "2048"], "num_warps": ["4", "8"], "intermediate_dtype": ["fp32_for_activation", "input_dtype_if_tolerance_allows"]}
+  },
+  "expected_effect": {
+    "correctness": "Should preserve semantics only if sem_pointwise_kbx_entrypoint_broadcast_activation_v1 is followed.",
+    "performance": "Candidate-only: may reduce memory passes or launch overhead; no H20 speedup is asserted.",
+    "search_efficiency": "Gives A3 a bounded first optimization motif for concrete KBX pointwise tasks.",
+    "risk": "May regress when stride/broadcast address math or activation register pressure dominates."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:triton_vector_add_pointwise_tail_mask", "source:cuda_best_practices_memory_coalescing", "claim:clm_kbx_pointwise_memory_bound_candidate_01"],
+    "benchmark_refs": [],
+    "profile_refs": [],
+    "evidence_level": "claim",
+    "confidence": 0.6
+  },
+  "validation": {
+    "gates": ["hidden_correctness", "benchmark_repeat", "profile_attribution", "reproducibility"],
+    "performance_requirements": ["Report p50 and p95 under the repository benchmark protocol.", "Attach profile summary before any promotion.", "Compare only legal candidates."],
+    "promotion_policy": "Remain quarantine until repeated H20 runs or an ablation support the memory-pass or launch-count mechanism across more than one task/shape family."
+  },
+  "failure_boundary": {
+    "known_failures": ["High-level PyTorch fallback can look fast but is illegal.", "Fusion does not repair wrong broadcast or activation semantics.", "Large blocks can lower occupancy or increase register pressure."],
+    "boundary_tests": ["small launch-bound case", "large memory-bound case", "broadcast operand", "fp16/bf16 activation tolerance", "non-power-of-two tail"],
+    "do_not_apply": ["scatter", "gather", "reduction", "softmax", "layernorm", "matmul", "hidden correctness failed"]
+  },
+  "retrieval": {
+    "keys": ["pointwise", "kbx", "fused", "fusion", "memory_bound", "launch_bound", "add", "mul", "gelu_fp16", "gelu_bf16", "fused_add_gelu", "fused_mul_sub", "tail_mask", "coalesced", "performance_optimize", "autotune"],
+    "negative_keys": ["scatter", "gather", "reduction", "softmax", "matmul", "layernorm", "unverified_speedup"],
+    "priority": 80,
+    "max_context_tokens": 560
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["perf_pointwise_fusion_memory_bound_candidate_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
