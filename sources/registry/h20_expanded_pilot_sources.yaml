@@ -1,7 +1,7 @@
-version: h20_expanded_pilot_sources_v0
+version: h20_expanded_pilot_sources_v1
 branch: h20-demo-round2
-generated_at: '2026-07-08T00:00:00Z'
-policy: Supplemental source registry for the H20 expanded pilot pointwise and layout/indexing categories. These entries prepare retrieval material only; they are not historical experiment results and do not update existing benchmark claims.
+generated_at: '2026-07-09T00:00:00Z'
+policy: Supplemental source registry for the H20 expanded pilot pointwise, layout/indexing, and concrete KernelBench-X gap-check coverage. These entries prepare retrieval material only; they are not historical experiment results and do not update existing benchmark claims.
 sources:
   - source_id: triton_vector_add_pointwise_tail_mask
     title: Triton vector add tutorial for tail masks and custom-op validation
@@ -142,3 +142,139 @@ sources:
     version_or_date: repository h20 formal protocol
     usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
     notes: Project legality rule for submitted candidate path; not an upstream performance source.
+  - source_id: kbx_expanded_pilot_task_manifest
+    title: H20 expanded pilot KernelBench-X concrete task manifest
+    kind: project_protocol
+    uri: experiments/h20/expanded_pilot_tasks.md
+    local_raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    secondary_local_raw_corpus_paths:
+      - sources/raw_corpus/pointwise_fusion_corpus.md
+      - sources/raw_corpus/layout_indexing_corpus.md
+    local_raw_archive_path: null
+    license: repository
+    trust_level: project_report
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [kernelbenchx, expanded_pilot, concrete_entrypoints, coverage_gap_check]
+    backends: [nvidia_cuda]
+    operators: [pointwise, reduction, softmax, layernorm, matmul, layout_indexing]
+    version_or_date: repository h20 expanded pilot task manifest
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Bridges abstract H20 operator categories to actual KBX op names and entrypoints; no hidden-test or performance evidence.
+  - source_id: pytorch_masked_select_where_semantics
+    title: PyTorch masked_select and where semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/stable/generated/torch.masked_select.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/stable/generated/torch.where.html
+    local_raw_corpus_path: sources/raw_corpus/layout_indexing_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [pytorch, masked_select, where, boolean_mask, broadcasting, compaction]
+    backends: [cpu, nvidia_cuda]
+    operators: [layout_indexing, pointwise]
+    version_or_date: PyTorch stable docs accessed 2026-07-09
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for KBX masked_select and expand_where semantic capsules; no H20 performance claim.
+  - source_id: pytorch_scatter_overwrite_semantics
+    title: PyTorch scatter overwrite semantics and duplicate-index boundary
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/stable/generated/torch.Tensor.scatter_.html
+    local_raw_corpus_path: sources/raw_corpus/layout_indexing_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [pytorch, scatter, overwrite, duplicate_indices, nondeterminism, bounds]
+    backends: [cpu, nvidia_cuda]
+    operators: [layout_indexing]
+    version_or_date: PyTorch stable docs accessed 2026-07-09
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used for KBX scatter overwrite semantics and collision failure boundaries.
+  - source_id: pytorch_reduction_kbx_semantics
+    title: PyTorch reduction semantics for std, argmax, min, and mean
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/stable/generated/torch.std.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/stable/generated/torch.argmax.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.min.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.mean.html
+    local_raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [pytorch, reduction, std, argmax, min, mean, keepdim, dtype]
+    backends: [cpu, nvidia_cuda]
+    operators: [reduction]
+    version_or_date: PyTorch stable docs accessed 2026-07-09
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used to supplement old MVP row reduction coverage for expanded KBX reductions; no H20 performance claim.
+  - source_id: pytorch_softmax_ce_attention_semantics
+    title: PyTorch softmax, log_softmax, cross_entropy, and scaled dot-product attention semantics
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.softmax.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.log_softmax.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.cross_entropy.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html
+    local_raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [pytorch, softmax, log_softmax, cross_entropy, attention, causal_mask]
+    backends: [cpu, nvidia_cuda]
+    operators: [softmax, matmul]
+    version_or_date: PyTorch stable docs accessed 2026-07-09
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used to supplement row-softmax corpus for fused log-softmax, CE, and attention primitives.
+  - source_id: pytorch_normalization_rms_dropout_semantics
+    title: PyTorch layer_norm, RMSNorm, dropout, and GELU semantics for fused normalization tasks
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.layer_norm.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/stable/generated/torch.nn.RMSNorm.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.dropout.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.gelu.html
+    local_raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [pytorch, layer_norm, rmsnorm, dropout, gelu, fused_normalization]
+    backends: [cpu, nvidia_cuda]
+    operators: [layernorm]
+    version_or_date: PyTorch stable docs accessed 2026-07-09
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used to supplement old layernorm-forward coverage for RMSNorm/dropout/fused-normalization KBX tasks; no H20 performance claim.
+  - source_id: pytorch_matmul_addmm_bmm_semantics
+    title: PyTorch matmul, bmm, addmm, and tril semantics for matmul-like expanded tasks
+    kind: official_doc
+    uri: https://docs.pytorch.org/docs/stable/generated/torch.matmul.html
+    secondary_uris:
+      - https://docs.pytorch.org/docs/stable/generated/torch.bmm.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.addmm.html
+      - https://docs.pytorch.org/docs/stable/generated/torch.tril.html
+    local_raw_corpus_path: sources/raw_corpus/kbx_expanded_gap_corpus.md
+    local_raw_archive_path: null
+    license: bsd_3_clause
+    trust_level: official
+    retrieved_at: '2026-07-09'
+    ingested_at: '2026-07-09'
+    topics: [pytorch, matmul, bmm, addmm, matvec, triangular_mask, epilogue]
+    backends: [cpu, nvidia_cuda]
+    operators: [matmul]
+    version_or_date: PyTorch stable docs accessed 2026-07-09
+    usable_for: [raw_corpus_rag, claim_extraction, kb_derivation]
+    notes: Used to supplement old GEMM coverage for addmm, matvec, batched matmul, and triangular epilogue tasks.
+excluded_categories_note:
+  - This supplemental registry records only source-visible task bridges and public official documentation.
+  - It does not include hidden tests, benchmark shapes, private KBX evaluator details, or unverified H20 performance numbers.
