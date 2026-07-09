@@ -1,0 +1,79 @@
+{
+  "id": "sem_layout_kbx_stride_indexing_v1",
+  "schema_version": "0.1.0",
+  "unit_type": "op_contract",
+  "status": "stable",
+  "abstraction_level": "portable",
+  "task_phases": ["plan", "generate", "correctness_repair"],
+  "operator_scope": {
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory"],
+    "op_names": ["*"],
+    "semantic_signature": "KBX concrete layout/indexing tasks with explicit strides, bounds, index tensors, masks, and materialized-copy semantics",
+    "shape_patterns": ["*"],
+    "dtype_scope": ["fp16", "bf16", "fp32"],
+    "layout_scope": ["*", "non_contiguous", "as_declared_by_task"]
+  },
+  "backend_abstract_features": {
+    "execution_hierarchy": ["program", "warp-or-wave", "lane", "tile"],
+    "memory_hierarchy": ["global", "cache", "shared_or_scratchpad", "register"],
+    "synchronization": ["block_local_sync_if_shared_tile_used"],
+    "profile_symptoms": ["memory_bound", "uncoalesced_memory", "divergence", "atomic_contention"]
+  },
+  "conditions": {
+    "valid_when": ["The concrete KBX op is index_select, permute_copy, scatter, masked_select, expand_where, fused_gather_masked_fill, or an equivalent layout/indexing task.", "Inputs or outputs may be non-contiguous, indexed, masked, broadcasted, sliced, or materialized from a view."],
+    "invalid_when": ["The task is a pure contiguous pointwise expression with no stride-sensitive, index, mask, or layout-transform behavior."],
+    "preconditions": ["Read sizes, strides, storage-offset assumptions, index dtype, mask shape, duplicate-index policy, and output layout from OpSpec before writing memory offsets."]
+  },
+  "mechanism": "Concrete KBX layout names must retrieve stride-aware and index-aware semantics. PyTorch views can be non-contiguous, while KBX copy/indexing tasks may require materialized output rather than a metadata-only view.",
+  "action": {
+    "kind": "must_obey",
+    "instructions": [
+      "For every logical output element or indexed element, compute source and destination storage offsets from logical indices and declared strides; do not assume contiguous layout unless OpSpec declares it.",
+      "For permute_copy, materialize the declared output layout and do not return a view-only permute or call a Python-level contiguous copy as the target implementation.",
+      "For index_select and fused_gather_masked_fill, keep index bounds checks and use task-declared index dtype; do not assume indices are sorted, unique, or contiguous.",
+      "For scatter, implement overwrite semantics and the task's duplicate-index policy; do not silently substitute scatter-add.",
+      "For masked_select, implement Boolean-mask broadcasting and compaction; for expand_where, implement broadcasted conditional selection with correct output shape."
+    ],
+    "patch_hint": "Pass shape, stride, dim, index, and mask metadata into the kernel. Replace base + linear_offset with base + sum_i(logical_i * stride_i), then apply index/mask-specific address transforms."
+  },
+  "expected_effect": {
+    "correctness": "Prevents concrete KBX layout tasks from passing only contiguous public cases and failing hidden stride/index/mask variants.",
+    "performance": "No direct performance claim; it is a semantic prerequisite for schedule tuning.",
+    "search_efficiency": "Prevents A3 hard-filter misses caused by concrete KBX op names and avoids repeated contiguous-only repairs.",
+    "risk": "Stride-aware integer address math can add overhead; optimize only after correctness gates pass."
+  },
+  "evidence": {
+    "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_stride_contiguous_tensor_views", "source:pytorch_broadcasting_expand_semantics", "claim:clm_kbx_layout_entrypoint_stride_01"],
+    "evidence_level": "claim",
+    "confidence": 0.88
+  },
+  "validation": {
+    "gates": ["schema", "static_legality", "compile", "smoke_correctness", "quick_correctness", "hidden_correctness", "anti_cheating"],
+    "correctness_matrix": ["contiguous input", "non-contiguous transpose/slice input", "non-unit stride", "index dtype int64 and hidden int32 when task enables it", "odd tile edge", "mask broadcast", "duplicate scatter indices if allowed by task"],
+    "promotion_policy": "Stable semantic bridge only; performance claims require separate H20 evidence."
+  },
+  "failure_boundary": {
+    "known_failures": ["Contiguous-only address math passes public contiguous cases but fails non-contiguous hidden cases.", "Returning a view-only permute does not satisfy materialized copy semantics.", "Missing output-store masks corrupt edge tiles."],
+    "boundary_tests": ["non-contiguous stride seed", "asymmetric permute", "random unsorted indices", "boolean mask broadcast", "scatter duplicate index", "row payload tail"],
+    "do_not_apply": ["pure pointwise contiguous tasks without stride/index/mask behavior"]
+  },
+  "migration": {
+    "transfer_policy": "portable",
+    "portable_part": ["shape/stride offset semantics", "bounds masking", "view-vs-copy distinction", "concrete KBX layout aliases"],
+    "replace_on_new_backend": ["integer-vector indexing idiom", "coalescing schedule", "atomic/index support"]
+  },
+  "retrieval": {
+    "keys": ["layout_indexing", "layout", "indexing", "irregular", "kbx", "index_select", "permute_copy", "scatter", "masked_select", "expand_where", "fused_gather_masked_fill", "stride", "strided", "non_contiguous", "bounds", "tail_mask", "mask", "where", "copy", "correctness_repair"],
+    "negative_keys": ["contiguous_only", "unverified_speedup"],
+    "priority": 96,
+    "max_context_tokens": 650
+  },
+  "lineage": {
+    "created_by": "gpt-5.5-pro-h20-expanded-pilot-prep",
+    "created_at": "2026-07-09T00:00:00Z",
+    "updated_at": "2026-07-09T00:00:00Z",
+    "parent_units": ["sem_layout_stride_indexing_v1"],
+    "supersedes": [],
+    "audit_log_refs": ["sources/derived_claims/h20_expanded_pilot_claims.yaml"]
+  }
+}
