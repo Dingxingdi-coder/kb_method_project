@@ -1,0 +1,70 @@
+version: kb_expanded_pilot_manifest_v1
+generated_at: '2026-07-09T00:00:00Z'
+branch: h20-demo-round2
+scope: Supplemental KB entries for the H20 6-category expanded pilot. Entries are derived from sources/raw_corpus/pointwise_fusion_corpus.md, sources/raw_corpus/layout_indexing_corpus.md, sources/raw_corpus/kbx_expanded_gap_corpus.md, and sources/derived_claims/h20_expanded_pilot_claims.yaml.
+policy:
+  - A1, A2, and A3 share the same source-visible supplemental raw corpus; no KB entry cites sources outside sources/registry/h20_expanded_pilot_sources.yaml or existing raw_corpus_v0 registries.
+  - Stable entries are limited to semantic or repository-legality constraints supported by official/project documentation.
+  - Performance motifs and old-family expanded-gap entries remain quarantine/candidate because they have no H20 benchmark/profile evidence.
+new_stable_entries:
+  pointwise:
+    - kb/stable/sem_pointwise_kbx_entrypoint_broadcast_activation_v1.json
+    - kb/stable/legality_no_high_level_kbx_pointwise_fallback_v1.json
+  layout_indexing:
+    - kb/stable/sem_layout_kbx_stride_indexing_v1.json
+    - kb/stable/sem_index_select_gather_bounds_v1.json
+    - kb/stable/sem_masked_select_where_broadcast_v1.json
+    - kb/stable/sem_scatter_overwrite_indexing_v1.json
+new_quarantine_entries:
+  pointwise:
+    - kb/quarantine/perf_pointwise_kbx_fusion_memory_bound_candidate_v1.json
+    - kb/quarantine/stop_pointwise_kbx_memory_bound_candidate_v1.json
+  layout_indexing:
+    - kb/quarantine/perf_layout_kbx_transpose_tile_copy_candidate_v1.json
+    - kb/quarantine/perf_irregular_kbx_gather_scatter_coalescing_candidate_v1.json
+  old_family_gap_candidates:
+    - kb/quarantine/sem_reduction_kbx_std_arg_index_candidate_v1.json
+    - kb/quarantine/sem_softmax_kbx_fused_attention_candidate_v1.json
+    - kb/quarantine/sem_normalization_kbx_fused_rms_candidate_v1.json
+    - kb/quarantine/sem_matmul_kbx_epilogue_candidate_v1.json
+new_failure_entries:
+  layout_indexing:
+    - kb/failures/fail_layout_kbx_assume_contiguous_or_unique_indices_v1.json
+coverage_map:
+  pointwise_fused_memory_bound:
+    concrete_kbx_ops: [add, mul, gelu_fp16, gelu_bf16, fused_add_gelu, fused_mul_sub]
+    stable_capsules:
+      - sem_pointwise_kbx_entrypoint_broadcast_activation_v1
+      - legality_no_high_level_kbx_pointwise_fallback_v1
+    quarantine_capsules:
+      - perf_pointwise_kbx_fusion_memory_bound_candidate_v1
+      - stop_pointwise_kbx_memory_bound_candidate_v1
+  layout_indexing_irregular_memory:
+    concrete_kbx_ops: [index_select, permute_copy, scatter, masked_select, expand_where, fused_gather_masked_fill]
+    stable_capsules:
+      - sem_layout_kbx_stride_indexing_v1
+      - sem_index_select_gather_bounds_v1
+      - sem_masked_select_where_broadcast_v1
+      - sem_scatter_overwrite_indexing_v1
+    quarantine_capsules:
+      - perf_layout_kbx_transpose_tile_copy_candidate_v1
+      - perf_irregular_kbx_gather_scatter_coalescing_candidate_v1
+    failure_capsules:
+      - fail_layout_kbx_assume_contiguous_or_unique_indices_v1
+  reduction:
+    existing_coverage: Base row sum/max, fp32 accumulation, masks, and non-power-of-two coverage remain from KB v0.
+    supplemental_candidate: sem_reduction_kbx_std_arg_index_candidate_v1
+  softmax_attention:
+    existing_coverage: Base row softmax stability, mask, dtype, and profile-after-correctness coverage remain from KB v0.
+    supplemental_candidate: sem_softmax_kbx_fused_attention_candidate_v1
+  normalization:
+    existing_coverage: Base LayerNorm forward formula, eps, affine, and fp32 accumulation coverage remain from KB v0.
+    supplemental_candidate: sem_normalization_kbx_fused_rms_candidate_v1
+  matmul_like:
+    existing_coverage: Base GEMM/tl.dot/tile/boundary-mask coverage remains from KB v0.
+    supplemental_candidate: sem_matmul_kbx_epilogue_candidate_v1
+retrieval_notes:
+  - New pointwise/layout bridge capsules use op_names ['*'] with concrete retrieval.keys because tools/retrieve_context.py hard-filters exact op_names when op_names is present.
+  - This avoids schema-enum changes while allowing A3 to match concrete KBX op_names emitted by future task JSON.
+  - If future task JSON emits a new op_family value such as normalization instead of layernorm, a minimal family-alias change in tools/retrieve_context.py may still be needed.
+index_rebuild_required: true
