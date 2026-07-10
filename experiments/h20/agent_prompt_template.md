@@ -11,7 +11,7 @@ one output section for each workspace.
 # H20 Kernel Generation Task
 <!-- section:background -->
 Background:
-- This is an H20 operator-kernel generation project.
+- You are a specialist in kernel generation.
 - Your job is to implement the public operator specification in `candidate.py`, then use the local harness to make it compile, pass correctness checks, and improve latency.
 - Keep the workflow below unchanged; only use the retrieval source allowed by your group.
 - The phase names describe your current intent:
@@ -46,7 +46,6 @@ Rules:
 
 <!-- section:workflow -->
 Workflow:
-- All experiment groups use this same phase-control loop. The only intended difference is the retrieval protocol below.
 - You choose your own phase: `generate`, `correctness_repair`, `performance_optimize`, or `autotune`.
 - Before the first substantial edit, enter `generate` and follow this group's retrieval protocol.
 - Use staged harness runs whenever you need measurement evidence from the GPU:
@@ -64,21 +63,13 @@ Workflow:
 - Fix correctness failures before performance tuning. Optimize and autotune only after correctness passes.
 <!-- endsection -->
 
-<!-- section:tuning -->
-Common tuning budget:
-- After correctness passes, test small launch/configuration variants when they apply to your implementation.
-- For a Triton row-wise kernel with `num_warps`, test `8`, `4`, `2`, and `1` when those values compile for the chosen block size.
-- Keep the fastest correct variant by the harness p50 result. If a value cannot compile or is clearly inapplicable, record that through `./run.sh` output or a brief code comment in `candidate.py` only if needed.
-- Do not continue random tuning after this fixed budget unless correctness is still failing.
-<!-- endsection -->
-
 <!-- section:kbx_portability -->
-Submission and KernelBench-X entrypoint constraint:
+Submission interface:
 - `candidate.py` remains the submission file for this H20 workspace.
-- This is a KernelBench-X-aligned task. Implement exactly the top-level callable `def {signature}` in `candidate.py`.
-- The function must be compatible with KernelBench-X task `{task_file}` and the public callable semantics in `task.json`.
+- This task requires the top-level callable `def {signature}` in `candidate.py`.
+- Follow the public callable semantics in `task.json`.
 - The function name must remain `{entrypoint}`; do not expose only `kernel_function`, because the H20 harness and exporter validate the explicit task entrypoint.
-- Do not add or rely on an extra `candidate(...)` wrapper for this KBX-aligned task.
+- Do not add or rely on an extra `candidate(...)` wrapper for this task.
 - Keep helper kernels and helper functions at module top level rather than nested inside `{entrypoint}(...)`.
 - Avoid import-time execution, local file reads, or current-working-directory assumptions so the final file can be copied after the experiment.
 <!-- endsection -->
@@ -89,8 +80,8 @@ Post-hoc portability constraint:
 - When practical, put the optimized implementation behind a top-level helper named `{impl_name}_impl(...)`, then have `candidate(...)` call that helper with the declared H20 arguments.
 - Keep helper kernels and helper functions at module top level rather than nested inside `candidate(...)`.
 - Avoid import-time execution, local file reads, or current-working-directory assumptions so the final file can be copied or wrapped after the experiment.
-- This H20 task has no declared KernelBench-X overlap in this pilot; do not add a speculative KernelBench-X entrypoint.
-- Do not replace the H20 interface with a KernelBench-X function, JSONL record, or differently named output file during this pilot.
+- Do not add another speculative entrypoint.
+- Do not replace the H20 interface with a differently named output file.
 <!-- endsection -->
 
 <!-- section:a0_retrieval -->

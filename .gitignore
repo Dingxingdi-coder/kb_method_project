@@ -12,3 +12,4 @@ runs/
 *.egg-info/
 .codex/
 .codex_h20_metrics/
+artifacts/

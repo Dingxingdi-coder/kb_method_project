@@ -6,7 +6,7 @@
   "abstraction_level": "portable",
   "task_phases": ["plan", "generate", "correctness_repair"],
   "operator_scope": {
-    "families": ["layout_indexing", "layout", "indexing", "irregular_memory", "pointwise", "elementwise"],
+    "families": ["layout_indexing", "layout", "indexing", "irregular_memory"],
     "op_names": ["*"],
     "semantic_signature": "masked_select compaction or expand_where broadcasted conditional selection",
     "shape_patterns": ["*"],

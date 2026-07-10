@@ -100,14 +100,14 @@ totals.compile_attempts
 totals.correctness_runs
 totals.benchmark_runs
 candidate_count
-agent_final_legal_p50_ms
-oracle_best_legal_p50_ms
+agent_final_legal_p50_ms  # legacy auxiliary field name
+oracle_best_legal_p50_ms  # legacy auxiliary field name
 observed_best_unfiltered_p50_ms
 ```
 
 默认 subagent-only 配置下，正式 wall time 主指标应使用 `agents[*].wall_time_s`。`session_wall_time_s` 可能为空，不进入主表。
 
-`agent_final_legal_p50_ms` 和 `oracle_best_legal_p50_ms` 只会在 harness 的 `results.json` 或 `benchmark.json` 中能解析出以下信息时产生：
+`agent_final_legal_p50_ms` 和 `oracle_best_legal_p50_ms` 是历史命名的辅助字段，不作为 pilot legality 指标。pilot 自动统计阶段先假设 candidate legal；cheating/illegal 由主代理事后人工检查。上述辅助字段只会在 harness 的 `results.json` 或 `benchmark.json` 中能解析出以下信息时产生：
 
 1. latency p50；
 2. correctness pass 或 hidden correctness pass；

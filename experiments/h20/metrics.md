@@ -9,7 +9,7 @@ quick_correctness_pass_rate
 hidden_correctness_pass_rate
 robustness_pass_rate
 false_positive_rate_if_rechecked
-cheating_detected_count
+manual_cheating_review_note
 ```
 
 正确性优先级高于性能。未通过 hidden correctness 的候选不得进入性能比较。
@@ -37,12 +37,11 @@ profile_symptom_distribution
 iterations_to_first_compile
 iterations_to_first_correct
 iterations_to_target_speedup
-token_to_first_correct
-token_to_target_speedup
 wall_time_to_first_correct
 wall_time_to_target_speedup
 gpu_benchmark_runs_per_task
 invalid_compile_attempts_per_task
+posthoc_budget_audit_status
 ```
 
 这些指标直接对应“少走弯路”。
@@ -52,7 +51,7 @@ invalid_compile_attempts_per_task
 四组都必须记录上下文规模。A1、A2、A3 还必须记录召回来源，方便区分“资料有用”“知识表示有用”和“ECC-KB 方法有用”。
 
 ```text
-context_token_count
+retrieved_context_length
 retrieved_item_count
 retrieved_item_ids
 retrieved_source_type_distribution
@@ -63,7 +62,7 @@ A1 专属指标：
 
 ```text
 raw_corpus_retrieved_chunk_count
-raw_corpus_context_tokens
+raw_corpus_context_length
 raw_corpus_chunk_adoption_rate
 raw_corpus_chunk_effective_rate
 ```
@@ -72,7 +71,7 @@ A2 专属指标：
 
 ```text
 kb_plain_rag_retrieved_unit_count
-kb_plain_rag_context_tokens
+kb_plain_rag_context_length
 kb_plain_rag_unit_adoption_rate
 kb_plain_rag_unit_effective_rate
 ```
@@ -81,7 +80,7 @@ A3 专属指标：
 
 ```text
 retrieved_capsule_count
-context_packet_tokens
+context_packet_length
 capsule_adoption_rate
 capsule_effective_rate
 anti_action_prevented_count
@@ -102,7 +101,7 @@ rejected_records_count
 promotion_precision
 round2_delta_correctness
 round2_delta_speedup
-round2_delta_token
+round2_delta_context_length
 round2_delta_iterations
 heldout_generalization_gain
 ```
@@ -111,6 +110,6 @@ heldout_generalization_gain
 
 ## 6. 最小统计方式
 
-每个任务每组至少 3 次独立 run。汇总时报告 median 和 bootstrap confidence interval。如果预算不足，先报告 paired task-level comparison，而不是只报告整体平均。
+每个任务每组至少 3 次独立 run。汇总时报告 median 和 bootstrap confidence interval。如果总实验资源不足，先报告 paired task-level comparison，而不是只报告整体平均。
 
-A0、A1、A2、A3 必须在同一任务集合、同一 agent、同一 token 上限、同一 wall-clock 上限和同一 GPU benchmark 预算下比较。A1、A2、A3 的上下文 token 上限必须相同。
+A0、A1、A2、A3 必须在同一任务集合、同一 agent、同一 harness、同一 retrieved context length 上限和同一事后预算审计阈值下比较。wall time、candidate 数、compile/correctness/benchmark/harness 调用数都要在实验结束后统计、标记并用于 cost 比较；这些阈值不作为子代理运行时的 prompt 约束或停止条件。

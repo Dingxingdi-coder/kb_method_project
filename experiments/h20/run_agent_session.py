@@ -29,6 +29,8 @@ GROUP_ALIASES = {
 
 GROUPS = ["A0_prompt", "A1_raw_corpus_vector_rag", "A2_kb_vector_rag", "A3_ecc_kb", *GROUP_ALIASES]
 
+PROMPT_TEMPLATE = Path(__file__).with_name("agent_prompt_template.md")
+
 SKELETONS = {
     "pointwise": """\"\"\"Candidate kernel for a fused pointwise task. See task.json for the exact interface.\"\"\"\n\ndef candidate(*args):\n    raise NotImplementedError(\"agent must implement the fused pointwise operator declared in task.json\")\n""",
     "softmax": """\"\"\"Candidate kernel for row softmax. Interface: candidate(x) -> y.\"\"\"\n\ndef candidate(x):\n    raise NotImplementedError(\"agent must implement row softmax\")\n""",
@@ -111,46 +113,23 @@ def phase_commands(
     )
 
 
-def background_protocol() -> str:
-    return """Background:
-- This is an H20 operator-kernel generation experiment.
-- Your job is to implement the public operator specification in `candidate.py`, then use the local harness to make it compile, pass correctness checks, and improve latency.
-- The experiment compares how different context sources affect the same agent workflow. Keep the workflow below unchanged; only use the retrieval source allowed by your group.
-- The phase names describe your current intent:
-  - `generate`: create or substantially rewrite the initial implementation.
-  - `correctness_repair`: fix compile, smoke, quick, or hidden correctness failures.
-  - `performance_optimize`: improve latency after correctness passes.
-  - `autotune`: try small launch/configuration variations after a correct implementation exists.
-- `./run.sh` is the measurement interface. Treat its stdout and output files as the evidence for phase changes and final claims.
-- `task.json` is public task information. Hidden tests and harness internals are not part of your allowed context."""
+def template_section(name: str) -> str:
+    text = PROMPT_TEMPLATE.read_text(encoding="utf-8")
+    start = f"<!-- section:{name} -->"
+    end = "<!-- endsection -->"
+    if start not in text:
+        raise KeyError(f"missing prompt template section: {name}")
+    section = text.split(start, 1)[1].split(end, 1)[0]
+    return section.strip()
+
+
+def render_section(name: str, values: dict[str, Any] | None = None) -> str:
+    section = template_section(name)
+    return section.format_map(values or {})
 
 
 def workflow_protocol() -> str:
-    return """Workflow:
-- All experiment groups use this same phase-control loop. The only intended difference is the retrieval protocol below.
-- You choose your own phase: `generate`, `correctness_repair`, `performance_optimize`, or `autotune`.
-- Before the first substantial edit, enter `generate` and follow this group's retrieval protocol.
-- Use staged harness runs whenever you need measurement evidence from the GPU:
-  - `./run.sh --stage compile` for import/build feedback.
-  - `./run.sh --stage smoke`, `./run.sh --stage quick`, or `./run.sh --stage hidden` for correctness feedback.
-  - `./run.sh --stage benchmark` after hidden correctness passes and you need latency evidence.
-  - `./run.sh` is the full local check when you need compile, all correctness suites, and benchmark together.
-- After every `./run.sh` run, classify the next phase from the harness output:
-  - compile, smoke, quick, or hidden failure -> `correctness_repair`
-  - correctness passes but latency or profile summary is weak -> `performance_optimize`
-  - correctness passes and only launch/configuration knobs remain -> `autotune`
-- Before editing for a selected phase, follow this group's retrieval protocol for that phase.
-- When retrieval is allowed, write a concrete query for the current problem before calling retrieval. The query should describe what you need now, such as the failing symptom, operator, dtype/shape, suspected cause, performance bottleneck, or tuning knob.
-- If retrieval is allowed for this group, do not treat retrieval as optional background reading; preserve the packet as evidence even when it contains no matches.
-- Fix correctness failures before performance tuning. Optimize and autotune only after correctness passes."""
-
-
-def tuning_protocol() -> str:
-    return """Common tuning budget:
-- After correctness passes, test small launch/configuration variants when they apply to your implementation.
-- For a Triton row-wise kernel with `num_warps`, test `8`, `4`, `2`, and `1` when those values compile for the chosen block size.
-- Keep the fastest correct variant by the harness p50 result. If a value cannot compile or is clearly inapplicable, record that through `./run.sh` output or a brief code comment in `candidate.py` only if needed.
-- Do not continue random tuning after this fixed budget unless correctness is still failing."""
+    return render_section("workflow")
 
 
 def candidate_skeleton(task: dict[str, Any]) -> str:
@@ -160,15 +139,23 @@ def candidate_skeleton(task: dict[str, Any]) -> str:
         signature = str(kbx["signature"])
         return (
             f'"""Candidate kernel for H20 task {task.get("task_id")}.\n\n'
-            f"H20 entrypoint: candidate(*args, **kwargs)\n"
-            f"KernelBench-X entrypoint: {signature}\n"
+            f"Required entrypoint: {signature}\n"
             '"""\n\n'
-            "def candidate(*args, **kwargs):\n"
-            f"    return {entrypoint}(*args, **kwargs)\n\n\n"
             f"def {signature}:\n"
             f"    raise NotImplementedError(\"agent must implement {entrypoint}\")\n"
         )
     return SKELETONS.get(task.get("op_family"), "def candidate(*args):\n    raise NotImplementedError()\n")
+
+
+def prompt_interface(task: dict[str, Any]) -> str:
+    kbx = task.get("kernelbenchx")
+    if isinstance(kbx, dict) and kbx.get("entrypoint") and kbx.get("signature"):
+        return str(kbx["signature"])
+    return str(task.get("op_spec", {}).get("candidate_interface"))
+
+
+def render_prompt_sections(sections: list[str]) -> str:
+    return "\n\n".join(section.strip() for section in sections if section.strip()) + "\n"
 
 
 def posthoc_portability_protocol(task: dict[str, Any]) -> str:
@@ -179,20 +166,8 @@ def posthoc_portability_protocol(task: dict[str, Any]) -> str:
         entrypoint = str(kbx["entrypoint"])
         signature = str(kbx["signature"])
         task_file = str(kbx["task_file"])
-        kbx_entry = f"""\n- KernelBench-X overlapping task: also expose `def {signature}` as a top-level callable.
-  It must be compatible with KernelBench-X task `{task_file}` and the public callable semantics in `task.json`.
-  The function name must remain `{entrypoint}`; do not expose only `kernel_function`, because the H20 exporter validates the explicit task entrypoint."""
-    else:
-        kbx_entry = ""
-    if not kbx_entry:
-        kbx_entry = "\n- This H20 task has no declared KernelBench-X overlap in this pilot; do not add a speculative KernelBench-X entrypoint."
-    return f"""Post-hoc portability constraint:
-- `candidate.py` remains the H20 submission and `candidate(...)` remains the H20 entrypoint.
-- When practical, put the optimized implementation behind a top-level helper named `{impl_name}_impl(...)`, then have `candidate(...)` call that helper with the declared H20 arguments.
-- Keep helper kernels and helper functions at module top level rather than nested inside `candidate(...)`.
-- Avoid import-time execution, local file reads, or current-working-directory assumptions so the final file can be copied or wrapped after the experiment.
-- For the KernelBench-X overlap below, define the listed top-level entrypoint in this same `candidate.py`; the post-hoc exporter will copy the file to the matching KernelBench-X basename and will not synthesize missing semantics.{kbx_entry}
-- Do not replace the H20 interface with a KernelBench-X function, JSONL record, or differently named output file during this pilot."""
+        return render_section("kbx_portability", {"entrypoint": entrypoint, "signature": signature, "task_file": task_file})
+    return render_section("legacy_portability", {"impl_name": impl_name})
 
 
 def group_retrieval_protocol(
@@ -207,57 +182,31 @@ def group_retrieval_protocol(
     kb_version: str,
 ) -> str:
     if group == "A0_prompt":
-        return """Retrieval protocol:
-- This is the no-retrieval baseline.
-- Do not call `tools/retrieve_context.py` or read `kb/`, `sources/raw_corpus/`, or `sources/raw_archive/`.
-- Use only `task.json`, `candidate.py`, `run.sh`, harness output files, and your own reasoning."""
+        return render_section("a0_retrieval")
 
     if group == "A1_raw_corpus_vector_rag":
-        return f"""Retrieval protocol:
-- This group may use only raw-corpus vector RAG.
-- Retrieval is mandatory at phase entry: call retrieval with `--group A1_raw_corpus_vector_rag` before acting in each selected phase.
-- You must replace the placeholder after `--query` with your own specific query for this phase/problem. Do not use a generic phase-only query.
-- Do not skip retrieval just because you already have an implementation or tuning idea.
-- Do not read `kb/` directly and do not call retrieval with A2 or A3 groups.
-- Save retrieved packets under `context_packets/`.
-- Phase-specific retrieval commands from this workspace:
-{phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)}"""
+        return render_section(
+            "a1_retrieval",
+            {"phase_commands": phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)},
+        )
 
     if group == "A2_kb_vector_rag":
-        return f"""Retrieval protocol:
-- This group may use only vector RAG over flattened KB units.
-- Retrieval is mandatory at phase entry: call retrieval with `--group A2_kb_vector_rag` before acting in each selected phase.
-- You must replace the placeholder after `--query` with your own specific query for this phase/problem. Do not use a generic phase-only query.
-- Do not skip retrieval just because you already have an implementation or tuning idea.
-- Do not read `sources/raw_corpus/` or `sources/raw_archive/` directly and do not call retrieval with A1 or A3 groups.
-- Treat retrieved KB units as ordinary text snippets, not as structured ECC capsules.
-- Save retrieved packets under `context_packets/`.
-- Phase-specific retrieval commands from this workspace:
-{phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)}"""
+        return render_section(
+            "a2_retrieval",
+            {"phase_commands": phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)},
+        )
 
-    return f"""Retrieval protocol:
-- This group uses ECC-KB structured context packets.
-- Retrieval is mandatory at ECC phase entry: call retrieval with `--group A3_ecc_kb` before acting in each selected phase.
-- You must replace the placeholder after `--query` with your own specific query for this phase/problem. Do not use a generic phase-only query.
-- Do not skip retrieval just because you already have an implementation or tuning idea.
-- Use the structured packet fields such as `must_obey`, `recommended_actions`, `anti_actions`, `validation_plan`, `stop_conditions`, and `evidence_refs`.
-- Do not call retrieval with A1 or A2 groups, and do not browse raw corpus files directly.
-- Save retrieved packets under `context_packets/`.
-- Phase-specific commands from this workspace:
-{phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)}"""
+    return render_section(
+        "a3_retrieval",
+        {"phase_commands": phase_commands(retrieve_script, backend_path, kb_root, source_root, raw_vector_index, kb_vector_index, embedding_model_path, group, kb_version)},
+    )
 
 
 def output_protocol(group: str) -> str:
     if group != "A0_prompt":
-        return """Outputs:
-- Final implementation: `candidate.py`.
-- Required retrieved context evidence: `context_packets/*.json` for every phase you enter.
-- Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`."""
+        return render_section("retrieval_outputs")
 
-    return """Outputs:
-- Final implementation: `candidate.py`.
-- No retrieval output is expected for this no-retrieval baseline.
-- Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`."""
+    return render_section("a0_outputs")
 
 
 def write_prompt(
@@ -276,9 +225,7 @@ def write_prompt(
     repo_root = Path.cwd()
     kb_root = (repo_root / "kb").resolve()
     source_root = (repo_root / "sources").resolve()
-    background = background_protocol()
     workflow = workflow_protocol()
-    tuning = tuning_protocol()
     posthoc_portability = posthoc_portability_protocol(task)
     protocol = group_retrieval_protocol(
         retrieve_script,
@@ -293,38 +240,28 @@ def write_prompt(
     )
     outputs = output_protocol(group)
     prompt.write_text(
-        f"""# H20 Kernel Generation Task
-
-Edit `candidate.py` for this ECC-KB experiment.
-
-Group: `{group}`
-Phase: `{phase}`
-Task: `{task.get('task_id')}`
-Operator: `{task.get('op_family')}` / `{task.get('op_name')}`
-Shape: `{task.get('shape')}`
-DType: `{task.get('dtype')}`
-Interface: `{task.get('op_spec', {}).get('candidate_interface')}`
-
-{background}
-
-Rules:
-- Read `task.json` first. It is the complete public task specification.
-- Modify only `candidate.py`. Keep retrieved context packets under `context_packets/`.
-- Preserve the declared interface.
-- Do not hardcode public shapes.
-- {FORBIDDEN_TARGET_API_RULE}
-- Do not read hidden test files or modify the harness.
-
-{workflow}
-
-{tuning}
-
-{posthoc_portability}
-
-{protocol}
-
-{outputs}
-""",
+        render_prompt_sections(
+            [
+                render_section(
+                    "header",
+                    {
+                        "group": group,
+                        "phase": phase,
+                        "task_id": task.get("task_id"),
+                        "op_family": task.get("op_family"),
+                        "op_name": task.get("op_name"),
+                        "shape": task.get("shape"),
+                        "dtype": task.get("dtype"),
+                        "interface": prompt_interface(task),
+                    },
+                ),
+                render_section("rules"),
+                workflow,
+                posthoc_portability,
+                protocol,
+                outputs,
+            ]
+        ),
         encoding="utf-8",
     )
     return prompt

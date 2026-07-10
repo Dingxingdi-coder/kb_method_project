@@ -81,9 +81,9 @@ MVP 选择四类中等复杂度算子：row reduction、softmax、layernorm、ma
 
 ## 6. 实验组
 
-固定同一 Coding Agent、同一任务顺序、同一最大迭代数、同一 token 上限、同一 wall-clock 上限、同一 GPU benchmark 预算和同一 harness，比较四组：
+固定同一 Coding Agent、同一任务顺序、同一 harness、同一 retrieved context length 上限和同一事后预算审计阈值，比较四组。wall time、candidate 数、compile/correctness/benchmark/harness 调用数在实验结束后统一统计和比较，不作为子代理运行时 prompt 约束或停止条件。
 
-1. `A0_prompt`：普通 prompt。只给 OpSpec、reference、harness 命令和预算限制，不提供资料库、知识库、历史经验或优化规则。
+1. `A0_prompt`：普通 prompt。只给 OpSpec、reference 和 harness 命令，不提供资料库、知识库、历史经验或优化规则。
 2. `A1_raw_corpus_rag`：对 `raw_corpus_v0` 做普通 RAG。召回对象是原始资料 chunk，例如官方文档、论文段落、示例代码说明、调研报告段落。检索只使用普通文本相似度，不做 phase-aware、evidence-aware、gate-aware 或 backend legality 过滤。
 3. `A2_kb_plain_rag`：对 `KB v0` 做普通 RAG。召回对象是知识单元的文本化表示。它可以看到 capsule 的自然语言内容，但不能调用 ECC-KB 的阶段化召回、硬过滤、证据重排、ContextPacket、stop capsule 或写回机制。
 4. `A3_ecc_kb`：使用 ECC-KB 方法。A3 输入 ECC-KB ContextPacket，使用阶段化召回、条件过滤、合法性过滤、证据重排、anti-action、validation plan、stop condition 和 quarantine/promotion 写回。

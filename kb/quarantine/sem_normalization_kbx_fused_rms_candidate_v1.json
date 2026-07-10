@@ -6,7 +6,7 @@
   "abstraction_level": "portable",
   "task_phases": ["plan", "generate", "correctness_repair"],
   "operator_scope": {
-    "families": ["layernorm", "common"],
+    "families": ["layernorm"],
     "op_names": ["*"],
     "semantic_signature": "candidate semantic bridge for expanded KBX normalization, RMSNorm, dropout, and fused-normalization tasks",
     "shape_patterns": ["*"],
@@ -18,7 +18,7 @@
     "invalid_when": ["The task is a pure pointwise activation, pure matmul, or pure softmax without normalization statistics."],
     "preconditions": ["Read normalized_shape, eps, weight/bias, RMSNorm vs LayerNorm semantics, quantization policy, dropout training flag, and fused subgraph order from OpSpec."]
   },
-  "mechanism": "Old layernorm-forward capsules cover mean/variance/eps/affine basics, but expanded KBX normalization tasks add RMSNorm, dropout, quantized W8A8 policy, and fused bmm/conv/activation/CE subgraphs. The common family is included only as a retrieval alias in case task JSON labels the category as normalization instead of layernorm.",
+  "mechanism": "Old layernorm-forward capsules cover mean/variance/eps/affine basics, but expanded KBX normalization tasks add RMSNorm, dropout, quantized W8A8 policy, and fused bmm/conv/activation/CE subgraphs.",
   "action": {
     "kind": "must_obey",
     "instructions": ["Do not reuse LayerNorm mean-subtraction code for RMSNorm unless OpSpec declares LayerNorm; RMSNorm normalizes by root mean square rather than centering by mean.", "Preserve eps placement and affine weight/bias semantics for layer_norm-like subexpressions.", "For dropout-containing fused tasks, respect training/eval behavior and harness randomness policy; do not silently remove dropout for speed unless OpSpec says inference-only.", "For W8A8 or quantized layernorm tasks, keep quantization/dequantization policy explicit and candidate-only until validated.", "Validate each fused subexpression order—bmm/conv, normalization, activation, dropout, subtraction, CE/softmax—before tuning."],
@@ -27,8 +27,8 @@
   "expected_effect": {
     "correctness": "Supplements old LayerNorm coverage for RMSNorm, dropout, W8A8, and complex fused normalization tasks.",
     "performance": "No H20 performance claim; complex fused schedules remain candidate/quarantine.",
-    "search_efficiency": "Prevents incorrect reuse of basic LayerNorm capsules for RMSNorm/dropout/fused subgraphs and reduces family-alias retrieval misses.",
-    "risk": "Because common passes family hard-filtering broadly, retrieval should still rely on concrete op-name keys and semantic ranking before using this candidate."
+    "search_efficiency": "Prevents incorrect reuse of basic LayerNorm capsules for RMSNorm/dropout/fused subgraphs while keeping retrieval scoped to normalization-family tasks.",
+    "risk": "If future task JSON labels the category as normalization instead of layernorm, update the schema/retriever alias rather than using a broad common-family match."
   },
   "evidence": {
     "source_refs": ["source:kbx_expanded_pilot_task_manifest", "source:pytorch_normalization_rms_dropout_semantics", "claim:clm_norm_kbx_fused_rms_gap_01"],

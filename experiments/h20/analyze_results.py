@@ -185,9 +185,7 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
         "failure_reason": failure_reason,
         "gpu_benchmark_runs": int(get_nested(results, "cost.gpu_benchmark_runs", 0) or 0),
         "invalid_compile_attempts": invalid_compiles,
-        "context_token_count": len(str(context).split()),
-        "retrieved_context_tokens_proxy": len(str(context).split()),
-        "context_packet_tokens_proxy": len(str(context).split()),
+        "retrieved_context_length": len(str(context)),
         "retrieval_mode": context.get("retrieval_mode", "unknown"),
         "source_corpus_version": context.get("source_corpus_version", ""),
         "raw_corpus_index_version": context.get("raw_corpus_index_version", ""),
@@ -251,8 +249,7 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "median_harness_wall_time_s": median([r["harness_wall_time_s"] for r in items]),
             "median_agent_wall_time_s": median([r["agent_wall_time_s"] for r in items]),
             "median_invalid_compile_attempts": median([r["invalid_compile_attempts"] for r in items]),
-            "median_context_token_count": median([r["context_token_count"] for r in items]),
-            "median_retrieved_context_tokens_proxy": median([r["retrieved_context_tokens_proxy"] for r in items]),
+            "median_retrieved_context_length": median([r["retrieved_context_length"] for r in items]),
             "median_retrieved_item_count": median([r["retrieved_item_count"] for r in items]),
             "median_raw_corpus_retrieved_chunk_count": median([r["raw_corpus_retrieved_chunk_count"] for r in items]),
             "median_kb_plain_rag_retrieved_unit_count": median([r["kb_plain_rag_retrieved_unit_count"] for r in items]),
@@ -281,7 +278,7 @@ def summarize_overall(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "median_speedup_vs_torch_compile_p50": median([r["speedup_vs_torch_compile_p50"] for r in items if r["hidden_pass"]]),
             "median_agent_wall_time_s": median([r["agent_wall_time_s"] for r in items]),
             "median_harness_wall_time_s": median([r["harness_wall_time_s"] for r in items]),
-            "median_retrieved_context_tokens_proxy": median([r["retrieved_context_tokens_proxy"] for r in items]),
+            "median_retrieved_context_length": median([r["retrieved_context_length"] for r in items]),
             "median_retrieved_item_count": median([r["retrieved_item_count"] for r in items]),
         })
     return out
@@ -347,8 +344,8 @@ def main() -> int:
             writer.writeheader(); writer.writerows(rows)
     json_path = Path(args.json_out) if args.json_out else out_path.with_suffix(".json")
     write_json(json_path, {"runs": rows, "summary": summaries, "overall_summary": overall, "failures": failures})
-    columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_invalid_compile_attempts", "median_retrieved_context_tokens_proxy", "median_retrieved_item_count"]
-    overall_columns = ["group", "runs", "op_families", "compile_success_rate", "hidden_correctness_pass_rate", "median_latency_p50_ms", "median_latency_p95_ms", "median_speedup_vs_eager_p50", "median_speedup_vs_torch_compile_p50", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_retrieved_context_tokens_proxy", "median_retrieved_item_count"]
+    columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_invalid_compile_attempts", "median_retrieved_context_length", "median_retrieved_item_count"]
+    overall_columns = ["group", "runs", "op_families", "compile_success_rate", "hidden_correctness_pass_rate", "median_latency_p50_ms", "median_latency_p95_ms", "median_speedup_vs_eager_p50", "median_speedup_vs_torch_compile_p50", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_retrieved_context_length", "median_retrieved_item_count"]
     failure_columns = ["group", "task_id", "op_family", "seed", "compile_success", "hidden_pass", "failure_reason"]
     report = [
         "# H20 MVP Experiment Report",
