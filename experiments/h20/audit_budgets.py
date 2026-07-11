@@ -19,6 +19,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import read_json, read_jsonl, write_json  # noqa: E402
 
 
+def infer_run_label(path: Path) -> str:
+    name = path.name
+    if name.startswith("run"):
+        return name.replace("run", "", 1)
+    if name.startswith("seed"):
+        return name.replace("seed", "", 1)
+    return ""
+
+
 def as_number(value: Any) -> float | None:
     if value is None:
         return None
@@ -152,7 +161,7 @@ def collect_workspace(workspace: Path, args: argparse.Namespace) -> dict[str, An
         "group": infer_group(workspace, task, hook_summary, agent_metrics),
         "task_id": task.get("task_id"),
         "op_family": task.get("op_family"),
-        "seed": workspace.name.replace("seed", "") if workspace.name.startswith("seed") else "",
+        "run": infer_run_label(workspace),
         **values,
         "over_budget": bool(over),
         "over_budget_metrics": ",".join(over),

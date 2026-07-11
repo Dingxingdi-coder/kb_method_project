@@ -39,7 +39,7 @@ runtime:
   CUDA_VISIBLE_DEVICES
   clock/persistence setting if available
   warmup/repeat counts
-  random seeds
+  run indices
 repo:
   git commit
   source corpus version
@@ -112,7 +112,7 @@ Agent 每轮只允许修改候选代码和说明，不允许修改 reference、h
 
 1. smoke：1–2 个小 shape，快速发现编译/接口错误；
 2. quick：公开 shape sweep，覆盖 dtype、边界和非 2 次幂；
-3. hidden：Agent 不可见的 shape/dtype/stride seeds；
+3. hidden：Agent 不可见的 shape/dtype/stride run variants；
 4. robustness：数值稳定、determinism、non-contiguous、broadcast/stride/alias 按算子适用性开启。
 
 性能测试必须在 hidden correctness 通过后执行。

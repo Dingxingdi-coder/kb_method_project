@@ -16,6 +16,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
 from ecc_utils import read_json, read_jsonl, write_json  # noqa: E402
 
 
+def infer_run_label(path: Path) -> str:
+    name = path.name
+    if name.startswith("run"):
+        return name.replace("run", "", 1)
+    if name.startswith("seed"):
+        return name.replace("seed", "", 1)
+    return ""
+
+
 def get_nested(data: dict[str, Any], path: str, default: Any = None) -> Any:
     cur: Any = data
     for key in path.split("."):
@@ -159,7 +168,7 @@ def collect_run(run_dir: Path) -> dict[str, Any] | None:
         "op_name": task.get("op_name"),
         "shape": str(task.get("shape")),
         "dtype": task.get("dtype"),
-        "seed": run_dir.name.replace("seed", "") if run_dir.name.startswith("seed") else "",
+        "run": infer_run_label(run_dir),
         "final_decision": results.get("final_decision"),
         "compile_success": compile_pass,
         "smoke_pass": smoke_pass,
@@ -293,7 +302,7 @@ def failed_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "group": row["group"],
             "task_id": row["task_id"],
             "op_family": row["op_family"],
-            "seed": row["seed"],
+            "run": row["run"],
             "compile_success": row["compile_success"],
             "hidden_pass": row["hidden_pass"],
             "failure_reason": row["failure_reason"],
@@ -462,9 +471,9 @@ def main() -> int:
     )
     columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_invalid_compile_attempts", "median_retrieved_context_length", "median_retrieved_item_count"]
     overall_columns = ["group", "runs", "op_families", "compile_success_rate", "hidden_correctness_pass_rate", "median_latency_p50_ms", "median_latency_p95_ms", "median_speedup_vs_eager_p50", "median_speedup_vs_torch_compile_p50", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_retrieved_context_length", "median_retrieved_item_count"]
-    failure_columns = ["group", "task_id", "op_family", "seed", "compile_success", "hidden_pass", "failure_reason"]
-    official_columns = ["group", "task_id", "op_family", "seed", "official_final_hidden_pass", "official_final_latency_p50_ms", "official_oracle_best_latency_p50_ms", "official_time_to_correct_s", "official_time_to_best_s"]
-    budget_columns = ["group", "task_id", "op_family", "seed", "budget_over_budget", "budget_over_budget_metrics", "budget_candidate_count", "budget_compile_attempts", "budget_correctness_runs", "budget_benchmark_runs", "budget_harness_runs"]
+    failure_columns = ["group", "task_id", "op_family", "run", "compile_success", "hidden_pass", "failure_reason"]
+    official_columns = ["group", "task_id", "op_family", "run", "official_final_hidden_pass", "official_final_latency_p50_ms", "official_oracle_best_latency_p50_ms", "official_time_to_correct_s", "official_time_to_best_s"]
+    budget_columns = ["group", "task_id", "op_family", "run", "budget_over_budget", "budget_over_budget_metrics", "budget_candidate_count", "budget_compile_attempts", "budget_correctness_runs", "budget_benchmark_runs", "budget_harness_runs"]
     official_rows = [row for row in rows if not math.isnan(as_float(row.get("official_final_latency_p50_ms"))) or not math.isnan(as_float(row.get("official_oracle_best_latency_p50_ms")))]
     budget_rows = [row for row in rows if row.get("budget_over_budget") is not None]
     report = [
@@ -499,7 +508,7 @@ def main() -> int:
         "",
         "## Interpretation checklist",
         "",
-        "- Compare A3 against A0/A1/A2 under the same task, seed, and budget.",
+        "- Compare A3 against A0/A1/A2 under the same task, run, and budget.",
         "- Treat hidden correctness as a hard gate before reading performance metrics.",
         "- Check whether A3 reduces iterations, wall time, invalid compile attempts, and context cost.",
         "- Manually review final `candidate.py` files for target high-level API fallback before claiming legal performance.",

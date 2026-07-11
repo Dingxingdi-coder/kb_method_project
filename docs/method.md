@@ -255,7 +255,7 @@ stop_conditions:
 |---|---|---|
 | plan/generate | OpSpec、合法模板、同类 skeleton、禁止行为 | 低层 profile knobs 全量历史 |
 | compile repair | error signature、API 合法性、最小修复 diff | 性能优化 motif |
-| correctness repair | hidden edge cases、容差、fuzz seed 类别、anti-cheating | profiler counter |
+| correctness repair | hidden edge cases、容差、fuzz run 类别、anti-cheating | profiler counter |
 | performance optimize | profile symptom -> motif、tuning record、stop capsule | 大段官方文档 |
 | autotune | knob search space、历史最优、失效组合 | 语义长解释 |
 | retrospective | trajectory compression、promotion/reject 建议 | 未验证的成功断言 |
@@ -327,11 +327,11 @@ draft -> quarantine -> candidate -> stable -> stale -> rejected
 1. schema gate：字段完整，条件和边界明确；
 2. static gate：DSL/API/target/version 合法；
 3. compile gate：候选独立编译成功；
-4. correctness gate：smoke、shape sweep、dtype matrix、edge cases、hidden seeds；
+4. correctness gate：smoke、shape sweep、dtype matrix、edge cases、hidden run variants；
 5. anti-cheating gate：不调用 reference/fallback，不 hardcode visible shapes，不跳过计算；
 6. performance gate：重复计时，p50/p95，noise control，baseline 明确；
 7. attribution gate：profile delta 或 ablation 支持预期机制；
-8. reproducibility gate：环境指纹、代码 hash、数据 seed 和命令可复现。
+8. reproducibility gate：环境指纹、代码 hash、数据 run 配置和命令可复现。
 
 ## 10. 为什么不是普通 RAG / KG / 规则库
 

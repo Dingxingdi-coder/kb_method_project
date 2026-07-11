@@ -341,7 +341,7 @@ def run_harness(args: argparse.Namespace, workspace: Path) -> int:
     repo_root = Path.cwd()
     task_path = workspace / "task.json"
     hidden_path = Path(args.hidden_tests).resolve() if args.hidden_tests else infer_hidden_path(Path(args.task).resolve())
-    cmd = [sys.executable, str((repo_root / args.harness).resolve()), "--task", str(task_path), "--candidate", str(workspace / "candidate.py"), "--out-dir", str(workspace), "--seed", str(args.seed), "--require-cuda"]
+    cmd = [sys.executable, str((repo_root / args.harness).resolve()), "--task", str(task_path), "--candidate", str(workspace / "candidate.py"), "--out-dir", str(workspace), "--run", str(args.run), "--require-cuda"]
     if hidden_path is not None:
         cmd.extend(["--hidden-tests", str(hidden_path)])
     if args.warmup is not None:
@@ -384,7 +384,8 @@ def main() -> int:
     parser.add_argument("--task", required=True)
     parser.add_argument("--backend", required=True)
     parser.add_argument("--kb-version", default="v0")
-    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--run", type=int, default=None, help="Run index; also used for harness input reproducibility.")
+    parser.add_argument("--seed", type=int, default=None, help=argparse.SUPPRESS)
     parser.add_argument("--out", required=True)
     parser.add_argument("--phase", default="generate")
     parser.add_argument("--iteration", type=int, default=0)
@@ -399,6 +400,8 @@ def main() -> int:
     parser.add_argument("--embedding-model-path", default=None)
     parser.add_argument("--conda-env", default="op_kb_dxd", help="Conda environment activated by generated run.sh. Use an empty value to disable activation.")
     args = parser.parse_args()
+    if args.run is None:
+        args.run = 0 if args.seed is None else args.seed
 
     workspace = prepare_workspace(args, args.phase)
     if args.run_harness:

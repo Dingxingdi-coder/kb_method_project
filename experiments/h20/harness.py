@@ -749,12 +749,16 @@ def main() -> int:
     parser.add_argument("--candidate", required=True)
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--hidden-tests", default=None)
-    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--run", type=int, default=None, help="Run index used for reproducible input generation.")
+    parser.add_argument("--seed", type=int, default=None, help=argparse.SUPPRESS)
     parser.add_argument("--warmup", type=int, default=None)
     parser.add_argument("--repeats", type=int, default=None)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--require-cuda", action="store_true", help="Fail instead of silently falling back to CPU when CUDA is unavailable.")
     args = parser.parse_args()
+    if args.run is None:
+        args.run = 0 if args.seed is None else args.seed
+    args.seed = args.run
 
     import torch
     out_dir = Path(args.out_dir); out_dir.mkdir(parents=True, exist_ok=True)

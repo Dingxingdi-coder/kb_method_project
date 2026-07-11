@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare or evaluate a matrix of H20 MVP tasks, groups, and seeds.
+"""Prepare or evaluate a matrix of H20 MVP tasks, groups, and runs.
 
 By default this script prepares workspaces. Pass --run-harness to evaluate the
 current candidate.py files in those workspaces.
@@ -42,7 +42,7 @@ def hidden_for(task: Path) -> Path | None:
 def run_one(repo_root: Path, runner: Path, job: dict[str, Any]) -> dict[str, Any]:
     env = os.environ.copy()
     env["CUDA_VISIBLE_DEVICES"] = str(job["gpu"])
-    cmd = [sys.executable, str(runner), "--group", job["group"], "--task", str(job["task"]), "--backend", str(job["backend"]), "--kb-version", job["kb_version"], "--seed", str(job["seed"]), "--out", str(job["out_dir"]), "--phase", job["phase"], "--iteration", str(job["iteration"])]
+    cmd = [sys.executable, str(runner), "--group", job["group"], "--task", str(job["task"]), "--backend", str(job["backend"]), "--kb-version", job["kb_version"], "--run", str(job["run"]), "--out", str(job["out_dir"]), "--phase", job["phase"], "--iteration", str(job["iteration"])]
     if job.get("hidden"):
         cmd.extend(["--hidden-tests", str(job["hidden"])])
     if job.get("run_harness"):
@@ -63,7 +63,8 @@ def main() -> int:
     parser.add_argument("--groups", required=True, help="Comma-separated group names.")
     parser.add_argument("--backend", required=True)
     parser.add_argument("--kb-version", default="v0")
-    parser.add_argument("--seeds", default="0")
+    parser.add_argument("--runs", default=None, help="Comma-separated run indices.")
+    parser.add_argument("--seeds", default=None, help=argparse.SUPPRESS)
     parser.add_argument("--gpus", default="0")
     parser.add_argument("--out", required=True)
     parser.add_argument("--task-filter", default=None)
@@ -79,7 +80,8 @@ def main() -> int:
     runner = repo_root / "experiments" / "h20" / "run_agent_session.py"
     tasks = apply_filter(discover_tasks(Path(args.tasks)), args.task_filter)
     groups = [g.strip() for g in args.groups.split(",") if g.strip()]
-    seeds = [int(s.strip()) for s in args.seeds.split(",") if s.strip()]
+    run_arg = args.runs if args.runs is not None else (args.seeds if args.seeds is not None else "0")
+    runs = [int(s.strip()) for s in run_arg.split(",") if s.strip()]
     gpus = [g.strip() for g in args.gpus.split(",") if g.strip()]
     out_root = Path(args.out); out_root.mkdir(parents=True, exist_ok=True)
 
@@ -89,12 +91,12 @@ def main() -> int:
         task_data = read_json(task)
         task_id = task_data.get("task_id", task.stem)
         for group in groups:
-            for seed in seeds:
+            for run in runs:
                 gpu = gpus[idx % len(gpus)]; idx += 1
-                jobs.append({"task": task.resolve(), "hidden": hidden_for(task), "group": group, "seed": seed, "gpu": gpu, "backend": Path(args.backend).resolve(), "kb_version": args.kb_version, "phase": args.phase, "iteration": args.iteration, "run_harness": args.run_harness, "warmup": args.warmup, "repeats": args.repeats, "conda_env": args.conda_env, "out_dir": (out_root / group / safe_id(str(task_id)) / f"seed{seed}").resolve()})
+                jobs.append({"task": task.resolve(), "hidden": hidden_for(task), "group": group, "run": run, "gpu": gpu, "backend": Path(args.backend).resolve(), "kb_version": args.kb_version, "phase": args.phase, "iteration": args.iteration, "run_harness": args.run_harness, "warmup": args.warmup, "repeats": args.repeats, "conda_env": args.conda_env, "out_dir": (out_root / group / safe_id(str(task_id)) / f"run{run}").resolve()})
 
     write_json(out_root / "matrix_manifest.json", {"jobs": [{k: str(v) for k, v in job.items()} for job in jobs]})
-    print(f"scheduled jobs={len(jobs)} tasks={len(tasks)} groups={groups} seeds={seeds}")
+    print(f"scheduled jobs={len(jobs)} tasks={len(tasks)} groups={groups} runs={runs}")
     results = []
     for job in jobs:
         result = run_one(repo_root, runner, job)

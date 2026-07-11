@@ -95,7 +95,7 @@ def mcnemar_exact_pvalue(a3_pass_base_fail: int, base_pass_a3_fail: int) -> floa
 
 
 def block_key(row: dict[str, Any]) -> tuple[str, str]:
-    return str(row.get("task_id", "")), str(row.get("seed", ""))
+    return str(row.get("task_id", "")), str(row.get("run", row.get("seed", "")))
 
 
 def group_rows(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
@@ -149,7 +149,7 @@ def paired_deltas(rows: list[dict[str, Any]], baseline: str, latency_getter=orac
         out.append(
             {
                 "task_id": key[0],
-                "seed": key[1],
+                "run": key[1],
                 "baseline": baseline,
                 "a3_latency_p50_ms": a3_lat,
                 "baseline_latency_p50_ms": base_lat,
@@ -177,7 +177,7 @@ def summarize_deltas(deltas: list[dict[str, Any]]) -> dict[str, Any]:
 def bootstrap_ci_by_task(
     deltas: list[dict[str, Any]],
     iterations: int,
-    seed: int,
+    bootstrap_run: int,
 ) -> dict[str, Any]:
     if not deltas:
         return {"iterations": iterations, "ci_low": math.nan, "ci_high": math.nan}
@@ -185,7 +185,7 @@ def bootstrap_ci_by_task(
     for item in deltas:
         by_task[str(item["task_id"])].append(float(item["delta_log_latency"]))
     tasks = sorted(by_task)
-    rng = random.Random(seed)
+    rng = random.Random(bootstrap_run)
     samples: list[float] = []
     for _ in range(iterations):
         vals: list[float] = []
@@ -208,13 +208,13 @@ def bootstrap_ci_by_task(
     }
 
 
-def primary_comparisons(rows: list[dict[str, Any]], bootstrap_iters: int, seed: int) -> dict[str, Any]:
+def primary_comparisons(rows: list[dict[str, Any]], bootstrap_iters: int, bootstrap_run: int) -> dict[str, Any]:
     out: dict[str, Any] = {}
     for idx, baseline in enumerate(BASELINES):
         deltas = paired_deltas(rows, baseline)
         out[baseline] = {
             **summarize_deltas(deltas),
-            "bootstrap_task_95ci": bootstrap_ci_by_task(deltas, bootstrap_iters, seed + idx),
+            "bootstrap_task_95ci": bootstrap_ci_by_task(deltas, bootstrap_iters, bootstrap_run + idx),
         }
     return out
 
@@ -377,12 +377,12 @@ def sensitivity_analysis(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return out
 
 
-def build_report(rows: list[dict[str, Any]], bootstrap_iters: int, seed: int) -> dict[str, Any]:
+def build_report(rows: list[dict[str, Any]], bootstrap_iters: int, bootstrap_run: int) -> dict[str, Any]:
     return {
         "schema_version": "0.1",
         "input_run_count": len(rows),
         "primary_metric": "official_oracle_best_latency_p50_ms",
-        "primary_paired_log_latency": primary_comparisons(rows, bootstrap_iters, seed),
+        "primary_paired_log_latency": primary_comparisons(rows, bootstrap_iters, bootstrap_run),
         "correctness": correctness_stats(rows),
         "time_to_correct_best": time_summary(rows),
         "budget": budget_summary(rows),
@@ -481,7 +481,8 @@ def main() -> int:
     parser.add_argument("--out-json", required=True)
     parser.add_argument("--out-md", required=True)
     parser.add_argument("--bootstrap-iters", type=int, default=2000)
-    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--bootstrap-run", type=int, default=None)
+    parser.add_argument("--seed", type=int, default=None, help=argparse.SUPPRESS)
     args = parser.parse_args()
 
     analysis = read_json(Path(args.analysis_json))
@@ -489,7 +490,8 @@ def main() -> int:
     if not isinstance(rows, list):
         raise TypeError("analysis JSON must contain a list at key 'runs'")
 
-    report = build_report(rows, args.bootstrap_iters, args.seed)
+    bootstrap_run = 0 if args.bootstrap_run is None and args.seed is None else (args.bootstrap_run if args.bootstrap_run is not None else args.seed)
+    report = build_report(rows, args.bootstrap_iters, bootstrap_run)
     write_json(Path(args.out_json), report)
     out_md = Path(args.out_md)
     out_md.parent.mkdir(parents=True, exist_ok=True)
