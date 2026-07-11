@@ -226,6 +226,13 @@ class H20RetrievalGroupSemanticsTest(unittest.TestCase):
                 self.assertEqual(task["agent_allowed_files"], ["candidate.py", "context_packets/"])
                 for snippet in snippets + common_snippets:
                     self.assertIn(snippet, prompt)
+                self.assertIn(f"Group: `{group}`", prompt)
+                self.assertIn("Task: `round1_softmax_row_softmax_4096x1024_bf16`", prompt)
+                self.assertIn("Interface: `candidate(x) -> y`", prompt)
+                self.assertIn("Background:", prompt)
+                self.assertIn("You are implementing one GPU kernel task", prompt)
+                self.assertNotIn("Common tuning budget", prompt)
+                self.assertNotIn("<!-- section:", prompt)
 
     def test_kernelbenchx_overlap_prompt_for_expanded_pilot_softmax(self) -> None:
         task = REPO_ROOT / "artifacts" / "h20" / "tasks_expanded_pilot" / "expanded_pilot_softmax_softmax.json"
@@ -354,6 +361,98 @@ class H20RetrievalGroupSemanticsTest(unittest.TestCase):
             self.assertIn("agent_wall_time_s", row["over_budget_metrics"])
             self.assertIn("candidate_count", row["over_budget_metrics"])
             self.assertEqual(candidate.read_text(encoding="utf-8"), "def candidate(x):\n    return x\n")
+
+    def test_analyze_results_merges_official_eval_and_budget_audit(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ws = root / "runs" / "A3_ecc_kb" / "demo_task" / "seed0"
+            ws.mkdir(parents=True)
+            (ws / "task.json").write_text(
+                json.dumps({"task_id": "demo_task", "op_family": "pointwise", "op_name": "add", "shape": [16], "dtype": "fp32"}),
+                encoding="utf-8",
+            )
+            (ws / "candidate.py").write_text("def add(input, other, alpha=1, out=None):\n    return input + other\n", encoding="utf-8")
+            (ws / "results.json").write_text(
+                json.dumps(
+                    {
+                        "final_decision": "KEEP",
+                        "compile": {"status": "pass"},
+                        "correctness": {"smoke": {"status": "pass"}, "quick": {"status": "pass"}, "hidden": {"status": "pass"}},
+                        "benchmark": {"latency_p50_ms": 3.0, "latency_p95_ms": 4.0, "speedup_vs_eager_p50": 2.0, "speedup_vs_torch_compile_p50": 1.5},
+                        "cost": {"wall_time_s": 1.0, "gpu_benchmark_runs": 1},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            official = root / "official.json"
+            official.write_text(
+                json.dumps(
+                    {
+                        "summaries": [
+                            {
+                                "run_dir": str(ws),
+                                "official_final": {"hidden_pass": 1, "latency_p50_ms": 2.8, "speedup_vs_eager_p50": 2.1},
+                                "oracle_best": {"hidden_pass": 1, "latency_p50_ms": 2.2, "speedup_vs_eager_p50": 2.7, "elapsed_from_agent_s": 90.0},
+                                "anytime_best": {"120": {"hidden_pass": 1, "latency_p50_ms": 2.5, "speedup_vs_eager_p50": 2.4}},
+                            }
+                        ],
+                        "rows": [
+                            {"run_dir": str(ws), "hidden_pass": 1, "elapsed_from_agent_s": 35.0},
+                            {"run_dir": str(ws), "hidden_pass": 1, "elapsed_from_agent_s": 90.0},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            audit = root / "audit.json"
+            audit.write_text(
+                json.dumps(
+                    {
+                        "runs": [
+                            {
+                                "workspace": str(ws),
+                                "over_budget": True,
+                                "over_budget_metrics": "candidate_count",
+                                "candidate_count": 17,
+                                "compile_attempts": 4,
+                                "correctness_runs": 5,
+                                "benchmark_runs": 6,
+                                "harness_runs": 7,
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            out = root / "report.md"
+            json_out = root / "report.json"
+            cmd = [
+                sys.executable,
+                "experiments/h20/analyze_results.py",
+                "--runs",
+                str(root / "runs"),
+                "--out",
+                str(out),
+                "--json-out",
+                str(json_out),
+                "--official-eval",
+                str(official),
+                "--budget-audit",
+                str(audit),
+            ]
+            subprocess.run(cmd, cwd=REPO_ROOT, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            report = json.loads(json_out.read_text(encoding="utf-8"))
+            row = report["runs"][0]
+            self.assertEqual(row["official_final_latency_p50_ms"], 2.8)
+            self.assertEqual(row["official_oracle_best_latency_p50_ms"], 2.2)
+            self.assertEqual(row["official_time_to_correct_s"], 35.0)
+            self.assertEqual(row["official_time_to_best_s"], 90.0)
+            self.assertEqual(row["official_anytime_120s_latency_p50_ms"], 2.5)
+            self.assertEqual(row["budget_over_budget"], 1)
+            self.assertEqual(row["budget_candidate_count"], 17)
+            text = out.read_text(encoding="utf-8")
+            self.assertIn("## Official evaluator", text)
+            self.assertIn("## Budget audit", text)
 
 
 if __name__ == "__main__":

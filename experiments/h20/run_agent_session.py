@@ -255,6 +255,7 @@ def write_prompt(
                         "interface": prompt_interface(task),
                     },
                 ),
+                render_section("background"),
                 render_section("rules"),
                 workflow,
                 posthoc_portability,

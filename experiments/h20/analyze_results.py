@@ -302,6 +302,105 @@ def failed_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
+def run_key(path: Any) -> str:
+    return str(Path(str(path)).resolve())
+
+
+def as_float(value: Any) -> float:
+    try:
+        out = float(value)
+    except (TypeError, ValueError):
+        return math.nan
+    return out if math.isfinite(out) else math.nan
+
+
+def as_int(value: Any) -> int | None:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def compact_latency(row: dict[str, Any] | None) -> float:
+    return as_float((row or {}).get("latency_p50_ms"))
+
+
+def compact_speedup(row: dict[str, Any] | None, key: str) -> float:
+    return as_float((row or {}).get(key))
+
+
+def load_official_eval(paths: list[str] | None) -> tuple[dict[str, dict[str, Any]], set[str]]:
+    official: dict[str, dict[str, Any]] = {}
+    timepoints: set[str] = set()
+    if not paths:
+        return official, timepoints
+    for name in paths:
+        report = read_json(Path(name), default={})
+        first_correct: dict[str, float] = {}
+        for row in report.get("rows", []):
+            if int(row.get("hidden_pass", 0) or 0) != 1:
+                continue
+            elapsed = as_float(row.get("elapsed_from_agent_s"))
+            if math.isnan(elapsed):
+                continue
+            key = run_key(row.get("run_dir", ""))
+            first_correct[key] = min(first_correct.get(key, elapsed), elapsed)
+        for summary in report.get("summaries", []):
+            key = run_key(summary.get("run_dir", ""))
+            summary = dict(summary)
+            summary["official_time_to_correct_s"] = first_correct.get(key, math.nan)
+            official[key] = summary
+            anytime = summary.get("anytime_best", {})
+            if isinstance(anytime, dict):
+                timepoints.update(str(t) for t in anytime)
+    return official, timepoints
+
+
+def load_budget_audit(paths: list[str] | None) -> dict[str, dict[str, Any]]:
+    budget: dict[str, dict[str, Any]] = {}
+    if not paths:
+        return budget
+    for name in paths:
+        report = read_json(Path(name), default={})
+        for row in report.get("runs", []):
+            budget[run_key(row.get("workspace", ""))] = row
+    return budget
+
+
+def enrich_with_posthoc(
+    rows: list[dict[str, Any]],
+    official: dict[str, dict[str, Any]],
+    budget: dict[str, dict[str, Any]],
+    timepoints: set[str],
+) -> None:
+    for row in rows:
+        key = run_key(row["run_dir"])
+        summary = official.get(key, {})
+        final = summary.get("official_final") if isinstance(summary.get("official_final"), dict) else None
+        oracle = summary.get("oracle_best") if isinstance(summary.get("oracle_best"), dict) else None
+        row["official_final_hidden_pass"] = as_int((final or {}).get("hidden_pass"))
+        row["official_final_latency_p50_ms"] = compact_latency(final)
+        row["official_final_speedup_vs_eager_p50"] = compact_speedup(final, "speedup_vs_eager_p50")
+        row["official_oracle_best_latency_p50_ms"] = compact_latency(oracle)
+        row["official_oracle_best_speedup_vs_eager_p50"] = compact_speedup(oracle, "speedup_vs_eager_p50")
+        row["official_time_to_correct_s"] = as_float(summary.get("official_time_to_correct_s"))
+        row["official_time_to_best_s"] = as_float((oracle or {}).get("elapsed_from_agent_s"))
+        for timepoint in sorted(timepoints, key=lambda x: float(x) if str(x).replace(".", "", 1).isdigit() else math.inf):
+            anytime = summary.get("anytime_best", {})
+            best = anytime.get(timepoint) if isinstance(anytime, dict) else None
+            row[f"official_anytime_{timepoint}s_latency_p50_ms"] = compact_latency(best if isinstance(best, dict) else None)
+            row[f"official_anytime_{timepoint}s_speedup_vs_eager_p50"] = compact_speedup(best if isinstance(best, dict) else None, "speedup_vs_eager_p50")
+
+        audit = budget.get(key, {})
+        row["budget_over_budget"] = int(bool(audit.get("over_budget"))) if audit else None
+        row["budget_over_budget_metrics"] = audit.get("over_budget_metrics", "")
+        row["budget_candidate_count"] = as_int(audit.get("candidate_count")) if audit else None
+        row["budget_compile_attempts"] = as_int(audit.get("compile_attempts")) if audit else None
+        row["budget_correctness_runs"] = as_int(audit.get("correctness_runs")) if audit else None
+        row["budget_benchmark_runs"] = as_int(audit.get("benchmark_runs")) if audit else None
+        row["budget_harness_runs"] = as_int(audit.get("harness_runs")) if audit else None
+
+
 def markdown_table(rows: list[dict[str, Any]], columns: list[str]) -> str:
     lines = ["| " + " | ".join(columns) + " |", "| " + " | ".join("---" for _ in columns) + " |"]
     for row in rows:
@@ -320,6 +419,8 @@ def main() -> int:
     parser.add_argument("--csv-out", default=None)
     parser.add_argument("--json-out", default=None)
     parser.add_argument("--metrics", default=None, help="Accepted for protocol traceability.")
+    parser.add_argument("--official-eval", nargs="*", default=None, help="Optional evaluate_official.py JSON report(s) to merge.")
+    parser.add_argument("--budget-audit", nargs="*", default=None, help="Optional audit_budgets.py JSON report(s) to merge.")
     args = parser.parse_args()
 
     rows: list[dict[str, Any]] = []
@@ -328,6 +429,9 @@ def main() -> int:
             row = collect_run(results_path.parent)
             if row:
                 rows.append(row)
+    official, official_timepoints = load_official_eval(args.official_eval)
+    budget = load_budget_audit(args.budget_audit)
+    enrich_with_posthoc(rows, official, budget, official_timepoints)
     summaries = summarize(rows)
     overall = summarize_overall(rows)
     failures = failed_rows(rows)
@@ -343,15 +447,33 @@ def main() -> int:
             writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
             writer.writeheader(); writer.writerows(rows)
     json_path = Path(args.json_out) if args.json_out else out_path.with_suffix(".json")
-    write_json(json_path, {"runs": rows, "summary": summaries, "overall_summary": overall, "failures": failures})
+    write_json(
+        json_path,
+        {
+            "runs": rows,
+            "summary": summaries,
+            "overall_summary": overall,
+            "failures": failures,
+            "posthoc_inputs": {
+                "official_eval": args.official_eval or [],
+                "budget_audit": args.budget_audit or [],
+            },
+        },
+    )
     columns = ["group", "op_family", "runs", "compile_success_rate", "hidden_correctness_pass_rate", "correct_and_faster_rate_vs_torch_compile", "median_speedup_vs_torch_compile_p50", "median_iterations_to_first_correct", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_invalid_compile_attempts", "median_retrieved_context_length", "median_retrieved_item_count"]
     overall_columns = ["group", "runs", "op_families", "compile_success_rate", "hidden_correctness_pass_rate", "median_latency_p50_ms", "median_latency_p95_ms", "median_speedup_vs_eager_p50", "median_speedup_vs_torch_compile_p50", "median_agent_wall_time_s", "median_harness_wall_time_s", "median_retrieved_context_length", "median_retrieved_item_count"]
     failure_columns = ["group", "task_id", "op_family", "seed", "compile_success", "hidden_pass", "failure_reason"]
+    official_columns = ["group", "task_id", "op_family", "seed", "official_final_hidden_pass", "official_final_latency_p50_ms", "official_oracle_best_latency_p50_ms", "official_time_to_correct_s", "official_time_to_best_s"]
+    budget_columns = ["group", "task_id", "op_family", "seed", "budget_over_budget", "budget_over_budget_metrics", "budget_candidate_count", "budget_compile_attempts", "budget_correctness_runs", "budget_benchmark_runs", "budget_harness_runs"]
+    official_rows = [row for row in rows if not math.isnan(as_float(row.get("official_final_latency_p50_ms"))) or not math.isnan(as_float(row.get("official_oracle_best_latency_p50_ms")))]
+    budget_rows = [row for row in rows if row.get("budget_over_budget") is not None]
     report = [
         "# H20 MVP Experiment Report",
         "",
         f"- run_records: {len(rows)}",
         f"- failed_or_incorrect_records: {len(failures)}",
+        f"- official_eval_records: {len(official_rows)}",
+        f"- budget_audit_records: {len(budget_rows)}",
         f"- csv: `{csv_path}`",
         f"- json: `{json_path}`",
         "",
@@ -366,6 +488,14 @@ def main() -> int:
         "## Failures",
         "",
         markdown_table(failures, failure_columns) if failures else "No compile or hidden-correctness failures found.",
+        "",
+        "## Official evaluator",
+        "",
+        markdown_table(official_rows, official_columns) if official_rows else "No official evaluator report was merged.",
+        "",
+        "## Budget audit",
+        "",
+        markdown_table(budget_rows, budget_columns) if budget_rows else "No budget audit report was merged.",
         "",
         "## Interpretation checklist",
         "",

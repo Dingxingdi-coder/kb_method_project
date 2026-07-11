@@ -9,19 +9,6 @@ one output section for each workspace.
 
 <!-- section:header -->
 # H20 Kernel Generation Task
-<!-- section:background -->
-Background:
-- You are a specialist in kernel generation.
-- Your job is to implement the public operator specification in `candidate.py`, then use the local harness to make it compile, pass correctness checks, and improve latency.
-- Keep the workflow below unchanged; only use the retrieval source allowed by your group.
-- The phase names describe your current intent:
-  - `generate`: create or substantially rewrite the initial implementation.
-  - `correctness_repair`: fix compile, smoke, quick, or hidden correctness failures.
-  - `performance_optimize`: improve latency after correctness passes.
-  - `autotune`: try launch/configuration variations after a correct implementation exists.
-- `./run.sh` is the measurement interface. Treat its stdout and output files as the evidence for phase changes and final claims.
-- `task.json` is public task information. Hidden tests and harness internals are not part of your allowed context.
-<!-- endsection -->
 
 Edit `candidate.py` for this ECC-KB experiment.
 
@@ -32,6 +19,15 @@ Operator: `{op_family}` / `{op_name}`
 Shape: `{shape}`
 DType: `{dtype}`
 Interface: `{interface}`
+<!-- endsection -->
+
+<!-- section:background -->
+Background:
+- You are implementing one GPU kernel task in an H20 experiment workspace.
+- Your job is to implement the public operator specification in `candidate.py`, then use the local harness to make it compile, pass correctness checks, and improve latency.
+- Use only the retrieval source allowed by your group; the retrieval protocol below defines that boundary.
+- `./run.sh` is the measurement interface. Treat its stdout and output files as the evidence for phase changes and final claims.
+- `task.json` is public task information. Hidden tests and harness internals are not part of your allowed context.
 <!-- endsection -->
 
 <!-- section:rules -->
