@@ -1,0 +1,538 @@
+version: h20_expanded_pilot_round2_sources_v1
+branch: h20-demo-round2
+generated_at: '2026-07-11T00:00:00Z'
+policy: Incremental source registry for the real 36-task expanded pilot. All round2 derived claims and KB units cite only
+  these entries or pre-existing raw_corpus_v0 entries. No hidden task shapes, historical results, or unverified H20 benchmark
+  numbers are included.
+sources:
+- source_id: kbx_round2_task_manifest
+  title: H20 expanded pilot concrete KernelBench-X aligned task list
+  kind: project_protocol
+  uri: experiments/h20/expanded_pilot_tasks.md
+  local_raw_corpus_path: sources/raw_corpus/expanded_pointwise_round2_corpus.md
+  secondary_local_raw_corpus_paths:
+  - sources/raw_corpus/expanded_reduction_round2_corpus.md
+  - sources/raw_corpus/expanded_softmax_attention_round2_corpus.md
+  - sources/raw_corpus/expanded_normalization_round2_corpus.md
+  - sources/raw_corpus/expanded_matmul_round2_corpus.md
+  - sources/raw_corpus/expanded_layout_round2_corpus.md
+  local_raw_archive_path: null
+  license: repository
+  trust_level: project_report
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - kernelbenchx
+  - expanded_pilot
+  - task_manifest
+  - coverage
+  backends:
+  - nvidia_cuda
+  operators:
+  - pointwise
+  - reduction
+  - softmax
+  - layernorm
+  - matmul
+  - layout_indexing
+  version_or_date: h20-demo-round2 branch task list
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: The branch does not currently contain artifacts/h20/tasks_expanded_pilot/manifest.json; this source is the available
+    frozen 36-task list. It contains no hidden shapes or performance evidence.
+- source_id: h20_round2_authoring_protocol
+  title: H20 formal kernel-authoring legality and anti-cheating protocol
+  kind: project_protocol
+  uri: docs/h20_formal_experiment_protocol.md
+  local_raw_corpus_path: sources/raw_corpus/expanded_pointwise_round2_corpus.md
+  secondary_local_raw_corpus_paths:
+  - sources/raw_corpus/expanded_reduction_round2_corpus.md
+  - sources/raw_corpus/expanded_softmax_attention_round2_corpus.md
+  - sources/raw_corpus/expanded_normalization_round2_corpus.md
+  - sources/raw_corpus/expanded_matmul_round2_corpus.md
+  - sources/raw_corpus/expanded_layout_round2_corpus.md
+  local_raw_archive_path: null
+  license: repository
+  trust_level: project_report
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - legality
+  - kernel_authoring
+  - anti_cheating
+  - high_level_fallback
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  - pointwise
+  - reduction
+  - softmax
+  - layernorm
+  - matmul
+  - layout_indexing
+  version_or_date: repository formal protocol
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Supports repository legality and validation rules only; it is not upstream hardware performance evidence.
+- source_id: h20_round2_measurement_protocol
+  title: H20 MVP correctness, benchmark, profile, and stop-condition protocol
+  kind: project_protocol
+  uri: docs/h20_mvp_protocol.md
+  local_raw_corpus_path: sources/raw_corpus/expanded_pointwise_round2_corpus.md
+  secondary_local_raw_corpus_paths:
+  - sources/raw_corpus/expanded_reduction_round2_corpus.md
+  - sources/raw_corpus/expanded_softmax_attention_round2_corpus.md
+  - sources/raw_corpus/expanded_normalization_round2_corpus.md
+  - sources/raw_corpus/expanded_matmul_round2_corpus.md
+  - sources/raw_corpus/expanded_layout_round2_corpus.md
+  local_raw_archive_path: null
+  license: repository
+  trust_level: project_report
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - correctness_gate
+  - benchmark_repeat
+  - profile_attribution
+  - p50
+  - p95
+  - stop_condition
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  - pointwise
+  - reduction
+  - softmax
+  - layernorm
+  - matmul
+  - layout_indexing
+  version_or_date: repository MVP protocol
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: H20-specific experimental protocol; it does not supply a measured speedup or an optimal schedule.
+- source_id: pytorch_pointwise_contracts_round2
+  title: PyTorch add, mul, GELU, broadcasting, and out semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.13/generated/torch.add.html
+  secondary_uris:
+  - https://docs.pytorch.org/docs/2.13/generated/torch.mul.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.gelu.html
+  - https://docs.pytorch.org/docs/2.13/notes/broadcasting.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.Tensor.expand.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_pointwise_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_pytorch_pointwise.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - add
+  - mul
+  - alpha
+  - out
+  - broadcast
+  - gelu
+  - dtype
+  backends:
+  - cpu
+  - nvidia_cuda
+  operators:
+  - pointwise
+  version_or_date: PyTorch 2.13 documentation
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Semantic source only; no H20 timing claim.
+- source_id: triton_pointwise_tutorial_round2
+  title: Triton vector-add tutorial for program mapping, masks, validation, and benchmark comparison
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_pointwise_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_triton_cuda_memory.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - triton
+  - program_id
+  - arange
+  - tail_mask
+  - load
+  - store
+  - benchmark
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - pointwise
+  - layout_indexing
+  version_or_date: Triton main documentation accessed 2026-07-11
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: The tutorial is a general skeleton and comparison methodology, not an H20 speedup result.
+- source_id: cuda_memory_access_round2
+  title: CUDA Best Practices guidance for coalescing and effective bandwidth
+  kind: official_doc
+  uri: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_pointwise_round2_corpus.md
+  secondary_local_raw_corpus_paths:
+  - sources/raw_corpus/expanded_layout_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_triton_cuda_memory.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - cuda
+  - coalescing
+  - global_memory
+  - effective_bandwidth
+  - strided_access
+  backends:
+  - nvidia_cuda
+  operators:
+  - common
+  - pointwise
+  - layout_indexing
+  version_or_date: CUDA C++ Best Practices Guide accessed 2026-07-11
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: General NVIDIA CUDA guidance. Concrete H20 block sizes, vector widths, and bandwidth conclusions require local measurement.
+- source_id: pytorch_reduction_contracts_round2
+  title: PyTorch sum, mean, std, min, and argmax semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.13/generated/torch.sum.html
+  secondary_uris:
+  - https://docs.pytorch.org/docs/2.13/generated/torch.mean.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.std.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.min.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.argmax.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_reduction_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_pytorch_reduction.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - sum
+  - mean
+  - std
+  - correction
+  - min
+  - argmax
+  - tie
+  - keepdim
+  - dtype
+  backends:
+  - cpu
+  - nvidia_cuda
+  operators:
+  - reduction
+  version_or_date: PyTorch 2.13 documentation
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Official semantic source; no H20 reduction schedule or throughput claim.
+- source_id: triton_reduction_contracts_round2
+  title: Triton reduction primitives and masked-load semantics
+  kind: official_doc
+  uri: https://triton-lang.org/main/python-api/generated/triton.language.sum.html
+  secondary_uris:
+  - https://triton-lang.org/main/python-api/generated/triton.language.max.html
+  - https://triton-lang.org/main/python-api/generated/triton.language.argmax.html
+  - https://triton-lang.org/main/python-api/generated/triton.language.load.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_reduction_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_triton_reduction.archive.md
+  license: mit
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - triton
+  - sum
+  - max
+  - argmax
+  - tie_break_left
+  - mask
+  - neutral_value
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - reduction
+  - softmax
+  version_or_date: Triton main API documentation accessed 2026-07-11
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Supports implementation semantics; hierarchical schedules remain candidate-only until measured.
+- source_id: pytorch_softmax_attention_contracts_round2
+  title: PyTorch softmax, log_softmax, cross_entropy, and scaled dot-product attention semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.softmax.html
+  secondary_uris:
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.log_softmax.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.cross_entropy.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.scaled_dot_product_attention.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_softmax_attention_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_pytorch_softmax_attention.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - softmax
+  - log_softmax
+  - cross_entropy
+  - ignore_index
+  - label_smoothing
+  - attention
+  - causal_mask
+  - dropout
+  backends:
+  - cpu
+  - nvidia_cuda
+  operators:
+  - softmax
+  - matmul
+  version_or_date: PyTorch 2.13 documentation
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Official semantics. Backend dispatch or fused-kernel performance is not an H20 result.
+- source_id: triton_softmax_attention_tutorials_round2
+  title: Triton fused softmax and fused attention tutorials
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html
+  secondary_uris:
+  - https://triton-lang.org/main/getting-started/tutorials/06-fused-attention.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_softmax_attention_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_triton_softmax_attention.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - triton
+  - softmax
+  - max_subtract
+  - fp32
+  - attention
+  - causal
+  - validation
+  - autotune
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - softmax
+  - matmul
+  version_or_date: Triton main tutorials accessed 2026-07-11
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Tutorial schedules and architecture branches are general candidates; no H20 performance number is imported.
+- source_id: pytorch_normalization_contracts_round2
+  title: PyTorch LayerNorm, RMSNorm, dropout, GELU, and SiLU semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.layer_norm.html
+  secondary_uris:
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.RMSNorm.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.dropout.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.gelu.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.nn.functional.silu.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_normalization_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_pytorch_normalization.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - layer_norm
+  - rmsnorm
+  - eps
+  - dropout
+  - training
+  - gelu
+  - silu
+  backends:
+  - cpu
+  - nvidia_cuda
+  operators:
+  - layernorm
+  version_or_date: PyTorch 2.13 documentation
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Semantic source; W8A8 quantization policy and fused-subgraph performance remain task-specific.
+- source_id: triton_layernorm_tutorial_round2
+  title: Triton LayerNorm tutorial for fp32 statistics, masking, affine, and validation
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/05-layer-norm.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_normalization_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_triton_layernorm.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - triton
+  - layernorm
+  - mean
+  - variance
+  - fp32
+  - mask
+  - affine
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - layernorm
+  - reduction
+  version_or_date: Triton main tutorial accessed 2026-07-11
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: LayerNorm skeleton only; not evidence for RMSNorm, dropout, W8A8, or H20 fused performance.
+- source_id: pytorch_matmul_contracts_round2
+  title: PyTorch matmul, addmm, bmm, and tril semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.13/generated/torch.matmul.html
+  secondary_uris:
+  - https://docs.pytorch.org/docs/2.13/generated/torch.addmm.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.bmm.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.tril.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_matmul_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_pytorch_matmul.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - matmul
+  - batch_broadcast
+  - matvec
+  - addmm
+  - alpha
+  - beta
+  - tril
+  - diagonal
+  backends:
+  - cpu
+  - nvidia_cuda
+  operators:
+  - matmul
+  version_or_date: PyTorch 2.13 documentation
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Semantic baseline. It does not establish a custom Triton kernel speedup on H20.
+- source_id: triton_matmul_tutorial_round2
+  title: Triton matrix multiplication tutorial for blocked dot, fp32 accumulation, epilogue fusion, tuning, and library comparison
+  kind: official_doc
+  uri: https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_matmul_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_triton_matmul.archive.md
+  license: unknown
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - triton
+  - matmul
+  - tl_dot
+  - fp32_accumulator
+  - boundary_mask
+  - epilogue
+  - autotune
+  - cublas_baseline
+  backends:
+  - nvidia_cuda
+  - amd_rocm
+  operators:
+  - matmul
+  version_or_date: Triton main tutorial accessed 2026-07-11
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Architecture-specific configurations and tutorial benchmark observations must not be treated as H20 results.
+- source_id: pytorch_layout_contracts_round2
+  title: PyTorch stride, index_select, permute_copy, scatter, masked_select, expand, and where semantics
+  kind: official_doc
+  uri: https://docs.pytorch.org/docs/2.13/tensor_view.html
+  secondary_uris:
+  - https://docs.pytorch.org/docs/2.13/generated/torch.index_select.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.permute_copy.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.scatter.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.masked_select.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.Tensor.expand.html
+  - https://docs.pytorch.org/docs/2.13/generated/torch.where.html
+  local_raw_corpus_path: sources/raw_corpus/expanded_layout_round2_corpus.md
+  local_raw_archive_path: sources/raw_archive/round2_pytorch_layout.archive.md
+  license: bsd_3_clause
+  trust_level: official
+  retrieved_at: '2026-07-11'
+  ingested_at: '2026-07-11'
+  topics:
+  - stride
+  - non_contiguous
+  - index_select
+  - permute_copy
+  - scatter
+  - masked_select
+  - expand
+  - where
+  backends:
+  - cpu
+  - nvidia_cuda
+  operators:
+  - layout_indexing
+  version_or_date: PyTorch 2.13 documentation
+  usable_for:
+  - raw_corpus_rag
+  - claim_extraction
+  - kb_derivation
+  notes: Semantic source. Index distribution, atomic behavior, compaction, and tile performance require local validation.
+h20_evidence_boundary:
+  h20_specific_sources:
+  - kbx_round2_task_manifest
+  - h20_round2_authoring_protocol
+  - h20_round2_measurement_protocol
+  h20_measured_performance_sources: []
+  generalizable_sources:
+  - pytorch_pointwise_contracts_round2
+  - triton_pointwise_tutorial_round2
+  - cuda_memory_access_round2
+  - pytorch_reduction_contracts_round2
+  - triton_reduction_contracts_round2
+  - pytorch_softmax_attention_contracts_round2
+  - triton_softmax_attention_tutorials_round2
+  - pytorch_normalization_contracts_round2
+  - triton_layernorm_tutorial_round2
+  - pytorch_matmul_contracts_round2
+  - triton_matmul_tutorial_round2
+  - pytorch_layout_contracts_round2
+  policy: Performance motifs derived from general CUDA/Triton/PyTorch documentation remain quarantine/candidate until H20
+    run evidence is attached.
