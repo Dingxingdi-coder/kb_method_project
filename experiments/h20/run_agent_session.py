@@ -299,6 +299,73 @@ def write_run_sh(
     path.chmod(0o755)
 
 
+def shell_prelude(conda_env: str | None) -> str:
+    prelude = "#!/usr/bin/env bash\nset -euo pipefail\n"
+    if conda_env:
+        prelude += (
+            "source /data/miniconda3/etc/profile.d/conda.sh\n"
+            f"conda activate {conda_env}\n"
+        )
+    return prelude
+
+
+def write_helper_scripts(
+    workspace: Path,
+    harness: Path,
+    profiler: Path,
+    hidden_path: Path | None,
+    warmup: int | None,
+    repeats: int | None,
+    conda_env: str | None,
+) -> None:
+    autotune = workspace / "run_autotune.sh"
+    autotune.write_text(
+        shell_prelude(conda_env)
+        + "./run.sh --stage hidden\n"
+        + "./run.sh --stage benchmark\n"
+        + "python - <<'PY'\n"
+        + "import json\n"
+        + "from pathlib import Path\n"
+        + "data = json.loads(Path('results.json').read_text()) if Path('results.json').exists() else {}\n"
+        + "bench = data.get('benchmark', {})\n"
+        + "print('autotune criterion: hidden correctness pass, then minimize benchmark latency_p50_ms while watching latency_p95_ms')\n"
+        + "if bench:\n"
+        + "    print(f\"p50_ms={bench.get('latency_p50_ms')} p95_ms={bench.get('latency_p95_ms')} speedup_vs_eager={bench.get('speedup_vs_eager_p50')}\")\n"
+        + "PY\n",
+        encoding="utf-8",
+    )
+    autotune.chmod(0o755)
+
+    profile_cmd = [
+        "python",
+        str(profiler),
+        "--task",
+        "task.json",
+        "--candidate",
+        "candidate.py",
+        "--out-dir",
+        "profile_artifacts",
+        "--harness",
+        str(harness),
+        "--require-cuda",
+    ]
+    if hidden_path is not None:
+        profile_cmd.extend(["--hidden-tests", str(hidden_path.resolve())])
+    if warmup is not None:
+        profile_cmd.extend(["--warmup", str(max(1, min(int(warmup), 20)))])
+    if repeats is not None:
+        profile_cmd.extend(["--repeats", str(max(1, min(int(repeats), 50)))])
+    profile = workspace / "run_profile.sh"
+    profile.write_text(
+        shell_prelude(conda_env)
+        + "mkdir -p profile_artifacts\n"
+        + " ".join(profile_cmd)
+        + ' "$@"\n',
+        encoding="utf-8",
+    )
+    profile.chmod(0o755)
+
+
 def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
     repo_root = Path.cwd()
     task_path = Path(args.task).resolve()
@@ -333,7 +400,9 @@ def prepare_workspace(args: argparse.Namespace, phase: str) -> Path:
         kb_vector_index,
         args.embedding_model_path,
     )
-    write_run_sh(workspace, (repo_root / args.harness).resolve(), hidden_path, args.warmup, args.repeats, args.conda_env)
+    harness = (repo_root / args.harness).resolve()
+    write_run_sh(workspace, harness, hidden_path, args.warmup, args.repeats, args.conda_env)
+    write_helper_scripts(workspace, harness, (repo_root / args.profiler).resolve(), hidden_path, args.warmup, args.repeats, args.conda_env)
     return workspace
 
 
@@ -394,6 +463,7 @@ def main() -> int:
     parser.add_argument("--hidden-tests", default=None)
     parser.add_argument("--retrieve-script", default="tools/retrieve_context.py")
     parser.add_argument("--harness", default="experiments/h20/harness.py")
+    parser.add_argument("--profiler", default="experiments/h20/profile_candidate.py")
     parser.add_argument("--raw-vector-index", default="artifacts/indexes/raw_corpus_vector_v0")
     parser.add_argument("--kb-vector-index", default="artifacts/indexes/kb_vector_v0")
     parser.add_argument("--embedding-model-path", default=None)

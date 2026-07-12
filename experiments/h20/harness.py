@@ -700,7 +700,14 @@ def profile_summary(task: dict[str, Any], bench: dict[str, Any]) -> dict[str, An
     symptom = "compute_bound" if task.get("op_family") == "matmul" else "memory_bound"
     speedup = bench.get("speedup_vs_eager_p50", 0.0) if bench else 0.0
     actions = ["verify_p95_stability", "try_small_knob_search_only"] if speedup >= 1.0 else ["inspect_memory_access_pattern", "reduce_register_pressure", "retune_tile_or_block_size"]
-    return {"dominant_symptom": symptom, "evidence": {"heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available", "speedup_vs_eager_p50": speedup}, "candidate_actions": actions}
+    return {
+        "profile_source": "harness_heuristic",
+        "profile_kind": "heuristic",
+        "heuristic_profile": True,
+        "dominant_symptom": symptom,
+        "evidence": {"heuristic": "op-family fallback summary; replace with NCU/Triton profiler when available", "speedup_vs_eager_p50": speedup},
+        "candidate_actions": actions,
+    }
 
 
 def status_at(data: dict[str, Any], path: str, default: str = "not_run") -> str:

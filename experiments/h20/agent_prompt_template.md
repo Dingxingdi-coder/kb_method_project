@@ -49,6 +49,8 @@ Workflow:
   - `./run.sh --stage smoke`, `./run.sh --stage quick`, or `./run.sh --stage hidden` for correctness feedback.
   - `./run.sh --stage benchmark` after hidden correctness passes and you need latency evidence.
   - `./run.sh` is the full local check when you need compile, all correctness suites, and benchmark together.
+- `./run_autotune.sh` uses hidden correctness plus benchmark p50/p95 as the tuning signal.
+- `./run_profile.sh` is optional after hidden correctness passes when hardware profiling would help diagnose a performance bottleneck.
 - After every `./run.sh` run, classify the next phase from the harness output:
   - compile, smoke, quick, or hidden failure -> `correctness_repair`
   - correctness passes but latency or profile summary is weak -> `performance_optimize`
@@ -130,6 +132,7 @@ Outputs:
 - Final implementation: `candidate.py`.
 - Required retrieved context evidence: `context_packets/*.json` for every phase you enter.
 - Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`.
+- Optional hardware profiling outputs from `./run_profile.sh`: `profile_artifacts/hardware_profile_summary.json`, `profile_artifacts/hardware_profile.log`.
 <!-- endsection -->
 
 <!-- section:a0_outputs -->
@@ -137,4 +140,5 @@ Outputs:
 - Final implementation: `candidate.py`.
 - No retrieval output is expected for this no-retrieval baseline.
 - Measurement outputs from `./run.sh`: `results.json`, `compile.log`, `correctness.log`, `benchmark.json`, `profile_summary.json`.
+- Optional hardware profiling outputs from `./run_profile.sh`: `profile_artifacts/hardware_profile_summary.json`, `profile_artifacts/hardware_profile.log`.
 <!-- endsection -->
