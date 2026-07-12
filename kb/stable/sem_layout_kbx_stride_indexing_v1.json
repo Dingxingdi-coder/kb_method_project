@@ -54,7 +54,7 @@
   },
   "failure_boundary": {
     "known_failures": ["Contiguous-only address math passes public contiguous cases but fails non-contiguous hidden cases.", "Returning a view-only permute does not satisfy materialized copy semantics.", "Missing output-store masks corrupt edge tiles."],
-    "boundary_tests": ["non-contiguous stride seed", "asymmetric permute", "random unsorted indices", "boolean mask broadcast", "scatter duplicate index", "row payload tail"],
+    "boundary_tests": ["non-contiguous stride case", "asymmetric permute", "random unsorted indices", "boolean mask broadcast", "scatter duplicate index", "row payload tail"],
     "do_not_apply": ["pure pointwise contiguous tasks without stride/index/mask behavior"]
   },
   "migration": {

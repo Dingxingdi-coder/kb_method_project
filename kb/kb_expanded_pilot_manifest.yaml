@@ -80,4 +80,4 @@ retrieval_notes:
   - New pointwise/layout bridge capsules use op_names ['*'] with concrete retrieval.keys because tools/retrieve_context.py hard-filters exact op_names when op_names is present.
   - This avoids schema-enum changes while allowing A3 to match concrete KBX op_names emitted by future task JSON.
   - sem_normalization_kbx_fused_rms_candidate_v1 stays scoped to family layernorm because current expanded task JSON uses op_family layernorm for normalization tasks; add an explicit schema/retriever alias if future task JSON uses normalization.
-index_rebuild_required: true
+index_rebuild_required: false

@@ -128,7 +128,7 @@
       "Missing output-store mask can corrupt memory for edge tiles."
     ],
     "boundary_tests": [
-      "non-contiguous stride seed",
+      "non-contiguous stride case",
       "slice with non-zero base offset",
       "transpose/permute copy with asymmetric dimensions",
       "tail tile smaller than block size"

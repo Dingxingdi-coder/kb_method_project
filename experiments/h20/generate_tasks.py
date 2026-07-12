@@ -126,39 +126,39 @@ def hidden_variants(op_family: str, shape: Any, dtype: str) -> list[dict[str, An
     if op_family in {"pointwise", "reduction", "softmax", "layernorm"}:
         b, n = shape
         for idx, candidate_shape in enumerate([[max(1, b // 2 + 1), n + 1 if n < 8192 else n - 1], [b + 7, max(1, n - 3)]]):
-            tests.append({"shape": candidate_shape, "dtype": dtype, "layout": "contiguous", "seed_offset": idx + 100})
-        tests.append({"shape": shape, "dtype": dtype, "layout": "non_contiguous", "seed_offset": 200})
+            tests.append({"shape": candidate_shape, "dtype": dtype, "layout": "contiguous", "run_offset": idx + 100})
+        tests.append({"shape": shape, "dtype": dtype, "layout": "non_contiguous", "run_offset": 200})
     elif op_family == "matmul":
         m, n, k = int(shape["M"]), int(shape["N"]), int(shape["K"])
         tests.extend([
-            {"shape": {"M": max(16, m // 2 + 17), "N": n, "K": k}, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-            {"shape": {"M": m, "N": max(16, n // 2 + 19), "K": max(16, k // 2 + 23)}, "dtype": dtype, "layout": "contiguous", "seed_offset": 101},
+            {"shape": {"M": max(16, m // 2 + 17), "N": n, "K": k}, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+            {"shape": {"M": m, "N": max(16, n // 2 + 19), "K": max(16, k // 2 + 23)}, "dtype": dtype, "layout": "contiguous", "run_offset": 101},
         ])
     elif op_family == "layout":
         if "M" in shape and "N" in shape:
             tests.extend([
-                {"shape": {"M": max(16, int(shape["M"]) // 2 + 17), "N": int(shape["N"]) + 1}, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-                {"shape": {"M": int(shape["M"]) + 7, "N": max(16, int(shape["N"]) - 3)}, "dtype": dtype, "layout": "non_contiguous", "seed_offset": 101},
+                {"shape": {"M": max(16, int(shape["M"]) // 2 + 17), "N": int(shape["N"]) + 1}, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+                {"shape": {"M": int(shape["M"]) + 7, "N": max(16, int(shape["N"]) - 3)}, "dtype": dtype, "layout": "non_contiguous", "run_offset": 101},
             ])
         elif "rows" in shape:
             tests.extend([
-                {"shape": {"rows": max(64, int(shape["rows"]) // 2 + 17), "width": int(shape["width"]) + 1, "out_rows": max(32, int(shape["out_rows"]) // 2 + 9)}, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-                {"shape": shape, "dtype": dtype, "layout": "index_int32", "seed_offset": 101},
+                {"shape": {"rows": max(64, int(shape["rows"]) // 2 + 17), "width": int(shape["width"]) + 1, "out_rows": max(32, int(shape["out_rows"]) // 2 + 9)}, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+                {"shape": shape, "dtype": dtype, "layout": "index_int32", "run_offset": 101},
             ])
         elif "vocab" in shape:
             tests.extend([
-                {"shape": {"vocab": max(128, int(shape["vocab"]) // 2 + 19), "dim": int(shape["dim"]) + 1, "batch": max(16, int(shape["batch"]) // 2 + 5), "seq": int(shape["seq"]) + 1}, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-                {"shape": shape, "dtype": dtype, "layout": "index_int32", "seed_offset": 101},
+                {"shape": {"vocab": max(128, int(shape["vocab"]) // 2 + 19), "dim": int(shape["dim"]) + 1, "batch": max(16, int(shape["batch"]) // 2 + 5), "seq": int(shape["seq"]) + 1}, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+                {"shape": shape, "dtype": dtype, "layout": "index_int32", "run_offset": 101},
             ])
         elif "nnz" in shape:
             tests.extend([
-                {"shape": {"nnz": max(64, int(shape["nnz"]) // 2 + 13), "width": int(shape["width"]) + 1, "out_rows": max(16, int(shape["out_rows"]) // 2 + 7)}, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-                {"shape": shape, "dtype": dtype, "layout": "collision_heavy", "seed_offset": 101},
+                {"shape": {"nnz": max(64, int(shape["nnz"]) // 2 + 13), "width": int(shape["width"]) + 1, "out_rows": max(16, int(shape["out_rows"]) // 2 + 7)}, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+                {"shape": shape, "dtype": dtype, "layout": "collision_heavy", "run_offset": 101},
             ])
         elif "B" in shape:
             tests.extend([
-                {"shape": {"B": max(16, int(shape["B"]) // 2 + 11), "N": int(shape["N"]) + 1, "cut": max(1, int(shape["cut"]) // 2)}, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-                {"shape": shape, "dtype": dtype, "layout": "non_contiguous", "seed_offset": 101},
+                {"shape": {"B": max(16, int(shape["B"]) // 2 + 11), "N": int(shape["N"]) + 1, "cut": max(1, int(shape["cut"]) // 2)}, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+                {"shape": shape, "dtype": dtype, "layout": "non_contiguous", "run_offset": 101},
             ])
     return tests
 
@@ -235,8 +235,8 @@ def kbx_hidden_variants(shape: Any, dtype: str) -> list[dict[str, Any]]:
     else:
         alt_shape = shape
     return [
-        {"shape": alt_shape, "dtype": dtype, "layout": "contiguous", "seed_offset": 100},
-        {"shape": shape, "dtype": dtype, "layout": "alternate_args", "seed_offset": 200},
+        {"shape": alt_shape, "dtype": dtype, "layout": "contiguous", "run_offset": 100},
+        {"shape": shape, "dtype": dtype, "layout": "alternate_args", "run_offset": 200},
     ]
 
 
@@ -262,7 +262,7 @@ def make_task(
         "op_spec": op_spec(op_family, variant, metadata),
         "op_spec_hash": short_hash([op_family, variant, shape, dtype]),
         "goal": "compile_correct_and_benchmark",
-        "public_tests": [{"shape": shape, "dtype": dtype, "layout": "contiguous", "seed_offset": 0}],
+        "public_tests": [{"shape": shape, "dtype": dtype, "layout": "contiguous", "run_offset": 0}],
         "budget": {"max_iterations": 8, "max_wall_time_minutes": 60, "warmup": 100, "repeats": 500},
         "agent_allowed_files": ["candidate.py", "notes.md"],
         "agent_forbidden_files": ["reference.py", "hidden_tests.json", "experiments/h20/harness.py"],

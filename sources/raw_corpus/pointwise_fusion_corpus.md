@@ -2,7 +2,7 @@
 corpus_file: pointwise_fusion_corpus
 derived_from:
   - sources/registry/h20_expanded_pilot_sources.yaml
-frozen_as: h20_expanded_pilot_seed
+frozen_as: h20_expanded_pilot_run
 ingested_at: 2026-07-08
 updated_at: 2026-07-09
 ---

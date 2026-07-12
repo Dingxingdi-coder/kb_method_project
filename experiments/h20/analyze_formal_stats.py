@@ -95,7 +95,7 @@ def mcnemar_exact_pvalue(a3_pass_base_fail: int, base_pass_a3_fail: int) -> floa
 
 
 def block_key(row: dict[str, Any]) -> tuple[str, str]:
-    return str(row.get("task_id", "")), str(row.get("run", row.get("seed", "")))
+    return str(row.get("task_id", "")), str(row.get("run", ""))
 
 
 def group_rows(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
@@ -481,8 +481,7 @@ def main() -> int:
     parser.add_argument("--out-json", required=True)
     parser.add_argument("--out-md", required=True)
     parser.add_argument("--bootstrap-iters", type=int, default=2000)
-    parser.add_argument("--bootstrap-run", type=int, default=None)
-    parser.add_argument("--seed", type=int, default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--bootstrap-run", type=int, default=0)
     args = parser.parse_args()
 
     analysis = read_json(Path(args.analysis_json))
@@ -490,8 +489,7 @@ def main() -> int:
     if not isinstance(rows, list):
         raise TypeError("analysis JSON must contain a list at key 'runs'")
 
-    bootstrap_run = 0 if args.bootstrap_run is None and args.seed is None else (args.bootstrap_run if args.bootstrap_run is not None else args.seed)
-    report = build_report(rows, args.bootstrap_iters, bootstrap_run)
+    report = build_report(rows, args.bootstrap_iters, args.bootstrap_run)
     write_json(Path(args.out_json), report)
     out_md = Path(args.out_md)
     out_md.parent.mkdir(parents=True, exist_ok=True)

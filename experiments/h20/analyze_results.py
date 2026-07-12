@@ -20,8 +20,6 @@ def infer_run_label(path: Path) -> str:
     name = path.name
     if name.startswith("run"):
         return name.replace("run", "", 1)
-    if name.startswith("seed"):
-        return name.replace("seed", "", 1)
     return ""
 
 

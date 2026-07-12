@@ -63,8 +63,7 @@ def main() -> int:
     parser.add_argument("--groups", required=True, help="Comma-separated group names.")
     parser.add_argument("--backend", required=True)
     parser.add_argument("--kb-version", default="v0")
-    parser.add_argument("--runs", default=None, help="Comma-separated run indices.")
-    parser.add_argument("--seeds", default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--runs", default="0", help="Comma-separated run indices.")
     parser.add_argument("--gpus", default="0")
     parser.add_argument("--out", required=True)
     parser.add_argument("--task-filter", default=None)
@@ -80,8 +79,7 @@ def main() -> int:
     runner = repo_root / "experiments" / "h20" / "run_agent_session.py"
     tasks = apply_filter(discover_tasks(Path(args.tasks)), args.task_filter)
     groups = [g.strip() for g in args.groups.split(",") if g.strip()]
-    run_arg = args.runs if args.runs is not None else (args.seeds if args.seeds is not None else "0")
-    runs = [int(s.strip()) for s in run_arg.split(",") if s.strip()]
+    runs = [int(s.strip()) for s in args.runs.split(",") if s.strip()]
     gpus = [g.strip() for g in args.gpus.split(",") if g.strip()]
     out_root = Path(args.out); out_root.mkdir(parents=True, exist_ok=True)
 

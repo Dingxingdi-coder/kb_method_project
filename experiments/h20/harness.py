@@ -60,9 +60,9 @@ def load_candidate(path: Path, entrypoint: str | None = None):
     raise AttributeError("candidate.py must define callable candidate(), run(), or forward()")
 
 
-def make_tensor_2d(shape: list[int], dtype_name: str, seed: int, layout: str, device: str):
+def make_tensor_2d(shape: list[int], dtype_name: str, sample_id: int, layout: str, device: str):
     import torch
-    torch.manual_seed(seed)
+    torch.manual_seed(sample_id)
     b, n = int(shape[0]), int(shape[1])
     dtype = torch_dtype(dtype_name)
     if layout == "non_contiguous":
@@ -70,15 +70,15 @@ def make_tensor_2d(shape: list[int], dtype_name: str, seed: int, layout: str, de
     return torch.randn((b, n), device=device, dtype=dtype)
 
 
-def make_vector(length: int, dtype_name: str, seed: int, device: str, scale: float = 1.0):
+def make_vector(length: int, dtype_name: str, sample_id: int, device: str, scale: float = 1.0):
     import torch
-    torch.manual_seed(seed)
+    torch.manual_seed(sample_id)
     return torch.randn((int(length),), device=device, dtype=torch_dtype(dtype_name)) * scale
 
 
-def make_strided_2d(m: int, n: int, dtype_name: str, seed: int, device: str, row_stride: int = 2):
+def make_strided_2d(m: int, n: int, dtype_name: str, sample_id: int, device: str, row_stride: int = 2):
     import torch
-    torch.manual_seed(seed)
+    torch.manual_seed(sample_id)
     base = torch.randn((int(m) * int(row_stride), int(n)), device=device, dtype=torch_dtype(dtype_name))
     return base[:: int(row_stride)]
 
@@ -100,42 +100,42 @@ def clone_input_tree(value: Any) -> Any:
     return value
 
 
-def rand(shape: Any, dtype_name: str, seed: int, device: str, positive: bool = False):
+def rand(shape: Any, dtype_name: str, sample_id: int, device: str, positive: bool = False):
     import torch
-    torch.manual_seed(seed)
+    torch.manual_seed(sample_id)
     tensor = torch.randn(tuple(int(x) for x in shape), device=device, dtype=torch_dtype(dtype_name))
     return tensor.abs() + 0.1 if positive else tensor
 
 
-def kbx_make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, device: str):
+def kbx_make_inputs(task: dict[str, Any], test: dict[str, Any], base_run: int, device: str):
     import torch
     op = str(task.get("op_name"))
     dtype_name = test.get("dtype", task.get("dtype", "fp32"))
     layout = test.get("layout", "contiguous")
-    seed = base_seed + int(test.get("seed_offset", 0))
+    sample_id = base_run + int(test.get("run_offset", 0))
     shape = test.get("shape", task["shape"])
     alternate = layout == "alternate_args"
 
     if op in {"add", "mul", "gelu_fp16", "gelu_bf16", "fused_add_gelu", "fused_mul_sub"}:
-        x = rand(shape, dtype_name, seed, device)
+        x = rand(shape, dtype_name, sample_id, device)
         if op == "add":
-            other = 0.5 if alternate else rand(shape, dtype_name, seed + 1, device)
+            other = 0.5 if alternate else rand(shape, dtype_name, sample_id + 1, device)
             return x, other, (0.5 if alternate else 1)
         if op == "mul":
-            other = 2.5 if alternate else rand(shape, dtype_name, seed + 1, device)
+            other = 2.5 if alternate else rand(shape, dtype_name, sample_id + 1, device)
             return x, other
         if op in {"gelu_fp16", "gelu_bf16"}:
             return x, ("tanh" if alternate else "none")
         if op == "fused_add_gelu":
-            other = 0.5 if alternate else rand(shape, dtype_name, seed + 1, device)
+            other = 0.5 if alternate else rand(shape, dtype_name, sample_id + 1, device)
             return x, other, (0.5 if alternate else 1), ("tanh" if alternate else "none")
-        y = 2.0 if alternate else rand(shape, dtype_name, seed + 1, device)
-        z = 0.5 if alternate else rand(shape, dtype_name, seed + 2, device)
+        y = 2.0 if alternate else rand(shape, dtype_name, sample_id + 1, device)
+        z = 0.5 if alternate else rand(shape, dtype_name, sample_id + 2, device)
         return x, y, z, (-0.5 if alternate else 1)
 
     if op in {"sum", "mean", "std", "min", "argmax", "fused_sum_std", "softmax", "fused_softmax_log"}:
         positive = op == "fused_softmax_log"
-        x = rand(shape, dtype_name, seed, device, positive=positive)
+        x = rand(shape, dtype_name, sample_id, device, positive=positive)
         dim = 0 if alternate else -1
         keepdim = bool(alternate and op in {"sum", "mean", "std", "min", "argmax", "fused_sum_std"})
         if op == "sum":
@@ -156,118 +156,118 @@ def kbx_make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, 
 
     if op == "fused_log_softmax_linear":
         b, in_features, out_features = int(shape["B"]), int(shape["IN"]), int(shape["OUT"])
-        x = rand((b, in_features), dtype_name, seed, device)
-        weight = rand((out_features, in_features), dtype_name, seed + 1, device)
-        bias = None if alternate else rand((out_features,), dtype_name, seed + 2, device)
+        x = rand((b, in_features), dtype_name, sample_id, device)
+        weight = rand((out_features, in_features), dtype_name, sample_id + 1, device)
+        bias = None if alternate else rand((out_features,), dtype_name, sample_id + 2, device)
         return x, weight, bias, -1, None
     if op == "fused_repeat_interleave_log_softmax":
-        x = rand(shape, dtype_name, seed, device)
+        x = rand(shape, dtype_name, sample_id, device)
         if alternate:
             repeats = torch.randint(1, 4, (int(shape[0]),), device=device, dtype=torch.int64)
             return x[:, 0], repeats, 0
         return x, 2, 1
     if op == "fused_cross_entropy_log_softmax":
         b, c = int(shape["B"]), int(shape["C"])
-        logits = rand((b, c), dtype_name, seed, device)
-        torch.manual_seed(seed + 1)
+        logits = rand((b, c), dtype_name, sample_id, device)
+        torch.manual_seed(sample_id + 1)
         target = torch.randint(0, c, (b,), device=device, dtype=torch.int64)
-        weight = rand((c,), dtype_name, seed + 2, device).abs() if alternate else None
+        weight = rand((c,), dtype_name, sample_id + 2, device).abs() if alternate else None
         return logits, target, 1, weight, -100, ("sum" if alternate else "mean"), (0.1 if alternate else 0.0)
     if op == "attention":
         b, h, s, d = int(shape["B"]), int(shape["H"]), int(shape["S"]), int(shape["D"])
-        q = rand((b, h, s, d), dtype_name, seed, device)
-        k = rand((b, h, s, d), dtype_name, seed + 1, device)
-        v = rand((b, h, s, d), dtype_name, seed + 2, device)
+        q = rand((b, h, s, d), dtype_name, sample_id, device)
+        k = rand((b, h, s, d), dtype_name, sample_id + 1, device)
+        v = rand((b, h, s, d), dtype_name, sample_id + 2, device)
         return q, k, v, bool(alternate), (0.125 if alternate else None)
 
     if op == "layernorm_w8a8":
         b, d = int(shape["B"]), int(shape["D"])
-        x = rand((b, d), "fp32", seed, device).clamp(-10, 10)
-        weight = None if alternate else rand((d,), "fp32", seed + 1, device)
-        bias = None if alternate else rand((d,), "fp32", seed + 2, device)
+        x = rand((b, d), "fp32", sample_id, device).clamp(-10, 10)
+        weight = None if alternate else rand((d,), "fp32", sample_id + 1, device)
+        bias = None if alternate else rand((d,), "fp32", sample_id + 2, device)
         return x, (d,), weight, bias, (1e-3 if alternate else 1e-5)
     if op == "fused_layer_norm_relu_linear":
         b, in_features, out_features = int(shape["B"]), int(shape["IN"]), int(shape["OUT"])
-        x = rand((b, in_features), dtype_name, seed, device)
-        weight = rand((out_features, in_features), dtype_name, seed + 1, device)
-        bias = None if alternate else rand((out_features,), dtype_name, seed + 2, device)
+        x = rand((b, in_features), dtype_name, sample_id, device)
+        weight = rand((out_features, in_features), dtype_name, sample_id + 1, device)
+        bias = None if alternate else rand((out_features,), dtype_name, sample_id + 2, device)
         return x, weight, bias, out_features, (1e-3 if alternate else 1e-5), True
     if op == "fused_cross_entropy_softmax_layernorm":
         b, c = int(shape["B"]), int(shape["C"])
-        logits = rand((b, c), dtype_name, seed, device)
-        torch.manual_seed(seed + 1)
+        logits = rand((b, c), dtype_name, sample_id, device)
+        torch.manual_seed(sample_id + 1)
         targets = torch.randint(0, c, (b,), device=device, dtype=torch.int64)
-        weight = rand((c,), dtype_name, seed + 2, device).abs() if alternate else None
+        weight = rand((c,), dtype_name, sample_id + 2, device).abs() if alternate else None
         return logits, targets, c, weight, -100, "mean", (0.1 if alternate else 0.0), (1e-3 if alternate else 1e-5)
     if op == "fused_silu_layer_norm_conv2d":
         b, c, h, w, oc, ksize = int(shape["B"]), int(shape["C"]), int(shape["H"]), int(shape["W"]), int(shape["OC"]), int(shape["K"])
-        x = rand((b, c, h, w), dtype_name, seed, device)
-        conv_weight = rand((oc, c, ksize, ksize), dtype_name, seed + 1, device)
-        conv_bias = None if alternate else rand((oc,), dtype_name, seed + 2, device)
+        x = rand((b, c, h, w), dtype_name, sample_id, device)
+        conv_weight = rand((oc, c, ksize, ksize), dtype_name, sample_id + 1, device)
+        conv_bias = None if alternate else rand((oc,), dtype_name, sample_id + 2, device)
         return x, None, conv_weight, conv_bias, 1, 1, 1, 1, (1e-3 if alternate else 1e-5)
     if op in {"fused_bmm_rmsnorm_gelu_dropout", "fused_bmm_rmsnorm_gelu_dropout_sub"}:
         b, m, kdim, n = int(shape["B"]), int(shape["M"]), int(shape["K"]), int(shape["N"])
-        input1 = rand((b, m, kdim), dtype_name, seed, device)
-        input2 = rand((b, kdim, n), dtype_name, seed + 1, device)
+        input1 = rand((b, m, kdim), dtype_name, sample_id, device)
+        input2 = rand((b, kdim, n), dtype_name, sample_id + 1, device)
         if op == "fused_bmm_rmsnorm_gelu_dropout":
             return input1, input2, n, 0.1, (1e-3 if alternate else 1e-5), False, ("tanh" if alternate else "none")
-        other = rand((b, m, n), dtype_name, seed + 2, device)
+        other = rand((b, m, n), dtype_name, sample_id + 2, device)
         return input1, input2, other, n, 0.1, False, ("tanh" if alternate else "none"), (1e-3 if alternate else 1e-5)
 
     if op in {"matmul", "matmul_fp16", "matmul_bf16"}:
         dtype = dtype_name
         if alternate:
             b, m, n, kdim = 4, int(shape["M"]), int(shape["N"]), int(shape["K"])
-            return rand((b, m, kdim), dtype, seed, device), rand((b, kdim, n), dtype, seed + 1, device)
-        return rand((int(shape["M"]), int(shape["K"])), dtype, seed, device), rand((int(shape["K"]), int(shape["N"])), dtype, seed + 1, device)
+            return rand((b, m, kdim), dtype, sample_id, device), rand((b, kdim, n), dtype, sample_id + 1, device)
+        return rand((int(shape["M"]), int(shape["K"])), dtype, sample_id, device), rand((int(shape["K"]), int(shape["N"])), dtype, sample_id + 1, device)
     if op == "addmm":
         m, n, kdim = int(shape["M"]), int(shape["N"]), int(shape["K"])
-        return rand((m, n), dtype_name, seed, device), rand((m, kdim), dtype_name, seed + 1, device), rand((kdim, n), dtype_name, seed + 2, device), (0.5 if alternate else 1), (2.0 if alternate else 1)
+        return rand((m, n), dtype_name, sample_id, device), rand((m, kdim), dtype_name, sample_id + 1, device), rand((kdim, n), dtype_name, sample_id + 2, device), (0.5 if alternate else 1), (2.0 if alternate else 1)
     if op == "matrix_vector_dot":
         n = int(shape["N"])
-        return rand((n, n), dtype_name, seed, device), rand((n,), dtype_name, seed + 1, device), rand((n,), dtype_name, seed + 2, device), (0.5 if alternate else 1.0), (0.5 if alternate else 0.0)
+        return rand((n, n), dtype_name, sample_id, device), rand((n,), dtype_name, sample_id + 1, device), rand((n,), dtype_name, sample_id + 2, device), (0.5 if alternate else 1.0), (0.5 if alternate else 0.0)
     if op == "tril_mm_and_scale":
         n, p = int(shape["N"]), int(shape["P"])
-        return rand((n, n), dtype_name, seed, device), rand((n, p), dtype_name, seed + 1, device), 1.0, (0.5 if alternate else 1.0)
+        return rand((n, n), dtype_name, sample_id, device), rand((n, p), dtype_name, sample_id + 1, device), 1.0, (0.5 if alternate else 1.0)
 
     if op == "index_select":
         b, n, d, k = int(shape["B"]), int(shape["N"]), int(shape["D"]), int(shape["K"])
-        x = rand((b, n, d), dtype_name, seed, device)
+        x = rand((b, n, d), dtype_name, sample_id, device)
         dim = 1 if alternate else 2
         high = n if dim == 1 else d
-        torch.manual_seed(seed + 1)
+        torch.manual_seed(sample_id + 1)
         index = torch.randint(0, high, (k,), device=device, dtype=torch.int64)
         return x, dim, index
     if op == "permute_copy":
-        x = rand(shape, dtype_name, seed, device)
+        x = rand(shape, dtype_name, sample_id, device)
         dims = [3, 0, 2, 1] if len(shape) == 4 and alternate else list(reversed(range(len(shape))))
         return x, dims
     if op == "scatter":
         b, n, d, k = int(shape["B"]), int(shape["N"]), int(shape["D"]), int(shape["K"])
-        base = rand((b, n, d), dtype_name, seed, device)
-        torch.manual_seed(seed + 1)
+        base = rand((b, n, d), dtype_name, sample_id, device)
+        torch.manual_seed(sample_id + 1)
         index = torch.randint(0, d, (b, n, k), device=device, dtype=torch.int64)
-        src = rand((b, n, k), dtype_name, seed + 2, device)
+        src = rand((b, n, k), dtype_name, sample_id + 2, device)
         return base, 2, index, src
     if op == "masked_select":
-        x = rand(shape, dtype_name, seed, device)
-        torch.manual_seed(seed + 1)
+        x = rand(shape, dtype_name, sample_id, device)
+        torch.manual_seed(sample_id + 1)
         mask_shape = (1, int(shape[1])) if alternate and len(shape) == 2 else tuple(shape)
         mask = torch.rand(mask_shape, device=device) > 0.5
         return x, mask
     if op == "expand_where":
         b, n = int(shape["B"]), int(shape["N"])
-        x = rand((1, n), dtype_name, seed, device)
-        torch.manual_seed(seed + 1)
+        x = rand((1, n), dtype_name, sample_id, device)
+        torch.manual_seed(sample_id + 1)
         cond = torch.rand((b, 1), device=device) > 0.5
-        other = rand((b, n), dtype_name, seed + 2, device)
+        other = rand((b, n), dtype_name, sample_id + 2, device)
         return x, (b, n), cond, other
     if op == "fused_gather_masked_fill":
         b, n, k = int(shape["B"]), int(shape["N"]), int(shape["K"])
-        x = rand((b, n), dtype_name, seed, device)
-        torch.manual_seed(seed + 1)
+        x = rand((b, n), dtype_name, sample_id, device)
+        torch.manual_seed(sample_id + 1)
         index = torch.randint(0, n, (b, k), device=device, dtype=torch.int64)
-        torch.manual_seed(seed + 2)
+        torch.manual_seed(sample_id + 2)
         mask = torch.rand((b, k), device=device) > 0.5
         return x, 1, index, mask, -1.0
 
@@ -407,39 +407,39 @@ def kbx_reference(task: dict[str, Any], inputs: tuple[Any, ...]):
     raise ValueError(f"unsupported KernelBench-X op: {op}")
 
 
-def make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, device: str):
+def make_inputs(task: dict[str, Any], test: dict[str, Any], base_run: int, device: str):
     import torch
     if is_kbx_task(task):
-        return kbx_make_inputs(task, test, base_seed, device)
+        return kbx_make_inputs(task, test, base_run, device)
     op_family = task["op_family"]
     variant = task.get("variant", task.get("op_name", ""))
     dtype_name = test.get("dtype", task.get("dtype", "fp16"))
     layout = test.get("layout", "contiguous")
-    seed = base_seed + int(test.get("seed_offset", 0))
+    sample_id = base_run + int(test.get("run_offset", 0))
     shape = test.get("shape", task["shape"])
     if op_family == "pointwise":
-        x = make_tensor_2d(shape, dtype_name, seed, layout, device)
+        x = make_tensor_2d(shape, dtype_name, sample_id, layout, device)
         n = int(shape[1])
         if variant in {"bias_gelu", "bias_silu"}:
-            return x, make_vector(n, dtype_name, seed + 17, device)
+            return x, make_vector(n, dtype_name, sample_id + 17, device)
         if variant == "residual_relu":
-            residual = make_tensor_2d(shape, dtype_name, seed + 17, layout, device)
+            residual = make_tensor_2d(shape, dtype_name, sample_id + 17, layout, device)
             return x, residual
         if variant == "broadcast_affine":
-            return x, make_vector(n, dtype_name, seed + 17, device, scale=0.25), make_vector(n, dtype_name, seed + 23, device)
+            return x, make_vector(n, dtype_name, sample_id + 17, device, scale=0.25), make_vector(n, dtype_name, sample_id + 23, device)
         if variant == "gated_silu_multiply":
-            x2 = make_tensor_2d(shape, dtype_name, seed + 17, layout, device)
+            x2 = make_tensor_2d(shape, dtype_name, sample_id + 17, layout, device)
             return x, x2
         if variant == "clamp_mul_add":
-            scale = make_vector(n, dtype_name, seed + 17, device, scale=0.25)
-            bias = make_vector(n, dtype_name, seed + 23, device)
+            scale = make_vector(n, dtype_name, sample_id + 17, device, scale=0.25)
+            bias = make_vector(n, dtype_name, sample_id + 23, device)
             return x, scale, bias, -2.0, 2.0
         raise ValueError(f"unsupported pointwise variant: {variant}")
     if op_family in {"reduction", "softmax", "layernorm"}:
-        x = make_tensor_2d(shape, dtype_name, seed, layout, device)
+        x = make_tensor_2d(shape, dtype_name, sample_id, layout, device)
         if op_family == "layernorm":
             n = int(shape[1])
-            torch.manual_seed(seed + 17)
+            torch.manual_seed(sample_id + 17)
             gamma = torch.randn((n,), device=device, dtype=torch_dtype(dtype_name))
             beta = torch.randn((n,), device=device, dtype=torch_dtype(dtype_name))
             return x, gamma, beta, float(task.get("eps", 1e-5))
@@ -449,14 +449,14 @@ def make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, devi
     if op_family == "matmul":
         dtype = torch_dtype(dtype_name)
         m, n, k = int(shape["M"]), int(shape["N"]), int(shape["K"])
-        torch.manual_seed(seed)
+        torch.manual_seed(sample_id)
         a = torch.randn((m, k), device=device, dtype=dtype)
-        torch.manual_seed(seed + 1)
+        torch.manual_seed(sample_id + 1)
         b = torch.randn((k, n), device=device, dtype=dtype)
         return a, b
     if op_family == "layout":
         dtype = torch_dtype(dtype_name)
-        torch.manual_seed(seed)
+        torch.manual_seed(sample_id)
         if variant == "transpose_copy":
             m, n = int(shape["M"]), int(shape["N"])
             if layout == "non_contiguous":
@@ -493,7 +493,7 @@ def make_inputs(task: dict[str, Any], test: dict[str, Any], base_seed: int, devi
                 other = torch.randn((b, n), device=device, dtype=dtype)
             return a, other, cut
         if variant == "strided_copy":
-            return (make_strided_2d(int(shape["M"]), int(shape["N"]), dtype_name, seed, device, int(shape.get("row_stride", 2))),)
+            return (make_strided_2d(int(shape["M"]), int(shape["N"]), dtype_name, sample_id, device, int(shape.get("row_stride", 2))),)
         raise ValueError(f"unsupported layout variant: {variant}")
     raise ValueError(f"unsupported op_family: {op_family}")
 
@@ -607,7 +607,7 @@ def run_suite(
     task: dict[str, Any],
     hidden: dict[str, Any],
     fn: Callable[..., Any],
-    base_seed: int,
+    base_run: int,
     device: str,
     log_lines: list[str],
     suite_names: list[str] | None = None,
@@ -622,7 +622,7 @@ def run_suite(
         suite_ok = True
         for idx, test in enumerate(tests):
             try:
-                inputs = make_inputs(task, test, base_seed + idx * 1000, device)
+                inputs = make_inputs(task, test, base_run + idx * 1000, device)
                 if is_kbx_task(task):
                     expected = reference(task, clone_input_tree(inputs))
                     actual = fn(*clone_input_tree(inputs))
@@ -671,10 +671,10 @@ def time_callable(fn: Callable[[], Any], warmup: int, repeats: int, device: str)
     return {"p50_ms": p50, "p95_ms": p95, "mean_ms": statistics.mean(samples) if samples else math.nan, "std_ms": statistics.pstdev(samples) if len(samples) > 1 else 0.0, "min_ms": min(samples) if samples else math.nan, "samples": samples}
 
 
-def benchmark(task: dict[str, Any], fn: Callable[..., Any], seed: int, device: str, warmup: int, repeats: int) -> dict[str, Any]:
+def benchmark(task: dict[str, Any], fn: Callable[..., Any], sample_id: int, device: str, warmup: int, repeats: int) -> dict[str, Any]:
     import torch
     test = task.get("public_tests", [])[0]
-    inputs = make_inputs(task, test, seed, device)
+    inputs = make_inputs(task, test, sample_id, device)
     if is_kbx_task(task):
         candidate_t = time_callable(lambda: fn(*clone_input_tree(inputs)), warmup, repeats, device)
         eager_t = time_callable(lambda: reference(task, clone_input_tree(inputs)), warmup, repeats, device)
@@ -749,17 +749,12 @@ def main() -> int:
     parser.add_argument("--candidate", required=True)
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--hidden-tests", default=None)
-    parser.add_argument("--run", type=int, default=None, help="Run index used for reproducible input generation.")
-    parser.add_argument("--seed", type=int, default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--run", type=int, default=0, help="Run index used for reproducible input generation.")
     parser.add_argument("--warmup", type=int, default=None)
     parser.add_argument("--repeats", type=int, default=None)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--require-cuda", action="store_true", help="Fail instead of silently falling back to CPU when CUDA is unavailable.")
     args = parser.parse_args()
-    if args.run is None:
-        args.run = 0 if args.seed is None else args.seed
-    args.seed = args.run
-
     import torch
     out_dir = Path(args.out_dir); out_dir.mkdir(parents=True, exist_ok=True)
     task = read_json(args.task)
@@ -772,7 +767,7 @@ def main() -> int:
     if requested_device == "cuda" and not cuda_available and args.require_cuda:
         results = {
             "schema_version": "0.1",
-            "run_id": f"harness_{short_hash([task, args.seed, args.stage, sha256_file(candidate_path), 'cuda_unavailable'])}",
+            "run_id": f"harness_{short_hash([task, args.run, args.stage, sha256_file(candidate_path), 'cuda_unavailable'])}",
             "stage": args.stage,
             "timestamp": utc_now(),
             "task_id": task.get("task_id"),
@@ -804,7 +799,7 @@ def main() -> int:
     started = time.time()
     compile_log: list[str] = []
     correctness_log: list[str] = []
-    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.seed, args.stage, sha256_file(candidate_path)])}", "stage": args.stage, "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}, "runtime": {"requested_device": requested_device, "actual_device": device, "cuda_available": bool(cuda_available), "cuda_device_count": int(torch.cuda.device_count())}}
+    results: dict[str, Any] = {"schema_version": "0.1", "run_id": f"harness_{short_hash([task, args.run, args.stage, sha256_file(candidate_path)])}", "stage": args.stage, "timestamp": utc_now(), "task_id": task.get("task_id"), "op_family": task.get("op_family"), "candidate_hash": sha256_file(candidate_path), "compile": {"status": "not_run"}, "anti_cheating": {"status": "not_run", "judge": "llm_judge_pending", "issues": []}, "correctness": {}, "benchmark": {}, "profile_summary": {}, "cost": {"iterations": 1, "gpu_benchmark_runs": 0, "wall_time_s": 0}, "runtime": {"requested_device": requested_device, "actual_device": device, "cuda_available": bool(cuda_available), "cuda_device_count": int(torch.cuda.device_count())}}
     try:
         entrypoint = task.get("kernelbenchx", {}).get("entrypoint") if is_kbx_task(task) else None
         fn = load_candidate(candidate_path, str(entrypoint) if entrypoint else None)
@@ -826,7 +821,7 @@ def main() -> int:
         return 0
 
     suite_names = ["smoke", "quick", "hidden"] if args.stage == "full" else (["hidden"] if args.stage == "benchmark" else [args.stage])
-    correctness = run_suite(task, hidden, fn, args.seed, device, correctness_log, suite_names=suite_names)
+    correctness = run_suite(task, hidden, fn, args.run, device, correctness_log, suite_names=suite_names)
     results["correctness"] = correctness
     required_suite = "hidden" if args.stage in {"full", "benchmark"} else args.stage
     correctness_ok = str(correctness.get(required_suite, {}).get("status", "fail")) == "pass"
@@ -834,7 +829,7 @@ def main() -> int:
     hidden_ok = str(correctness.get("hidden", {}).get("status", "fail")) == "pass"
     bench: dict[str, Any] = {}; prof: dict[str, Any] = {}
     if args.stage in {"full", "benchmark"} and hidden_ok:
-        bench = benchmark(task, fn, args.seed, device, warmup, repeats)
+        bench = benchmark(task, fn, args.run, device, warmup, repeats)
         prof = profile_summary(task, bench)
         results["benchmark"] = {"latency_p50_ms": bench["candidate"]["p50_ms"], "latency_p95_ms": bench["candidate"]["p95_ms"], "latency_mean_ms": bench["candidate"]["mean_ms"], "latency_std_ms": bench["candidate"]["std_ms"], "speedup_vs_eager_p50": bench.get("speedup_vs_eager_p50", 0.0), "speedup_vs_torch_compile_p50": bench.get("speedup_vs_torch_compile_p50", 0.0)}
         results["profile_summary"] = prof; results["cost"]["gpu_benchmark_runs"] = repeats

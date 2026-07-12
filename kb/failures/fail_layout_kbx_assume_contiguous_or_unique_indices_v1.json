@@ -42,7 +42,7 @@
   },
   "failure_boundary": {
     "known_failures": ["Contiguous-only address math", "view-only return for copy task", "unique/sorted index assumption", "dense output for masked_select", "scatter-add logic for scatter overwrite"],
-    "boundary_tests": ["non-contiguous stride seed", "unsorted index tensor", "duplicate scatter target", "all-false mask", "broadcast condition", "small edge tile"],
+    "boundary_tests": ["non-contiguous stride case", "unsorted index tensor", "duplicate scatter target", "all-false mask", "broadcast condition", "small edge tile"],
     "do_not_apply": ["pure matmul", "row reduction", "row softmax", "pointwise contiguous add/mul"]
   },
   "retrieval": {

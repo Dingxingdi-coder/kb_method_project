@@ -245,17 +245,13 @@ def main() -> int:
     parser.add_argument("--eval-dir-name", default="posthoc_eval")
     parser.add_argument("--timepoints", default="120,240,480", help="Comma-separated anytime cutoffs in seconds.")
     parser.add_argument("--python", default=sys.executable)
-    parser.add_argument("--run", type=int, default=None, help="Run index; also used for harness input reproducibility.")
-    parser.add_argument("--seed", type=int, default=None, help=argparse.SUPPRESS)
+    parser.add_argument("--run", type=int, default=0, help="Run index; also used for harness input reproducibility.")
     parser.add_argument("--warmup", type=int, default=None)
     parser.add_argument("--repeats", type=int, default=None)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--require-cuda", action="store_true")
     parser.add_argument("--timeout", type=int, default=None)
     args = parser.parse_args()
-    if args.run is None:
-        args.run = 0 if args.seed is None else args.seed
-
     timepoints = [float(x) for x in args.timepoints.split(",") if x.strip()]
     run_dirs = find_run_dirs([Path(root) for root in args.runs])
     rows: list[dict[str, Any]] = []

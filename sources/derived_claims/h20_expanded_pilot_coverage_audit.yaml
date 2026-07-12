@@ -147,4 +147,4 @@ coverage_result:
     softmax_expanded_variants: [fused_softmax_log, fused_log_softmax_linear, fused_repeat_interleave_log_softmax, fused_cross_entropy_log_softmax, attention]
     normalization_expanded_variants: [layernorm_w8a8, fused_layer_norm_relu_linear, fused_cross_entropy_softmax_layernorm, fused_silu_layer_norm_conv2d, fused_bmm_rmsnorm_gelu_dropout, fused_bmm_rmsnorm_gelu_dropout_sub]
     matmul_epilogue_variants: [addmm, matrix_vector_dot, tril_mm_and_scale]
-index_rebuild_required: true
+index_rebuild_required: false
